@@ -1,0 +1,106 @@
+{
+    "app": {
+        "otp_verification": {
+            "title": "تحقق من رقم الهاتف",
+            "instruction": "يرجى إدخال رمز التحقق المؤلف من 6 أرقام المرسل إلى",
+            "resend_code": "اعادة ارسال الرمز",
+            "change_phone": "تغيير رقم الهاتف",
+            "verify": "تحقق"
+        },
+        "general": {
+            "app_back": "رجوع"
+        },
+        "userTypeSelection": {
+            "addNewType": "إضافة صنف آخر",
+            "title": "خُبزاتي",
+            "driver": "سائق",
+            "resturant": "مطعم",
+            "bakery": "مخبز",
+            "WelcomeText": "اهلاً بك في خُبزاتي",
+            "createAccountHint": "إنشاء حساب كـ...",
+            "thankYouMessage": "شكرًا لك على تقديم طلب انضمام لخُبزاتي\nلقد تم استلام طلبك، وسيتم الرد خلال 3 أيام عمل!\nمتطلعين للعمل معكم."
+        },
+        "login": {},
+        "button": {
+            "search": "بحث"
+        },
+        "signup": {
+            "appBarTitle": " مرحبًا بك في خُبزاتي",
+            "app_signup_createNewAccount": "أنشئ حساب جديد",
+            "app_signup_bakeryName": "اسم المخبز",
+            "app_signup_enterBakeryName": "ادخل اسم المخبز",
+            "app_signup_phoneNumber": "رقم الهاتف",
+            "app_signup_phoneNumber_hint": "ادخل رقم الهاتف",
+            "app_signup_location": "الموقع",
+            "app_signup_location_hint": "ادخل الموقع",
+            "app_signup_bakeryLocation": "موقع المخبز",
+            "app_signup_bakeryLogo": "لوجو المخبز",
+            "app_signup_chooseFile": "اختيار ملف",
+            "app_signup_commercialRegistry": "السجل التجاري",
+            "app_signup_next": "التالي",
+            "already_have_account": "هل لديك حساب بالفعل؟",
+            "login": "تسجيل دخول",
+            "commercialRegistry": "السجل التجاري",
+            "attach_files_again": "الرجاء ارفاق الملفات مرة اخرى",
+            "attach_logo": "إرفاق لوجو",
+            "attach_commercial_registry": "إرفاق السجل التجاري"
+        },
+        "error": {
+            "requiredField": "هذا الحقل مطلوب",
+            "firstName": {
+                "lettersOnly": "يجب أن يتكون الاسم الاول من أحرف فقط",
+                "length": "يجب أن يكون الاسم الاول على الأقل ٢ أحرف"
+            },
+            "middleName": {
+                "lettersOnly": "يجب أن يتكون الاسم الاوسط من أحرف فقط",
+                "length": "يجب أن يكون الاسم الاوسط على الأقل ٢ أحرف"
+            },
+            "lastName": {
+                "lettersOnly": "يجب أن يتكون الاسم الاخير من أحرف فقط",
+                "length": "يجب أن يكون الاسم الاخير على الأقل ٢ أحرف"
+            },
+            "email": {
+                "invalid": "يرجى إدخال عنوان بريد إلكتروني صحيح"
+            },
+            "password": {
+                "length": "يجب أن تكون كلمة المرور على الأقل ٨ أحرف",
+                "missing": "يرجى تضمين حرف كبير وحرف صغير ورقم وحرف خاص على الأقل"
+            },
+            "confirmPassword": {
+                "mismatch": "كلمة المرور غير متطابقة! تأكد مرة أخرى"
+            },
+            "dateOfBirthAge": {
+                "invalidAge": "تاريخ الميلاد غير صالح. يجب أن يكون عمرك {} عامًا على الأقل للتسجيل"
+            },
+            "phoneNumber": "يرجى إدخال رقم هاتف صحيح."
+        },
+        "apiError": {
+            "connection": "الرجاء التحقق من اتصال الانترنت الخاص بك",
+            "server": "حدث خطأ ما، يرجى المحاولة لاحقا",
+            "sessionExpired": "انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى"
+        },
+        "errorPage": {
+            "title": "لا يوجد اتصال بالإنترنت",
+            "subTitle": "يجب عليك الاتصال بالإنترنت لإتمام هذا الإجراء!"
+        },
+        "bread_type": {
+            "panel_title": "الصنف",
+            "title": "ادخل أنواع الخبز وكميتها اليومية",
+            "instruction": "يرجى ملء التفاصيل أدناه.",
+            "name": "اسم الصنف",
+            "name_placeholder": "ادخل الاسم",
+            "type": "النوع",
+            "type_placeholder": "اختر النوع",
+            "quantity": "الكمية",
+            "quantity_placeholder": "أدخل الكمية",
+            "unit": "الوحدة",
+            "unit_placeholder": "بالكيلو",
+            "price": "السعر",
+            "price_placeholder": "ادخل السعر",
+            "calories": "السعرات الحرارية",
+            "calories_placeholder": "ادخل السعرات الحرارية",
+            "submit": "إرسال",
+            "add_another": "اضافة صنف آخر"
+        }
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "app": {
+        "otp_verification": {
+            "title": "Verify the phone number",
+            "instruction": "Please enter the 6-digit verification code sent to",
+            "resend_code": "Resend Code",
+            "change_phone": "Change Phone Number",
+            "verify": "Verify"
+        },
+        "general": {
+            "app_back": "back"
+        },
+        "userTypeSelection": {
+            "addNewType": "Add another category",
+            "title": "Khubzati",
+            "driver": "Driver",
+            "bakery": "Bakery",
+            "WelcomeText": "Welcome to khubzati",
+            "resturant": "Resturant",
+            "createAccountHint": "Create account as...",
+            "thankYouMessage": "Thank you for applying to join KHUBZATI.\nYour application has been received, and we will respond within 3 working days!\nLooking forward to working with you."
+        },
+        "login": {},
+        "button": {
+            "search": "Search"
+        },
+        "signup": {
+            "appBarTitle": "Welcome to khubzati",
+            "app_signup_createNewAccount": "Create a New Account",
+            "app_signup_bakeryName": "Bakery Name",
+            "app_signup_enterBakeryName": "Enter the Bakery Name",
+            "app_signup_phoneNumber": "Phone Number",
+            "app_signup_location": "Location",
+            "app_signup_bakeryLocation": "Bakery Location",
+            "app_signup_bakeryLogo": "Bakery Logo",
+            "app_signup_chooseFile": "Choose File",
+            "app_signup_commercialRegistry": "Commercial Registry",
+            "app_signup_next": "Next",
+            "app_signup_phoneNumber_hint": "Enter phone number",
+            "app_signup_location_hint": "Enter location",
+            "already_have_account": "Already have an account?",
+            "login": "Login",
+            "attach_files_again": "Please attach the files again.",
+            "attach_logo": "Attach Logo",
+            "attach_commercial_registry": "Attach Commercial Registry"
+        },
+        "error": {
+            "requiredField": "This field is required",
+            "firstName": {
+                "lettersOnly": "First name must contain letters only",
+                "length": "First name must be at least 2 characters long"
+            },
+            "middleName": {
+                "lettersOnly": "Middle name must contain letters only",
+                "length": "Middle name must be at least 2 characters long"
+            },
+            "lastName": {
+                "lettersOnly": "Last name must contain letters only",
+                "length": "Last name must be at least 2 characters long"
+            },
+            "email": {
+                "invalid": "Please enter a valid email address"
+            },
+            "password": {
+                "length": "Password must be at least 8 characters long",
+                "missing": "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character"
+            },
+            "confirmPassword": {
+                "mismatch": "Passwords don't match! Try again"
+            },
+            "dateOfBirthAge": {
+                "invalidAge": "Invalid birth date. You must be at least {} years old to register"
+            },
+            "phoneNumber": {
+                "invalidNumber": "Please enter a valid phone number."
+            }
+        },
+        "apiError": {
+            "connection": "Please check your internet connection",
+            "server": "Unexpected error, Please try later",
+            "sessionExpired": "Session expired. Please log in again"
+        },
+        "errorPage": {
+            "title": "No Internet",
+            "subTitle": "You must connect to the internet to complete this action!"
+        },
+        "bread_type": {
+            "panel_title": "Category",
+            "title": "Enter Bread Types and Daily Quantities",
+            "instruction": "Please fill in the details below.",
+            "name": "Name",
+            "name_placeholder": "Enter name",
+            "type": "Type",
+            "type_placeholder": "Select type",
+            "quantity": "Quantity",
+            "quantity_placeholder": "Enter quantity",
+            "unit": "Unit",
+            "unit_placeholder": "Kilograms",
+            "price": "Price",
+            "price_placeholder": "Enter price",
+            "calories": "Calories",
+            "calories_placeholder": "Enter calories",
+            "submit": "Submit",
+            "add_another": "Add Another Item"
+        }
+    }
+}

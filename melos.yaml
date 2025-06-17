@@ -1,0 +1,24 @@
+name: khubzati
+packages:
+  - packages/khubzati_app
+  - packages/khubzati_components
+scripts:
+  run: flutter run --flavor dev
+description: A Flutter application for khubzati.
+version: 1.0.0
+
+environment:
+  sdk: ">=3.4.4 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # other dependencies...
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/splash/
+    - assets/translations/
+    - assets/fonts/

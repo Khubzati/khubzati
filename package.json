@@ -1,0 +1,12 @@
+{
+    "name": "khubzati",
+    "private": true,
+    "workspaces": [
+        "packages/*"
+    ],
+    "devDependencies": {},
+    "scripts": {
+        "start": "melos run run:app",
+        "melos-get": "melos get"
+    }
+}
