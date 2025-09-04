@@ -38,7 +38,15 @@ class CodegenLoader extends AssetLoader{
       "createAccountHint": "Create account as...",
       "thankYouMessage": "Thank you for applying to join KHUBZATI.\nYour application has been received, and we will respond within 3 working days!\nLooking forward to working with you."
     },
-    "login": {},
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "forgot_password": "Forgot Password?",
+      "login_button": "Login",
+      "no_account": "Don't have an account?",
+      "signup": "Sign Up"
+    },
     "button": {
       "search": "Search"
     },
@@ -120,6 +128,123 @@ class CodegenLoader extends AssetLoader{
       "calories_placeholder": "Enter calories",
       "submit": "Submit",
       "add_another": "Add Another Item"
+    },
+    "onboarding": {
+      "select_role": {
+        "title": "Select Account Type",
+        "heading": "Welcome to Khubzati",
+        "subheading": "Choose the account type that suits you"
+      }
+    },
+    "roles": {
+      "customer": "Customer",
+      "bakery_owner": "Bakery Owner",
+      "restaurant_owner": "Restaurant Owner"
+    },
+    "auth": {
+      "signup_title": "Create New Account",
+      "signup_heading": "Welcome to Khubzati",
+      "signup_subheading": "Create your new account to get started",
+      "signup_button": "Create Account",
+      "terms_and_conditions_prompt": "I agree to the Terms and Conditions",
+      "already_have_account_prompt": "Already have an account?",
+      "login_link": "Login",
+      "forgot_password_heading": "Forgot Password?",
+      "forgot_password_subheading": "Enter your email and we'll send you a password reset link",
+      "forgot_password_send_button": "Send Reset Link",
+      "login_title": "Login",
+      "login_subheading": "Welcome back",
+      "login_button": "Login",
+      "forgot_password_link": "Forgot Password?",
+      "no_account_prompt": "Don't have an account?",
+      "signup_link": "Sign Up",
+      "otp_verification_title": "Verify Code",
+      "otp_verification_heading": "Enter Verification Code",
+      "otp_verification_subheading": "We've sent a verification code to your phone",
+      "otp_verify_button": "Verify",
+      "otp_did_not_receive_prompt": "Didn't receive the code?",
+      "otp_resend_link": "Resend"
+    },
+    "form": {
+      "username_label": "Username",
+      "username_hint": "Enter your username",
+      "email_label": "Email",
+      "email_hint": "Enter your email",
+      "phone_label": "Phone Number",
+      "phone_hint": "Enter your phone number",
+      "password_label": "Password",
+      "password_hint": "Enter your password",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_hint": "Re-enter your password",
+      "forgot_password_title": "Forgot Password"
+    },
+    "form_validation": {
+      "required": "This field is required",
+      "invalid_email": "Please enter a valid email address",
+      "password_short": "Password must be at least 6 characters",
+      "password_mismatch": "Passwords do not match",
+      "agree_terms": "You must agree to the Terms and Conditions"
+    },
+    "common": {
+      "back_button": "Back"
+    },
+    "bakery_owner": {
+      "dashboard": {
+        "title": "Bakery Dashboard",
+        "sales_overview_title": "Sales Overview",
+        "recent_orders_title": "Recent Orders",
+        "quick_stats_title": "Quick Stats",
+        "order_id_placeholder": "Order ID",
+        "order_status_placeholder": "Order Status",
+        "manage_products": "Manage Products",
+        "manage_orders": "Manage Orders",
+        "bakery_settings": "Bakery Settings"
+      },
+      "order_management": {
+        "title": "Order Management",
+        "order_id_placeholder": "Order ID",
+        "customer_name_placeholder": "Customer Name",
+        "order_status_placeholder": "Order Status"
+      },
+      "product_management": {
+        "title": "Product Management",
+        "add_product_button": "Add Product",
+        "product_name_placeholder": "Product Name",
+        "product_price_placeholder": "Price"
+      }
+    },
+    "cart": {
+      "title": "Shopping Cart",
+      "item_name_placeholder": "Product Name",
+      "subtotal_label": "Subtotal",
+      "total_label": "Total",
+      "proceed_to_checkout_button": "Proceed to Checkout",
+      "empty_message": "Your cart is empty"
+    },
+    "checkout": {
+      "title": "Checkout",
+      "delivery_address_title": "Delivery Address",
+      "select_address_prompt": "Select delivery address",
+      "payment_method_title": "Payment Method",
+      "select_payment_method_prompt": "Select payment method",
+      "order_summary_title": "Order Summary",
+      "delivery_fee_label": "Delivery Fee",
+      "place_order_button": "Place Order"
+    },
+    "home": {
+      "title": "Home",
+      "categories_title": "Categories",
+      "nearby_vendors_title": "Nearby Vendors",
+      "popular_vendors_title": "Popular Vendors",
+      "category_bakery": "Bakery",
+      "category_restaurant": "Restaurant"
+    },
+    "order_confirmation": {
+      "title": "Order Confirmation",
+      "heading": "Order Placed Successfully!",
+      "subheading": "Thank you for your order. You can track its status in your order history.",
+      "track_order_button": "Track Your Order",
+      "back_to_home_button": "Back to Home"
     }
   }
 };
@@ -147,7 +272,15 @@ static const Map<String,dynamic> _ar = {
       "createAccountHint": "إنشاء حساب كـ...",
       "thankYouMessage": "شكرًا لك على تقديم طلب انضمام لخُبزاتي\nلقد تم استلام طلبك، وسيتم الرد خلال 3 أيام عمل!\nمتطلعين للعمل معكم."
     },
-    "login": {},
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "forgot_password": "نسيت كلمة المرور؟",
+      "login_button": "تسجيل الدخول",
+      "no_account": "ليس لديك حساب؟",
+      "signup": "إنشاء حساب"
+    },
     "button": {
       "search": "بحث"
     },
@@ -228,6 +361,122 @@ static const Map<String,dynamic> _ar = {
       "calories_placeholder": "ادخل السعرات الحرارية",
       "submit": "إرسال",
       "add_another": "اضافة صنف آخر"
+    },
+    "onboarding": {
+      "select_role": {
+        "title": "اختر نوع الحساب",
+        "heading": "مرحباً بك في خُبزاتي",
+        "subheading": "اختر نوع الحساب المناسب لك"
+      }
+    },
+    "roles": {
+      "customer": "عميل",
+      "bakery_owner": "صاحب مخبز",
+      "restaurant_owner": "صاحب مطعم"
+    },
+    "auth": {
+      "signup_title": "إنشاء حساب جديد",
+      "signup_heading": "مرحباً بك في خُبزاتي",
+      "signup_subheading": "أنشئ حسابك الجديد للبدء",
+      "signup_button": "إنشاء حساب",
+      "terms_and_conditions_prompt": "أوافق على الشروط والأحكام",
+      "already_have_account_prompt": "لديك حساب بالفعل؟",
+      "login_link": "تسجيل الدخول",
+      "forgot_password_heading": "نسيت كلمة المرور؟",
+      "forgot_password_subheading": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور",
+      "forgot_password_send_button": "إرسال رابط إعادة التعيين",
+      "login_title": "تسجيل الدخول",
+      "login_subheading": "مرحباً بك مرة أخرى",
+      "login_button": "تسجيل الدخول",
+      "forgot_password_link": "نسيت كلمة المرور؟",
+      "no_account_prompt": "ليس لديك حساب؟",
+      "signup_link": "إنشاء حساب",
+      "otp_verification_title": "تحقق من الرمز",
+      "otp_verification_heading": "أدخل رمز التحقق",
+      "otp_verification_subheading": "تم إرسال رمز التحقق إلى رقم هاتفك",
+      "otp_verify_button": "تحقق",
+      "otp_did_not_receive_prompt": "لم تستلم الرمز؟",
+      "otp_resend_link": "إعادة إرسال"
+    },
+    "form": {
+      "username_label": "اسم المستخدم",
+      "username_hint": "أدخل اسم المستخدم",
+      "email_label": "البريد الإلكتروني",
+      "email_hint": "أدخل بريدك الإلكتروني",
+      "phone_label": "رقم الهاتف",
+      "phone_hint": "أدخل رقم هاتفك",
+      "password_label": "كلمة المرور",
+      "password_hint": "أدخل كلمة المرور",
+      "confirm_password_label": "تأكيد كلمة المرور",
+      "confirm_password_hint": "أعد إدخال كلمة المرور",
+      "forgot_password_title": "نسيت كلمة المرور"
+    },
+    "form_validation": {
+      "required": "هذا الحقل مطلوب",
+      "invalid_email": "يرجى إدخال بريد إلكتروني صحيح",
+      "password_short": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+      "password_mismatch": "كلمة المرور غير متطابقة",
+      "agree_terms": "يجب الموافقة على الشروط والأحكام"
+    },
+    "common": {
+      "back_button": "رجوع"
+    },
+    "bakery_owner": {
+      "dashboard": {
+        "title": "لوحة تحكم المخبز",
+        "sales_overview_title": "نظرة عامة على المبيعات",
+        "recent_orders_title": "الطلبات الحديثة",
+        "quick_stats_title": "الإحصائيات السريعة",
+        "order_id_placeholder": "رقم الطلب",
+        "order_status_placeholder": "حالة الطلب",
+        "manage_products": "إدارة المنتجات",
+        "manage_orders": "إدارة الطلبات",
+        "bakery_settings": "إعدادات المخبز"
+      },
+      "order_management": {
+        "title": "إدارة الطلبات",
+        "order_id_placeholder": "رقم الطلب",
+        "customer_name_placeholder": "اسم العميل",
+        "order_status_placeholder": "حالة الطلب"
+      },
+      "product_management": {
+        "title": "إدارة المنتجات",
+        "add_product_button": "إضافة منتج",
+        "product_name_placeholder": "اسم المنتج",
+        "product_price_placeholder": "السعر"
+      }
+    },
+    "cart": {
+      "title": "سلة التسوق",
+      "item_name_placeholder": "اسم المنتج",
+      "subtotal_label": "المجموع الفرعي",
+      "total_label": "المجموع الكلي",
+      "proceed_to_checkout_button": "المتابعة للدفع",
+      "empty_message": "سلة التسوق فارغة"
+    },
+    "checkout": {
+      "title": "إتمام الطلب",
+      "delivery_address_title": "عنوان التوصيل",
+      "select_address_prompt": "اختر عنوان التوصيل",
+      "payment_method_title": "طريقة الدفع",
+      "select_payment_method_prompt": "اختر طريقة الدفع",
+      "order_summary_title": "ملخص الطلب",
+      "delivery_fee_label": "رسوم التوصيل"
+    },
+    "home": {
+      "title": "الرئيسية",
+      "categories_title": "التصنيفات",
+      "nearby_vendors_title": "المتاجر القريبة",
+      "popular_vendors_title": "المتاجر الشائعة",
+      "category_bakery": "مخبز",
+      "category_restaurant": "مطعم"
+    },
+    "order_confirmation": {
+      "title": "تأكيد الطلب",
+      "heading": "تم إرسال طلبك بنجاح!",
+      "subheading": "شكراً لطلبك. يمكنك تتبع حالته من سجل الطلبات.",
+      "track_order_button": "تتبع طلبك",
+      "back_to_home_button": "العودة إلى الرئيسية"
     }
   }
 };

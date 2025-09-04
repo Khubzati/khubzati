@@ -6,7 +6,7 @@ class BakeryOrderManagementService {
   final ApiClient _apiClient = ApiClient();
 
   /// Fetches all orders for the bakery owner
-  /// 
+  ///
   /// [page] is the page number for pagination (starts from 1)
   /// [limit] is the number of orders per page
   /// [status] optional filter for order status (e.g., 'pending', 'processing', 'completed', 'cancelled')
@@ -20,34 +20,37 @@ class BakeryOrderManagementService {
     String? status,
     String? sortBy,
     String? sortOrder,
+    DateTime? startDate,
+    DateTime? endDate,
   }) async {
     try {
       final queryParams = {
         'page': page.toString(),
         'limit': limit.toString(),
       };
-      
+
       if (status != null) {
         queryParams['status'] = status;
       }
-      
+
       if (sortBy != null) {
         queryParams['sort_by'] = sortBy;
       }
-      
+
       if (sortOrder != null) {
         queryParams['sort_order'] = sortOrder;
       }
-      
+
       final response = await _apiClient.get(
         ApiConstants.bakeryOrders,
         queryParameters: queryParams,
         requiresAuth: true,
       );
-      
+
       return {
         'orders': List<Map<String, dynamic>>.from(response['data'] ?? []),
-        'pagination': Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
+        'pagination':
+            Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
       };
     } catch (e) {
       if (e is ApiError) {
@@ -58,7 +61,7 @@ class BakeryOrderManagementService {
   }
 
   /// Fetches detailed information for a specific order
-  /// 
+  ///
   /// [orderId] is the ID of the order to fetch details for
   /// Returns comprehensive order details including items, customer info, etc.
   /// Throws [ApiError] if the request fails
@@ -68,7 +71,7 @@ class BakeryOrderManagementService {
         '${ApiConstants.bakeryOrderDetail}$orderId',
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -79,28 +82,29 @@ class BakeryOrderManagementService {
   }
 
   /// Updates the status of an order
-  /// 
+  ///
   /// [orderId] is the ID of the order to update
   /// [status] is the new status for the order (e.g., 'accepted', 'preparing', 'ready_for_pickup', 'completed', 'cancelled')
   /// [notes] optional notes about the status change
   /// Returns the updated order data
   /// Throws [ApiError] if the update fails
-  Future<Map<String, dynamic>> updateOrderStatus(String orderId, String status, {String? notes}) async {
+  Future<Map<String, dynamic>> updateOrderStatus(String orderId, String status,
+      {String? notes}) async {
     try {
       final data = {
         'status': status,
       };
-      
+
       if (notes != null) {
         data['notes'] = notes;
       }
-      
+
       final response = await _apiClient.put(
         '${ApiConstants.bakeryOrderDetail}$orderId/status',
         data: data,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -111,19 +115,20 @@ class BakeryOrderManagementService {
   }
 
   /// Assigns a delivery person to an order
-  /// 
+  ///
   /// [orderId] is the ID of the order to assign
   /// [deliveryPersonId] is the ID of the delivery person to assign
   /// Returns the updated order data
   /// Throws [ApiError] if the assignment fails
-  Future<Map<String, dynamic>> assignDeliveryPerson(String orderId, String deliveryPersonId) async {
+  Future<Map<String, dynamic>> assignDeliveryPerson(
+      String orderId, String deliveryPersonId) async {
     try {
       final response = await _apiClient.post(
         '${ApiConstants.bakeryOrderDetail}$orderId/assign-delivery',
         data: {'delivery_person_id': deliveryPersonId},
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -134,7 +139,7 @@ class BakeryOrderManagementService {
   }
 
   /// Sends notification to customer about order status
-  /// 
+  ///
   /// [orderId] is the ID of the order
   /// [message] is the notification message to send
   /// Returns success status
@@ -146,7 +151,7 @@ class BakeryOrderManagementService {
         data: {'message': message},
         requiresAuth: true,
       );
-      
+
       return true;
     } catch (e) {
       if (e is ApiError) {
@@ -157,7 +162,7 @@ class BakeryOrderManagementService {
   }
 
   /// Generates invoice for an order
-  /// 
+  ///
   /// [orderId] is the ID of the order to generate invoice for
   /// Returns invoice data including download URL
   /// Throws [ApiError] if invoice generation fails
@@ -167,7 +172,7 @@ class BakeryOrderManagementService {
         '${ApiConstants.bakeryOrderDetail}$orderId/generate-invoice',
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -178,7 +183,7 @@ class BakeryOrderManagementService {
   }
 
   /// Searches orders with specific criteria
-  /// 
+  ///
   /// [searchTerm] is the term to search for (e.g., order ID, customer name, product name)
   /// [page] is the page number for pagination
   /// [limit] is the number of orders per page
@@ -195,16 +200,17 @@ class BakeryOrderManagementService {
         'page': page.toString(),
         'limit': limit.toString(),
       };
-      
+
       final response = await _apiClient.get(
         '${ApiConstants.bakeryOrders}/search',
         queryParameters: queryParams,
         requiresAuth: true,
       );
-      
+
       return {
         'orders': List<Map<String, dynamic>>.from(response['data'] ?? []),
-        'pagination': Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
+        'pagination':
+            Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
       };
     } catch (e) {
       if (e is ApiError) {
@@ -215,7 +221,7 @@ class BakeryOrderManagementService {
   }
 
   /// Fetches order statistics by status
-  /// 
+  ///
   /// Returns count of orders grouped by status
   /// Throws [ApiError] if the request fails
   Future<Map<String, dynamic>> getOrderStatistics() async {
@@ -224,7 +230,39 @@ class BakeryOrderManagementService {
         '${ApiConstants.bakeryOrders}/statistics',
         requiresAuth: true,
       );
-      
+
+      return Map<String, dynamic>.from(response['data'] ?? {});
+    } catch (e) {
+      if (e is ApiError) {
+        rethrow;
+      }
+      throw ApiError(message: e.toString());
+    }
+  }
+
+  /// Generates order report for a specific time period
+  ///
+  /// [startDate] is the start date for the report (YYYY-MM-DD format)
+  /// [endDate] is the end date for the report (YYYY-MM-DD format)
+  /// [reportType] is the type of report to generate (e.g., 'sales', 'orders', 'revenue')
+  /// Returns report data including download URL and summary
+  /// Throws [ApiError] if report generation fails
+  Future<Map<String, dynamic>> generateOrderReport({
+    required String startDate,
+    required String endDate,
+    required String reportType,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        '${ApiConstants.bakeryOrders}/reports',
+        data: {
+          'start_date': startDate,
+          'end_date': endDate,
+          'report_type': reportType,
+        },
+        requiresAuth: true,
+      );
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {

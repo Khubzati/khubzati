@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../gen/fonts.gen.dart';
+import 'package:khubzati/gen/fonts.gen.dart';
 import '../../di/injection.dart';
 import '../../services/app_preferences.dart';
 import 'app_colors.dart';
@@ -17,11 +17,11 @@ TextTheme get appTextTheme {
 }
 
 class AppTextStyles {
-  // static const TextStyle phoneNumber = TextStyle(
-  //   fontSize: 16,
-  //   fontWeight: FontWeight.w500,
-  //   color: AppColors.textDarkBrown,
-  // );
+  static const TextStyle phoneNumber = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textDarkBrown,
+  );
 
   static TextStyle otpInput = TextStyle(
     fontSize: 16.sp,

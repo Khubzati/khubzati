@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
@@ -20,7 +20,7 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.cart_title.tr()), // Assuming this key exists
+        title: Text(LocaleKeys.app_cart_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -32,7 +32,8 @@ class CartScreen extends StatelessWidget {
               // TODO: Replace with actual cart items list or empty cart message
               Expanded(
                 child: ListView.builder(
-                  itemCount: 2, // Placeholder count, replace with actual cart item count from CartBloc
+                  itemCount:
+                      2, // Placeholder count, replace with actual cart item count from CartBloc
                   itemBuilder: (context, index) {
                     // Replace with actual CartItemWidget and data
                     return Card(
@@ -46,26 +47,49 @@ class CartScreen extends StatelessWidget {
                               width: 60,
                               height: 60,
                               color: Colors.grey[300],
-                              margin: const EdgeInsetsDirectional.only(end: 12.0),
-                              child: Icon(Icons.image_outlined, color: Colors.grey[600]),
+                              margin:
+                                  const EdgeInsetsDirectional.only(end: 12.0),
+                              child: Icon(Icons.image_outlined,
+                                  color: Colors.grey[600]),
                             ),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("${LocaleKeys.cart_item_name_placeholder.tr()} ${index + 1}", style: context.theme.textTheme.titleMedium),
+                                  Text(
+                                      "${LocaleKeys.app_cart_item_name_placeholder.tr()} ${index + 1}",
+                                      style:
+                                          context.theme.textTheme.titleMedium),
                                   const SizedBox(height: 4),
-                                  Text("\SAR 10.00", style: context.theme.textTheme.bodyMedium?.copyWith(color: context.colorScheme.primary)), // Placeholder price
+                                  Text("\SAR 10.00",
+                                      style: context.theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                              color: context.colorScheme
+                                                  .primary)), // Placeholder price
                                 ],
                               ),
                             ),
                             // Placeholder for Quantity Adjustment & Remove Button
                             Row(
                               children: [
-                                IconButton(icon: const Icon(Icons.remove_circle_outline), onPressed: () { /* TODO: Decrement quantity */ }),
-                                Text("1", style: context.theme.textTheme.titleMedium), // Placeholder quantity
-                                IconButton(icon: const Icon(Icons.add_circle_outline), onPressed: () { /* TODO: Increment quantity */ }),
-                                IconButton(icon: Icon(Icons.delete_outline, color: context.colorScheme.error), onPressed: () { /* TODO: Remove item */ }),
+                                IconButton(
+                                    icon:
+                                        const Icon(Icons.remove_circle_outline),
+                                    onPressed: () {
+                                      /* TODO: Decrement quantity */
+                                    }),
+                                Text("1",
+                                    style: context.theme.textTheme
+                                        .titleMedium), // Placeholder quantity
+                                IconButton(
+                                    icon: const Icon(Icons.add_circle_outline),
+                                    onPressed: () {
+                                      /* TODO: Increment quantity */
+                                    }),
+                                IconButton(
+                                    icon: Icon(Icons.delete_outline,
+                                        color: context.colorScheme.error),
+                                    onPressed: () {/* TODO: Remove item */}),
                               ],
                             )
                           ],
@@ -91,26 +115,35 @@ class CartScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(LocaleKeys.cart_subtotal_label.tr(), style: context.theme.textTheme.titleMedium),
-                    Text("\SAR 20.00", style: context.theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)), // Placeholder
+                    Text(LocaleKeys.app_cart_subtotal_label.tr(),
+                        style: context.theme.textTheme.titleMedium),
+                    Text("\SAR 20.00",
+                        style: context.theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold)), // Placeholder
                   ],
                 ),
               ),
               // Add more for delivery, total etc.
               const Divider(),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(LocaleKeys.cart_total_label.tr(), style: context.theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-                    Text("\SAR 20.00", style: context.theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: context.colorScheme.primary)), // Placeholder
+                    Text(LocaleKeys.app_cart_total_label.tr(),
+                        style: context.theme.textTheme.titleLarge
+                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    Text("\SAR 20.00",
+                        style: context.theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: context.colorScheme.primary)), // Placeholder
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               AppElevatedButton(
-                text: LocaleKeys.cart_proceed_to_checkout_button.tr(),
+                child:
+                    Text(LocaleKeys.app_cart_proceed_to_checkout_button.tr()),
                 onPressed: () {
                   // TODO: Navigate to CheckoutScreen
                   print("Proceed to Checkout Tapped");
@@ -124,4 +157,3 @@ class CartScreen extends StatelessWidget {
     );
   }
 }
-

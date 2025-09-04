@@ -1,14 +1,16 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khubzati/features/bakery_owner/order_management/data/services/bakery_order_management_service.dart';
 
 part 'bakery_order_management_event.dart';
 part 'bakery_order_management_state.dart';
 
-class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryOrderManagementState> {
+class BakeryOrderManagementBloc
+    extends Bloc<BakeryOrderManagementEvent, BakeryOrderManagementState> {
   final BakeryOrderManagementService orderManagementService;
 
-  BakeryOrderManagementBloc({required this.orderManagementService}) : super(BakeryOrderManagementInitial()) {
+  BakeryOrderManagementBloc({required this.orderManagementService})
+      : super(BakeryOrderManagementInitial()) {
     on<LoadBakeryOrders>(_onLoadBakeryOrders);
     on<LoadBakeryOrderDetails>(_onLoadBakeryOrderDetails);
     on<UpdateBakeryOrderStatus>(_onUpdateBakeryOrderStatus);
@@ -17,13 +19,14 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
     on<GenerateBakeryOrderReport>(_onGenerateBakeryOrderReport);
   }
 
-  Future<void> _onLoadBakeryOrders(LoadBakeryOrders event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onLoadBakeryOrders(
+      LoadBakeryOrders event, Emitter<BakeryOrderManagementState> emit) async {
     // If we're loading the first page or changing filters, emit loading state
-    if (event.page == 1 || 
-        (state is BakeryOrdersLoaded && 
-         ((state as BakeryOrdersLoaded).currentStatus != event.status ||
-          (state as BakeryOrdersLoaded).startDate != event.startDate ||
-          (state as BakeryOrdersLoaded).endDate != event.endDate))) {
+    if (event.page == 1 ||
+        (state is BakeryOrdersLoaded &&
+            ((state as BakeryOrdersLoaded).currentStatus != event.status ||
+                (state as BakeryOrdersLoaded).startDate != event.startDate ||
+                (state as BakeryOrdersLoaded).endDate != event.endDate))) {
       emit(BakeryOrdersLoading());
     }
 
@@ -67,28 +70,36 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         ));
       }
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to load orders: ${e.toString()}'));
+      emit(
+          BakeryOrderManagementError('Failed to load orders: ${e.toString()}'));
     }
   }
 
-  Future<void> _onLoadBakeryOrderDetails(LoadBakeryOrderDetails event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onLoadBakeryOrderDetails(LoadBakeryOrderDetails event,
+      Emitter<BakeryOrderManagementState> emit) async {
     emit(BakeryOrderDetailsLoading());
     try {
       // Call API to get order details
-      final orderDetails = await orderManagementService.getOrderDetails(event.orderId);
+      final orderDetails =
+          await orderManagementService.getOrderDetails(event.orderId);
 
       emit(BakeryOrderDetailsLoaded(orderDetails));
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to load order details: ${e.toString()}'));
+      emit(BakeryOrderManagementError(
+          'Failed to load order details: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateBakeryOrderStatus(UpdateBakeryOrderStatus event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onUpdateBakeryOrderStatus(UpdateBakeryOrderStatus event,
+      Emitter<BakeryOrderManagementState> emit) async {
     emit(BakeryOrderStatusUpdateInProgress());
     try {
       // Validate cancellation reason if status is 'cancelled'
-      if (event.newStatus == 'cancelled' && (event.cancellationReason == null || event.cancellationReason!.isEmpty)) {
-        emit(const BakeryOrderManagementError('Cancellation reason is required when cancelling an order'));
+      if (event.newStatus == 'cancelled' &&
+          (event.cancellationReason == null ||
+              event.cancellationReason!.isEmpty)) {
+        emit(const BakeryOrderManagementError(
+            'Cancellation reason is required when cancelling an order'));
         return;
       }
 
@@ -96,7 +107,8 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
       final updatedOrder = await orderManagementService.updateOrderStatus(
         event.orderId,
         event.newStatus,
-        notes: event.cancellationReason, // Use notes field for cancellation reason
+        notes:
+            event.cancellationReason, // Use notes field for cancellation reason
       );
 
       // Generate appropriate message based on status
@@ -130,25 +142,28 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
       // Update order in list if we were in loaded state
       if (state is BakeryOrdersLoaded) {
         final currentState = state as BakeryOrdersLoaded;
-        final updatedOrders = List<Map<String, dynamic>>.from(currentState.orders);
+        final updatedOrders =
+            List<Map<String, dynamic>>.from(currentState.orders);
         final index = updatedOrders.indexWhere((o) => o['id'] == event.orderId);
-        
+
         if (index != -1) {
           updatedOrders[index] = updatedOrder;
           emit(currentState.copyWith(orders: updatedOrders));
         }
       }
-      
+
       // If we were viewing order details, reload them
       if (state is BakeryOrderDetailsLoaded) {
         add(LoadBakeryOrderDetails(event.orderId));
       }
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to update order status: ${e.toString()}'));
+      emit(BakeryOrderManagementError(
+          'Failed to update order status: ${e.toString()}'));
     }
   }
 
-  Future<void> _onSearchBakeryOrders(SearchBakeryOrders event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onSearchBakeryOrders(SearchBakeryOrders event,
+      Emitter<BakeryOrderManagementState> emit) async {
     emit(BakeryOrdersLoading());
     try {
       // Call API to search orders
@@ -157,7 +172,7 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         page: 1,
         limit: 20, // Adjust limit as needed
       );
-      
+
       final searchResults = response['orders'];
       final pagination = response['pagination'];
       final totalCount = pagination['total_count'] ?? 0;
@@ -171,11 +186,13 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         searchQuery: event.query,
       ));
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to search orders: ${e.toString()}'));
+      emit(BakeryOrderManagementError(
+          'Failed to search orders: ${e.toString()}'));
     }
   }
 
-  Future<void> _onFilterBakeryOrdersByDate(FilterBakeryOrdersByDate event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onFilterBakeryOrdersByDate(FilterBakeryOrdersByDate event,
+      Emitter<BakeryOrderManagementState> emit) async {
     emit(BakeryOrdersLoading());
     try {
       // Call API to get filtered orders
@@ -185,7 +202,7 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         page: 1,
         limit: 20, // Adjust limit as needed
       );
-      
+
       final filteredOrders = response['orders'];
       final pagination = response['pagination'];
       final totalCount = pagination['total_count'] ?? 0;
@@ -200,17 +217,23 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         endDate: event.endDate,
       ));
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to filter orders by date: ${e.toString()}'));
+      emit(BakeryOrderManagementError(
+          'Failed to filter orders by date: ${e.toString()}'));
     }
   }
 
-  Future<void> _onGenerateBakeryOrderReport(GenerateBakeryOrderReport event, Emitter<BakeryOrderManagementState> emit) async {
+  Future<void> _onGenerateBakeryOrderReport(GenerateBakeryOrderReport event,
+      Emitter<BakeryOrderManagementState> emit) async {
     emit(BakeryOrderReportGenerating(event.reportType));
     try {
+      // Convert DateTime to String in YYYY-MM-DD format
+      final startDateString = event.startDate.toIso8601String().split('T')[0];
+      final endDateString = event.endDate.toIso8601String().split('T')[0];
+
       // Call API to generate report
       final reportData = await orderManagementService.generateOrderReport(
-        startDate: event.startDate,
-        endDate: event.endDate,
+        startDate: startDateString,
+        endDate: endDateString,
         reportType: event.reportType,
       );
 
@@ -224,7 +247,8 @@ class BakeryOrderManagementBloc extends Bloc<BakeryOrderManagementEvent, BakeryO
         reportSummary: reportSummary,
       ));
     } catch (e) {
-      emit(BakeryOrderManagementError('Failed to generate report: ${e.toString()}'));
+      emit(BakeryOrderManagementError(
+          'Failed to generate report: ${e.toString()}'));
     }
   }
 }

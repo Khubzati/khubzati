@@ -49,3 +49,40 @@ class RateOrder extends OrderConfirmationEvent {
   @override
   List<Object?> get props => [orderId, rating, comment];
 }
+
+class SendOrderReceipt extends OrderConfirmationEvent {
+  final String orderId;
+  final String? email;
+
+  const SendOrderReceipt({required this.orderId, this.email});
+
+  @override
+  List<Object?> get props => [orderId, email];
+}
+
+class ConfirmOrderReceipt extends OrderConfirmationEvent {
+  final String orderId;
+
+  const ConfirmOrderReceipt({required this.orderId});
+
+  @override
+  List<Object?> get props => [orderId];
+}
+
+class ReportOrderIssue extends OrderConfirmationEvent {
+  final String orderId;
+  final String issueType;
+  final String? description;
+  final List<dynamic>?
+      images; // Could be List<File> or URLs depending on implementation
+
+  const ReportOrderIssue({
+    required this.orderId,
+    required this.issueType,
+    this.description,
+    this.images,
+  });
+
+  @override
+  List<Object?> get props => [orderId, issueType, description, images];
+}

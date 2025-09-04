@@ -51,19 +51,19 @@ class OtpSent extends AuthState {
 
 // State when OTP verification is successful (intermediate state before Authenticated or PasswordResetReady)
 class OtpVerified extends AuthState {
-  final String verificationId; // Or some identifier for the OTP process
+    final String verificationId; // Or some identifier for the OTP process
 
   const OtpVerified({required this.verificationId});
-  @override
+    @override
   List<Object?> get props => [verificationId];
 }
 
 // State when password reset is successful and user can login
 class PasswordResetSuccess extends AuthState {
-  final String? message; // Optional success message
+    final String? message; // Optional success message
 
-  const PasswordResetSuccess({this.message});
+    const PasswordResetSuccess({this.message});
 
-  @override
+    @override
   List<Object?> get props => [message];
 }

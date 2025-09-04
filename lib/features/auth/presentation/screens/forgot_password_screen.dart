@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
 import 'package:khubzati/core/widgets/app_text_field.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // TODO: Implement AuthBloc for state management and API calls for sending reset password OTP/link
 // TODO: Implement navigation to OTP verification screen or a confirmation screen
@@ -40,7 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.auth_forgot_password_title.tr()),
+        title: Text(LocaleKeys.app_form_forgot_password_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -53,43 +53,48 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               children: <Widget>[
                 const SizedBox(height: 48),
                 Text(
-                  LocaleKeys.auth_forgot_password_heading.tr(),
-                  style: context.theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                  LocaleKeys.app_auth_forgot_password_heading.tr(),
+                  style: context.theme.textTheme.headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  LocaleKeys.auth_forgot_password_subheading.tr(),
+                  LocaleKeys.app_auth_forgot_password_subheading.tr(),
                   style: context.theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                AppTextField(
-                  controller: _emailController,
-                  labelText: LocaleKeys.form_email_label.tr(),
-                  hintText: LocaleKeys.form_email_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _emailController,
+                  label: LocaleKeys.app_form_email_label.tr(),
+                  hintText: LocaleKeys.app_form_email_hint.tr(),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required.tr(args: [LocaleKeys.form_email_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_email_label.tr()]);
                     }
-                    if (!value.contains('@')) { // Basic email validation
-                      return LocaleKeys.form_validation_invalid_email.tr();
+                    if (!value.contains('@')) {
+                      // Basic email validation
+                      return LocaleKeys.app_form_validation_invalid_email.tr();
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 32),
                 AppElevatedButton(
-                  text: LocaleKeys.auth_forgot_password_send_button.tr(),
+                  child: Text(
+                      LocaleKeys.app_auth_forgot_password_send_button.tr()),
                   onPressed: _sendResetLink,
                 ),
                 const SizedBox(height: 24),
                 TextButton(
-                    onPressed: () {
-                        Navigator.of(context).pop(); // Go back to the previous screen (likely Login)
-                    },
-                    child: Text(LocaleKeys.common_back_button.tr()),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pop(); // Go back to the previous screen (likely Login)
+                  },
+                  child: Text(LocaleKeys.app_common_back_button.tr()),
                 )
               ],
             ),
@@ -99,4 +104,3 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     );
   }
 }
-

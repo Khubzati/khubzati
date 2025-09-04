@@ -8,7 +8,8 @@ abstract class BakeryOrderManagementEvent extends Equatable {
 }
 
 class LoadBakeryOrders extends BakeryOrderManagementEvent {
-  final String status; // 'all', 'pending', 'in_progress', 'completed', 'cancelled'
+  final String
+      status; // 'all', 'pending', 'in_progress', 'completed', 'cancelled'
   final DateTime? startDate;
   final DateTime? endDate;
   final int page;
@@ -37,7 +38,8 @@ class LoadBakeryOrderDetails extends BakeryOrderManagementEvent {
 
 class UpdateBakeryOrderStatus extends BakeryOrderManagementEvent {
   final String orderId;
-  final String newStatus; // 'accepted', 'preparing', 'ready_for_pickup', 'completed', 'cancelled'
+  final String
+      newStatus; // 'accepted', 'preparing', 'ready_for_pickup', 'completed', 'cancelled'
   final String? cancellationReason; // Required if status is 'cancelled'
 
   const UpdateBakeryOrderStatus({

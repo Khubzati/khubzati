@@ -15,7 +15,8 @@ class OrderConfirmationLoaded extends OrderConfirmationState {
   // final OrderModel order;
   // Using placeholder map for now
   final Map<String, dynamic> order;
-  final String orderStatus; // "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"
+  final String
+      orderStatus; // "confirmed", "preparing", "out_for_delivery", "delivered", "cancelled"
   final String estimatedDeliveryTime;
   final bool canCancel; // Whether the order can still be cancelled
 
@@ -27,7 +28,8 @@ class OrderConfirmationLoaded extends OrderConfirmationState {
   });
 
   @override
-  List<Object?> get props => [order, orderStatus, estimatedDeliveryTime, canCancel];
+  List<Object?> get props =>
+      [order, orderStatus, estimatedDeliveryTime, canCancel];
 }
 
 class OrderTrackingState extends OrderConfirmationState {
@@ -88,6 +90,44 @@ class OrderRatingSuccess extends OrderConfirmationState {
 
   @override
   List<Object?> get props => [orderId, rating, message];
+}
+
+class OrderReceiptSendingInProgress extends OrderConfirmationState {}
+
+class OrderReceiptSendingSuccess extends OrderConfirmationState {
+  final String message;
+
+  const OrderReceiptSendingSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class OrderReceiptConfirmed extends OrderConfirmationState {
+  final String orderId;
+  final String message;
+
+  const OrderReceiptConfirmed({required this.orderId, required this.message});
+
+  @override
+  List<Object?> get props => [orderId, message];
+}
+
+class OrderIssueReportingInProgress extends OrderConfirmationState {}
+
+class OrderIssueReportingSuccess extends OrderConfirmationState {
+  final String orderId;
+  final String ticketId;
+  final String message;
+
+  const OrderIssueReportingSuccess({
+    required this.orderId,
+    required this.ticketId,
+    required this.message,
+  });
+
+  @override
+  List<Object?> get props => [orderId, ticketId, message];
 }
 
 class OrderConfirmationError extends OrderConfirmationState {

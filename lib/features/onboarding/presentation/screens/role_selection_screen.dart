@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // TODO: Create Cubit for state management if needed for role persistence or complex logic
+
 @RoutePage()
 class RoleSelectionScreen extends StatelessWidget {
   static const String routeName = '/role-selection';
@@ -15,7 +17,7 @@ class RoleSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.onboarding_select_role_title.tr()),
+        title: Text(LocaleKeys.app_onboarding_select_role_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -26,39 +28,29 @@ class RoleSelectionScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Text(
-                LocaleKeys.onboarding_select_role_heading
-                    .tr(), // Assuming this key exists or will be added
+                LocaleKeys.app_onboarding_select_role_heading.tr(),
                 style: context.theme.textTheme.headlineMedium
                     ?.copyWith(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
               AppElevatedButton(
-                text:
-                    LocaleKeys.roles_customer.tr(), // Assuming this key exists
+                child: Text(LocaleKeys.app_roles_customer.tr()),
                 onPressed: () {
-                  // TODO: Persist role as 'customer'
-                  // TODO: Navigate to Customer App Flow (e.g., Login/Signup or Home)
                   print("Selected Role: Customer");
                 },
               ),
               const SizedBox(height: 16),
               AppElevatedButton(
-                text: LocaleKeys.roles_bakery_owner
-                    .tr(), // Assuming this key exists
+                child: Text(LocaleKeys.app_roles_bakery_owner.tr()),
                 onPressed: () {
-                  // TODO: Persist role as 'bakery_owner'
-                  // TODO: Navigate to Bakery Owner App Flow (e.g., Login/Signup or Dashboard)
                   print("Selected Role: Bakery Owner");
                 },
               ),
               const SizedBox(height: 16),
               AppElevatedButton(
-                child: LocaleKeys.roles_restaurant_owner
-                    .tr(), // Assuming this key exists
+                child: Text(LocaleKeys.app_roles_restaurant_owner.tr()),
                 onPressed: () {
-                  // TODO: Persist role as 'restaurant_owner'
-                  // TODO: Navigate to Restaurant Owner App Flow (e.g., Login/Signup or Dashboard)
                   print("Selected Role: Restaurant Owner");
                 },
               ),

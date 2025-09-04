@@ -19,7 +19,20 @@ class InitializeCheckout extends CheckoutEvent {
   List<Object?> get props => [cartItems, subtotal, total];
 }
 
-class LoadDeliveryAddresses extends CheckoutEvent {}
+class LoadDeliveryAddresses extends CheckoutEvent {
+  final Map<String, Map<String, dynamic>>? cartItems;
+  final double? subtotal;
+  final double? total;
+
+  const LoadDeliveryAddresses({
+    this.cartItems,
+    this.subtotal,
+    this.total,
+  });
+
+  @override
+  List<Object?> get props => [cartItems, subtotal, total];
+}
 
 class SelectDeliveryAddress extends CheckoutEvent {
   final String addressId;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
@@ -25,7 +25,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void _placeOrder() {
     // TODO: Validate selections (address, payment)
     // TODO: Call CheckoutBloc to place the order
-    print('Placing order with Address ID: $_selectedAddressId, Payment Method: $_selectedPaymentMethod');
+    print(
+        'Placing order with Address ID: $_selectedAddressId, Payment Method: $_selectedPaymentMethod');
     // Placeholder for navigation or showing success/error
   }
 
@@ -33,7 +34,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.checkout_title.tr()), // Assuming this key exists
+        title: Text(LocaleKeys.app_checkout_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -43,15 +44,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               // Section 1: Delivery Address
-              Text(LocaleKeys.checkout_delivery_address_title.tr(), style: context.theme.textTheme.titleLarge), // Assuming this key exists
+              Text(LocaleKeys.app_checkout_delivery_address_title.tr(),
+                  style: context.theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               // TODO: Implement Address Selection UI (e.g., dropdown, list, or a dedicated widget)
               // Placeholder for address selection
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.location_on_outlined),
-                  title: Text(_selectedAddressId ?? LocaleKeys.checkout_select_address_prompt.tr()),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  title: Text(_selectedAddressId ??
+                      LocaleKeys.app_checkout_select_address_prompt.tr()),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {
                     // TODO: Navigate to Address Selection/Management Screen or show a dialog
                     print('Select Address Tapped');
@@ -61,15 +65,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 24),
 
               // Section 2: Payment Method
-              Text(LocaleKeys.checkout_payment_method_title.tr(), style: context.theme.textTheme.titleLarge), // Assuming this key exists
+              Text(LocaleKeys.app_checkout_payment_method_title.tr(),
+                  style: context.theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               // TODO: Implement Payment Method Selection UI (e.g., radio buttons, list)
               // Placeholder for payment method selection
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.payment_outlined),
-                  title: Text(_selectedPaymentMethod ?? LocaleKeys.checkout_select_payment_method_prompt.tr()),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  title: Text(_selectedPaymentMethod ??
+                      LocaleKeys.app_checkout_select_payment_method_prompt
+                          .tr()),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   onTap: () {
                     // TODO: Navigate to Payment Method Selection Screen or show a dialog
                     print('Select Payment Method Tapped');
@@ -79,7 +87,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               const SizedBox(height: 24),
 
               // Section 3: Order Summary
-              Text(LocaleKeys.checkout_order_summary_title.tr(), style: context.theme.textTheme.titleLarge), // Assuming this key exists
+              Text(LocaleKeys.app_checkout_order_summary_title.tr(),
+                  style: context.theme.textTheme.titleLarge),
               const SizedBox(height: 8),
               // TODO: Implement Order Summary UI (list of items, subtotal, delivery fee, total)
               // Placeholder for order summary
@@ -88,11 +97,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(LocaleKeys.cart_subtotal_label.tr()), Text("\SAR 20.00")]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(LocaleKeys.app_cart_subtotal_label.tr()),
+                            const Text("SAR 20.00")
+                          ]),
                       const SizedBox(height: 8),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(LocaleKeys.checkout_delivery_fee_label.tr()), Text("\SAR 5.00")]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(LocaleKeys.app_checkout_delivery_fee_label
+                                .tr()),
+                            const Text("SAR 5.00")
+                          ]),
                       const Divider(height: 24),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Text(LocaleKeys.cart_total_label.tr(), style: context.theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)), Text("\SAR 25.00", style: context.theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: context.colorScheme.primary))]),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(LocaleKeys.app_cart_total_label.tr(),
+                                style: context.theme.textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold)),
+                            Text("SAR 25.00",
+                                style: context.theme.textTheme.titleMedium
+                                    ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: context.colorScheme.primary))
+                          ]),
                     ],
                   ),
                 ),
@@ -101,7 +132,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               // Place Order Button
               AppElevatedButton(
-                text: LocaleKeys.checkout_place_order_button.tr(), // Assuming this key exists
+                child: Text(LocaleKeys.app_checkout_place_order_button.tr()),
                 onPressed: _placeOrder,
                 // TODO: Disable button if address/payment not selected or cart is empty
               ),
@@ -112,4 +143,3 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 }
-

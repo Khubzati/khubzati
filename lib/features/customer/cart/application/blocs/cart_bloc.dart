@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // Import your models and services here
 // e.g., import 'package:khubzati/core/models/cart_item_model.dart';
 // import 'package:khubzati/core/services/cart_service.dart'; // For backend cart sync
@@ -23,10 +23,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       // TODO: Load cart from local storage (e.g., AppPreferences) or backend (via cartService)
       // For now, starting with an empty cart or pre-populating for testing
-      await Future.delayed(const Duration(milliseconds: 200)); // Simulate loading
+      await Future.delayed(
+          const Duration(milliseconds: 200)); // Simulate loading
       // final Map<String, Map<String, dynamic>> loadedItems = await appPreferences.getCartItems();
       // emit(_calculateTotals(CartLoaded(items: loadedItems)));
-      emit(const CartLoaded(items: {}, subtotal: 0.0, total: 0.0)); // Start with empty cart
+      emit(const CartLoaded(
+          items: {}, subtotal: 0.0, total: 0.0)); // Start with empty cart
     } catch (e) {
       emit(CartError('Failed to load cart: ${e.toString()}'));
     }
@@ -35,7 +37,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _onAddItemToCart(AddItemToCart event, Emitter<CartState> emit) {
     if (state is CartLoaded) {
       final currentState = state as CartLoaded;
-      final Map<String, Map<String, dynamic>> updatedItems = Map.from(currentState.items);
+      final Map<String, Map<String, dynamic>> updatedItems =
+          Map.from(currentState.items);
 
       if (updatedItems.containsKey(event.productId)) {
         // Item already exists, update quantity
@@ -57,23 +60,25 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       // TODO: Persist updatedItems to local storage or sync with backend
       emit(_calculateTotals(CartLoaded(items: updatedItems)));
     } else if (state is CartInitial || state is CartLoading) {
-        // If cart wasn't loaded, create a new cart with this item
-        final Map<String, Map<String, dynamic>> newItems = {};
-        newItems[event.productId] = {
-          'productId': event.productId,
-          'name': event.productName,
-          'price': event.productPrice,
-          'quantity': event.quantity,
-          'imageUrl': event.productImageUrl,
-        };
-        emit(_calculateTotals(CartLoaded(items: newItems)));
+      // If cart wasn't loaded, create a new cart with this item
+      final Map<String, Map<String, dynamic>> newItems = {};
+      newItems[event.productId] = {
+        'productId': event.productId,
+        'name': event.productName,
+        'price': event.productPrice,
+        'quantity': event.quantity,
+        'imageUrl': event.productImageUrl,
+      };
+      emit(_calculateTotals(CartLoaded(items: newItems)));
     }
   }
 
-  void _onUpdateCartItemQuantity(UpdateCartItemQuantity event, Emitter<CartState> emit) {
+  void _onUpdateCartItemQuantity(
+      UpdateCartItemQuantity event, Emitter<CartState> emit) {
     if (state is CartLoaded) {
       final currentState = state as CartLoaded;
-      final Map<String, Map<String, dynamic>> updatedItems = Map.from(currentState.items);
+      final Map<String, Map<String, dynamic>> updatedItems =
+          Map.from(currentState.items);
 
       if (updatedItems.containsKey(event.productId)) {
         if (event.newQuantity > 0) {
@@ -88,10 +93,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  void _onRemoveItemFromCart(RemoveItemFromCart event, Emitter<CartState> emit) {
+  void _onRemoveItemFromCart(
+      RemoveItemFromCart event, Emitter<CartState> emit) {
     if (state is CartLoaded) {
       final currentState = state as CartLoaded;
-      final Map<String, Map<String, dynamic>> updatedItems = Map.from(currentState.items);
+      final Map<String, Map<String, dynamic>> updatedItems =
+          Map.from(currentState.items);
 
       updatedItems.remove(event.productId);
       // TODO: Persist updatedItems
@@ -117,4 +124,3 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return cart.copyWith(subtotal: subtotal, total: total);
   }
 }
-

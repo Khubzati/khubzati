@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:khubzati/core/routes/app_router.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/translations/locale_keys.g.dart';
 import '../theme/styles/app_colors.dart';
 import '../theme/styles/app_text_style.dart';
 import 'app_elevated_button.dart';
-import '../../features/auth/presentation/bloc/cubit/auth_cubit.dart'; // Import AuthCubit
-import '../routes/app_router.dart'; // Import your router
+import '../../features/auth/application/blocs/auth_bloc.dart';
 
 class BottomSheetWidget extends StatelessWidget {
   const BottomSheetWidget({super.key});
@@ -43,7 +43,7 @@ class BottomSheetWidget extends StatelessWidget {
                 child: AppElevatedButton(
                   child: Text(context.tr(LocaleKeys.app_general_logout)),
                   onPressed: () {
-                    context.read<AuthCubit>().signout();
+                    context.read<AuthBloc>().add(LogoutRequested());
                     context.router.push(const LoginRoute());
                   },
                 ),

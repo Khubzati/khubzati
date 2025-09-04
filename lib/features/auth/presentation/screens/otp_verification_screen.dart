@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:flutter/services.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
-import 'package:khubzati/core/widgets/otp_input_field.dart'; // Assuming this custom widget exists
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // TODO: Implement AuthBloc for state management and API calls for OTP verification and resend
 // TODO: Implement navigation to Home screen or relevant next step upon successful verification
@@ -11,7 +11,8 @@ import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   static const String routeName = '/otp-verification';
-  final String? verificationId; // Or email/phone, depending on what's needed for verification
+  final String?
+      verificationId; // Or email/phone, depending on what's needed for verification
 
   const OtpVerificationScreen({super.key, this.verificationId});
 
@@ -21,11 +22,31 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _otpCode = '';
+  final List<TextEditingController> _otpControllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
+  final List<FocusNode> _focusNodes = List.generate(
+    6,
+    (index) => FocusNode(),
+  );
+
+  @override
+  void dispose() {
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
+  String get _otpCode =>
+      _otpControllers.map((controller) => controller.text).join();
 
   void _verifyOtp() {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
       // TODO: Call AuthBloc to perform OTP verification with _otpCode and widget.verificationId
       print('OTP Code: $_otpCode');
       print('Verification ID: ${widget.verificationId}');
@@ -43,7 +64,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.auth_otp_verification_title.tr()),
+        title: Text(LocaleKeys.app_auth_otp_verification_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -56,42 +77,63 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               children: <Widget>[
                 const SizedBox(height: 48),
                 Text(
-                  LocaleKeys.auth_otp_verification_heading.tr(),
-                  style: context.theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                  LocaleKeys.app_auth_otp_verification_heading.tr(),
+                  style: context.theme.textTheme.headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  // TODO: Add a more specific subheading, possibly including the phone/email the OTP was sent to
-                  LocaleKeys.auth_otp_verification_subheading.tr(), 
+                  LocaleKeys.app_auth_otp_verification_subheading.tr(),
                   style: context.theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                // Assuming OtpInputField is a custom widget that takes a callback for the completed OTP
-                OtpInputField(
-                  numberOfFields: 6, // As per common OTP lengths, adjust if Figma specifies otherwise
-                  onSubmit: (String verificationCode) {
-                    setState(() {
-                      _otpCode = verificationCode;
-                    });
-                    // Optionally, auto-submit when all fields are filled
-                    // _verifyOtp(); 
-                  },
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    6,
+                    (index) => SizedBox(
+                      width: 45,
+                      height: 49,
+                      child: TextField(
+                        controller: _otpControllers[index],
+                        focusNode: _focusNodes[index],
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(1),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value.length == 1 && index < 5) {
+                            _focusNodes[index + 1].requestFocus();
+                          } else if (value.isEmpty && index > 0) {
+                            _focusNodes[index - 1].requestFocus();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 32),
                 AppElevatedButton(
-                  text: LocaleKeys.auth_otp_verify_button.tr(),
+                  child: Text(LocaleKeys.app_auth_otp_verify_button.tr()),
                   onPressed: _verifyOtp,
                 ),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(LocaleKeys.auth_otp_did_not_receive_prompt.tr()),
+                    Text(LocaleKeys.app_auth_otp_did_not_receive_prompt.tr()),
                     TextButton(
                       onPressed: _resendOtp,
-                      child: Text(LocaleKeys.auth_otp_resend_link.tr()),
+                      child: Text(LocaleKeys.app_auth_otp_resend_link.tr()),
                     ),
                   ],
                 ),
@@ -104,4 +146,3 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 }
-

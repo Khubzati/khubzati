@@ -22,7 +22,15 @@
             "createAccountHint": "Create account as...",
             "thankYouMessage": "Thank you for applying to join KHUBZATI.\nYour application has been received, and we will respond within 3 working days!\nLooking forward to working with you."
         },
-        "login": {},
+        "login": {
+            "title": "Login",
+            "email": "Email",
+            "password": "Password",
+            "forgot_password": "Forgot Password?",
+            "login_button": "Login",
+            "no_account": "Don't have an account?",
+            "signup": "Sign Up"
+        },
         "button": {
             "search": "Search"
         },
@@ -104,6 +112,123 @@
             "calories_placeholder": "Enter calories",
             "submit": "Submit",
             "add_another": "Add Another Item"
+        },
+        "onboarding": {
+            "select_role": {
+                "title": "Select Account Type",
+                "heading": "Welcome to Khubzati",
+                "subheading": "Choose the account type that suits you"
+            }
+        },
+        "roles": {
+            "customer": "Customer",
+            "bakery_owner": "Bakery Owner",
+            "restaurant_owner": "Restaurant Owner"
+        },
+        "auth": {
+            "signup_title": "Create New Account",
+            "signup_heading": "Welcome to Khubzati",
+            "signup_subheading": "Create your new account to get started",
+            "signup_button": "Create Account",
+            "terms_and_conditions_prompt": "I agree to the Terms and Conditions",
+            "already_have_account_prompt": "Already have an account?",
+            "login_link": "Login",
+            "forgot_password_heading": "Forgot Password?",
+            "forgot_password_subheading": "Enter your email and we'll send you a password reset link",
+            "forgot_password_send_button": "Send Reset Link",
+            "login_title": "Login",
+            "login_subheading": "Welcome back",
+            "login_button": "Login",
+            "forgot_password_link": "Forgot Password?",
+            "no_account_prompt": "Don't have an account?",
+            "signup_link": "Sign Up",
+            "otp_verification_title": "Verify Code",
+            "otp_verification_heading": "Enter Verification Code",
+            "otp_verification_subheading": "We've sent a verification code to your phone",
+            "otp_verify_button": "Verify",
+            "otp_did_not_receive_prompt": "Didn't receive the code?",
+            "otp_resend_link": "Resend"
+        },
+        "form": {
+            "username_label": "Username",
+            "username_hint": "Enter your username",
+            "email_label": "Email",
+            "email_hint": "Enter your email",
+            "phone_label": "Phone Number",
+            "phone_hint": "Enter your phone number",
+            "password_label": "Password",
+            "password_hint": "Enter your password",
+            "confirm_password_label": "Confirm Password",
+            "confirm_password_hint": "Re-enter your password",
+            "forgot_password_title": "Forgot Password"
+        },
+        "form_validation": {
+            "required": "This field is required",
+            "invalid_email": "Please enter a valid email address",
+            "password_short": "Password must be at least 6 characters",
+            "password_mismatch": "Passwords do not match",
+            "agree_terms": "You must agree to the Terms and Conditions"
+        },
+        "common": {
+            "back_button": "Back"
+        },
+        "bakery_owner": {
+            "dashboard": {
+                "title": "Bakery Dashboard",
+                "sales_overview_title": "Sales Overview",
+                "recent_orders_title": "Recent Orders",
+                "quick_stats_title": "Quick Stats",
+                "order_id_placeholder": "Order ID",
+                "order_status_placeholder": "Order Status",
+                "manage_products": "Manage Products",
+                "manage_orders": "Manage Orders",
+                "bakery_settings": "Bakery Settings"
+            },
+            "order_management": {
+                "title": "Order Management",
+                "order_id_placeholder": "Order ID",
+                "customer_name_placeholder": "Customer Name",
+                "order_status_placeholder": "Order Status"
+            },
+            "product_management": {
+                "title": "Product Management",
+                "add_product_button": "Add Product",
+                "product_name_placeholder": "Product Name",
+                "product_price_placeholder": "Price"
+            }
+        },
+        "cart": {
+            "title": "Shopping Cart",
+            "item_name_placeholder": "Product Name",
+            "subtotal_label": "Subtotal",
+            "total_label": "Total",
+            "proceed_to_checkout_button": "Proceed to Checkout",
+            "empty_message": "Your cart is empty"
+        },
+        "checkout": {
+            "title": "Checkout",
+            "delivery_address_title": "Delivery Address",
+            "select_address_prompt": "Select delivery address",
+            "payment_method_title": "Payment Method",
+            "select_payment_method_prompt": "Select payment method",
+            "order_summary_title": "Order Summary",
+            "delivery_fee_label": "Delivery Fee",
+            "place_order_button": "Place Order"
+        },
+        "home": {
+            "title": "Home",
+            "categories_title": "Categories",
+            "nearby_vendors_title": "Nearby Vendors",
+            "popular_vendors_title": "Popular Vendors",
+            "category_bakery": "Bakery",
+            "category_restaurant": "Restaurant"
+        },
+        "order_confirmation": {
+            "title": "Order Confirmation",
+            "heading": "Order Placed Successfully!",
+            "subheading": "Thank you for your order. You can track its status in your order history.",
+            "track_order_button": "Track Your Order",
+            "back_to_home_button": "Back to Home"
         }
     }
 }

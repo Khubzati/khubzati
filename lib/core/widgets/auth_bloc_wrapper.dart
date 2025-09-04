@@ -4,8 +4,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/utils/utils.dart';
-import '../../../../core/widgets/app_bloc_wrapper_screen.dart';
+import '../utils/utils.dart';
+import 'app_bloc_wrapper_screen.dart';
 import '../../features/auth/application/blocs/auth_bloc.dart';
 
 class AuthBlocWrapper extends StatelessWidget {
@@ -20,20 +20,20 @@ class AuthBlocWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBlocWrapperScreen(
-      blocListener: BlocListener<AuthCubit, AuthState>(
+      blocListener: BlocListener<AuthBloc, AuthState>(
         listenWhen: (previous, current) {
           return context.router.current.name ==
               ModalRoute.of(context)?.settings.name;
         },
         listener: (context, state) {
-          state.status.whenOrNull(
-            loading: () => showAppLoadingDialog(context),
-            failure: (error) => context.router.popForced(),
-            success: () {
+          if (state is AuthLoading) {
+            showAppLoadingDialog(context);
+          } else if (state is AuthError) {
+            context.router.popForced();
+          } else if (state is Authenticated) {
               context.router.popForced();
               success?.call();
-            },
-          );
+          }
         },
       ),
       child: child,

@@ -47,7 +47,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         // Title can be dynamic based on product name fetched
-        title: Text(LocaleKeys.product_detail_title.tr()), // Assuming this key exists
+        title: Text(
+            LocaleKeys.product_detail_title.tr()), // Assuming this key exists
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -60,16 +61,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 height: 250,
                 color: Colors.grey[300],
                 alignment: Alignment.center,
-                child: Text("Product Image Carousel Placeholder (ID: ${widget.productId})", style: context.theme.textTheme.titleMedium),
+                child: Text(
+                    "Product Image Carousel Placeholder (ID: ${widget.productId})",
+                    style: context.theme.textTheme.titleMedium),
               ),
               const SizedBox(height: 24),
 
               // TODO: Implement Product Name (fetched from Bloc)
-              Text("Product Name Placeholder", style: context.theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
+              Text("Product Name Placeholder",
+                  style: context.theme.textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
 
               // TODO: Implement Product Price (fetched from Bloc)
-              Text("\SAR 0.00", style: context.theme.textTheme.titleLarge?.copyWith(color: context.colorScheme.primary, fontWeight: FontWeight.bold)),
+              Text("SAR 0.00",
+                  style: context.theme.textTheme.titleLarge?.copyWith(
+                      color: context.colorScheme.primary,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
 
               // TODO: Implement Product Description (fetched from Bloc)
@@ -83,16 +91,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(icon: const Icon(Icons.remove_circle_outline), onPressed: _decrementQuantity, iconSize: 30),
-                  Text('$_quantity', style: context.theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-                  IconButton(icon: const Icon(Icons.add_circle_outline), onPressed: _incrementQuantity, iconSize: 30),
+                  IconButton(
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed: _decrementQuantity,
+                      iconSize: 30),
+                  Text('$_quantity',
+                      style: context.theme.textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                  IconButton(
+                      icon: const Icon(Icons.add_circle_outline),
+                      onPressed: _incrementQuantity,
+                      iconSize: 30),
                 ],
               ),
               const SizedBox(height: 24),
 
               // Add to Cart Button
               AppElevatedButton(
-                text: LocaleKeys.product_detail_add_to_cart_button.tr(), // Assuming this key exists
+                text: LocaleKeys.product_detail_add_to_cart_button
+                    .tr(), // Assuming this key exists
                 onPressed: _addToCart,
                 // TODO: Style button as per Figma
               ),
@@ -106,4 +123,3 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 }
-

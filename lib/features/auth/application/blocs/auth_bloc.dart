@@ -110,7 +110,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // if (otpResponse.isVerified) {
       //   // If OTP was for signup, token and user details might be returned here or require another step
       //   // For simplicity, assuming it leads to Authenticated state for now
-      //   await appPreferences.setUserToken(otpResponse.token);
+      //   await appPreferences.setUserToken(otpResponse.token); 
       //   await appPreferences.setUserId(otpResponse.user.id);
       //   await appPreferences.setUserRole(otpResponse.user.role);
       //   emit(Authenticated(userId: otpResponse.user.id, role: otpResponse.user.role));
@@ -121,15 +121,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       // Placeholder logic
       await Future.delayed(const Duration(seconds: 1));
       if (event.otp == "123456") {
-        // Check if this OTP was for signup or password reset based on verificationId or state
+         // Check if this OTP was for signup or password reset based on verificationId or state
         if (event.verificationId.startsWith("signup")) {
-          const placeholderUserId = "user_signup_123";
+            const placeholderUserId = "user_signup_123";
           const placeholderRole =
               "customer"; // Role should be known from signup request
-          await appPreferences.setUserToken("fake_signup_token_123");
-          await appPreferences.setUserId(placeholderUserId);
-          await appPreferences.setUserRole(placeholderRole);
-          emit(Authenticated(userId: placeholderUserId, role: placeholderRole));
+            await appPreferences.setUserToken("fake_signup_token_123");
+            await appPreferences.setUserId(placeholderUserId);
+            await appPreferences.setUserRole(placeholderRole);
+            emit(Authenticated(userId: placeholderUserId, role: placeholderRole));
         } else if (event.verificationId.startsWith("reset")) {
           emit(OtpVerified(
               verificationId: event

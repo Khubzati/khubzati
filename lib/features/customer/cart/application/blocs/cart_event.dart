@@ -33,7 +33,8 @@ class UpdateCartItemQuantity extends CartEvent {
   final String productId;
   final int newQuantity;
 
-  const UpdateCartItemQuantity({required this.productId, required this.newQuantity});
+  const UpdateCartItemQuantity(
+      {required this.productId, required this.newQuantity});
 
   @override
   List<Object> get props => [productId, newQuantity];
@@ -49,4 +50,3 @@ class RemoveItemFromCart extends CartEvent {
 }
 
 class ClearCart extends CartEvent {}
-

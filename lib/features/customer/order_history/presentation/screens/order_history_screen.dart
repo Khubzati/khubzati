@@ -19,7 +19,8 @@ class OrderHistoryScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.order_history_title.tr()), // Assuming this key exists
+        title: Text(
+            LocaleKeys.order_history_title.tr()), // Assuming this key exists
         centerTitle: true,
       ),
       body: SafeArea(
@@ -27,23 +28,32 @@ class OrderHistoryScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           // TODO: Replace with actual order list or empty state message
           child: ListView.builder(
-            itemCount: 3, // Placeholder count, replace with actual order count from OrderHistoryBloc
+            itemCount:
+                3, // Placeholder count, replace with actual order count from OrderHistoryBloc
             itemBuilder: (context, index) {
               // Replace with actual OrderHistoryItemWidget and data
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
-                  leading: Icon(Icons.receipt_long_outlined, size: 40, color: context.colorScheme.primary),
-                  title: Text("${LocaleKeys.order_history_order_id_placeholder.tr()} #12345${index + 1}"), // Placeholder
+                  leading: Icon(Icons.receipt_long_outlined,
+                      size: 40, color: context.colorScheme.primary),
+                  title: Text(
+                      "${LocaleKeys.order_history_order_id_placeholder.tr()} #12345${index + 1}"), // Placeholder
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${LocaleKeys.order_history_date_placeholder.tr()}: 2024-07-${20 + index}"), // Placeholder
-                      Text("${LocaleKeys.order_history_status_placeholder.tr()}: Delivered", style: TextStyle(color: Colors.green[700])), // Placeholder
-                      Text("${LocaleKeys.order_history_total_placeholder.tr()}: \SAR 75.00"), // Placeholder
+                      Text(
+                          "${LocaleKeys.order_history_date_placeholder.tr()}: 2024-07-${20 + index}"), // Placeholder
+                      Text(
+                          "${LocaleKeys.order_history_status_placeholder.tr()}: Delivered",
+                          style: TextStyle(
+                              color: Colors.green[700])), // Placeholder
+                      Text(
+                          "${LocaleKeys.order_history_total_placeholder.tr()}: SAR 75.00"), // Placeholder
                     ],
                   ),
-                  trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   isThreeLine: true,
                   onTap: () {
                     // TODO: Navigate to OrderDetailScreen with the specific order ID
@@ -73,4 +83,3 @@ class OrderHistoryScreen extends StatelessWidget {
     );
   }
 }
-

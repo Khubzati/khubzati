@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
+
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
+import 'package:khubzati/core/widgets/app_text_field.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
 // TODO: Implement AuthBloc for state management and API calls
@@ -44,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.auth_login_title.tr()),
+        title: Text(LocaleKeys.app_login_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -65,39 +67,39 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  LocaleKeys.auth_login_subheading.tr(),
+                  LocaleKeys.app_auth_login_subheading.tr(),
                   style: context.theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
-                AppTextField(
-                  controller: _emailController,
-                  labelText: LocaleKeys.form_email_label.tr(),
-                  hintText: LocaleKeys.form_email_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _emailController,
+                  label: LocaleKeys.app_form_email_label.tr(),
+                  hintText: LocaleKeys.app_form_email_hint.tr(),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_email_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_email_label.tr()]);
                     }
                     // TODO: Add more sophisticated email validation if needed
                     if (!value.contains('@')) {
                       // Basic check
-                      return LocaleKeys.form_validation_invalid_email.tr();
+                      return LocaleKeys.app_form_validation_invalid_email.tr();
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                AppTextField(
-                  controller: _passwordController,
-                  labelText: LocaleKeys.form_password_label.tr(),
-                  hintText: LocaleKeys.form_password_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _passwordController,
+                  label: LocaleKeys.app_form_password_label.tr(),
+                  hintText: LocaleKeys.app_form_password_hint.tr(),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_password_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_password_label.tr()]);
                     }
                     // TODO: Add password strength validation if needed
                     return null;
@@ -111,12 +113,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       // TODO: Navigate to Forgot Password screen
                       print('Forgot Password Tapped');
                     },
-                    child: Text(LocaleKeys.auth_forgot_password_link.tr()),
+                    child: Text(LocaleKeys.app_auth_forgot_password_link.tr()),
                   ),
                 ),
                 const SizedBox(height: 24),
                 AppElevatedButton(
-                  text: LocaleKeys.auth_login_button.tr(),
+                  child: Text(LocaleKeys.app_auth_login_button.tr()),
                   onPressed: _login,
                 ),
                 const SizedBox(height: 32),
@@ -124,13 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(LocaleKeys.auth_no_account_prompt.tr()),
+                    Text(LocaleKeys.app_auth_no_account_prompt.tr()),
                     TextButton(
                       onPressed: () {
                         // TODO: Navigate to Signup screen
                         print('Sign Up Tapped');
                       },
-                      child: Text(LocaleKeys.auth_signup_link.tr()),
+                      child: Text(LocaleKeys.app_auth_signup_link.tr()),
                     ),
                   ],
                 ),

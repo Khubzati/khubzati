@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:khubzati/core/extenstions/context.dart';
 
 import 'package:khubzati/core/widgets/app_elevated_button.dart';
+import 'package:khubzati/core/widgets/app_text_field.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 // TODO: Implement AuthBloc for state management and API calls
 // TODO: Implement navigation to Login and OTP screens
@@ -42,18 +44,16 @@ class _SignupScreenState extends State<SignupScreen> {
   void _signup() {
     if (_formKey.currentState!.validate()) {
       if (!_agreeToTerms) {
-        // TODO: Show a snackbar or dialog to agree to terms
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(LocaleKeys.form_validation_agree_terms.tr())),
+          SnackBar(
+              content: Text(LocaleKeys.app_form_validation_agree_terms.tr())),
         );
         return;
       }
-      // TODO: Call AuthBloc to perform signup
       print('Username: ${_usernameController.text}');
       print('Email: ${_emailController.text}');
       print('Phone: ${_phoneController.text}');
       print('Password: ${_passwordController.text}');
-      // Placeholder for navigation or showing success/error
     }
   }
 
@@ -61,7 +61,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.auth_signup_title.tr()),
+        title: Text(LocaleKeys.app_auth_signup_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -72,97 +72,95 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                // TODO: Add App Logo or relevant image as per Figma
                 const SizedBox(height: 32),
                 Text(
-                  LocaleKeys.auth_signup_heading.tr(),
+                  LocaleKeys.app_auth_signup_heading.tr(),
                   style: context.theme.textTheme.headlineMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  LocaleKeys.auth_signup_subheading.tr(),
+                  LocaleKeys.app_auth_signup_subheading.tr(),
                   style: context.theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                AppTextField(
-                  controller: _usernameController,
-                  labelText: LocaleKeys.form_username_label.tr(),
-                  hintText: LocaleKeys.form_username_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _usernameController,
+                  label: LocaleKeys.app_form_username_label.tr(),
+                  hintText: LocaleKeys.app_form_username_hint.tr(),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_username_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_username_label.tr()]);
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                AppTextField(
-                  controller: _emailController,
-                  labelText: LocaleKeys.form_email_label.tr(),
-                  hintText: LocaleKeys.form_email_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _emailController,
+                  label: LocaleKeys.app_form_email_label.tr(),
+                  hintText: LocaleKeys.app_form_email_hint.tr(),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_email_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_email_label.tr()]);
                     }
                     if (!value.contains('@')) {
-                      // Basic check
-                      return LocaleKeys.form_validation_invalid_email.tr();
+                      return LocaleKeys.app_form_validation_invalid_email.tr();
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                AppTextField(
-                  controller: _phoneController,
-                  labelText: LocaleKeys.form_phone_label.tr(),
-                  hintText: LocaleKeys.form_phone_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _phoneController,
+                  label: LocaleKeys.app_form_phone_label.tr(),
+                  hintText: LocaleKeys.app_form_phone_hint.tr(),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_phone_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_phone_label.tr()]);
                     }
-                    // TODO: Add more sophisticated phone validation if needed
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                AppTextField(
-                  controller: _passwordController,
-                  labelText: LocaleKeys.form_password_label.tr(),
-                  hintText: LocaleKeys.form_password_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _passwordController,
+                  label: LocaleKeys.app_form_password_label.tr(),
+                  hintText: LocaleKeys.app_form_password_hint.tr(),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required
-                          .tr(args: [LocaleKeys.form_password_label.tr()]);
+                      return LocaleKeys.app_form_validation_required
+                          .tr(args: [LocaleKeys.app_form_password_label.tr()]);
                     }
                     if (value.length < 6) {
-                      // Example: min length
-                      return LocaleKeys.form_validation_password_short.tr();
+                      return LocaleKeys.app_form_validation_password_short.tr();
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
-                AppTextField(
-                  controller: _confirmPasswordController,
-                  labelText: LocaleKeys.form_confirm_password_label.tr(),
-                  hintText: LocaleKeys.form_confirm_password_hint.tr(),
+                AppTextFormField(
+                  textEditingController: _confirmPasswordController,
+                  label: LocaleKeys.app_form_confirm_password_label.tr(),
+                  hintText: LocaleKeys.app_form_confirm_password_hint.tr(),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return LocaleKeys.form_validation_required.tr(
-                          args: [LocaleKeys.form_confirm_password_label.tr()]);
+                      return LocaleKeys.app_form_validation_required.tr(args: [
+                        LocaleKeys.app_form_confirm_password_label.tr()
+                      ]);
                     }
                     if (value != _passwordController.text) {
-                      return LocaleKeys.form_validation_password_mismatch.tr();
+                      return LocaleKeys.app_form_validation_password_mismatch
+                          .tr();
                     }
                     return null;
                   },
@@ -181,11 +179,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Navigate to Terms & Conditions screen or show a dialog
                           print('Terms & Conditions Tapped');
                         },
                         child: Text(
-                          LocaleKeys.auth_terms_and_conditions_prompt.tr(),
+                          LocaleKeys.app_auth_terms_and_conditions_prompt.tr(),
                           style: context.theme.textTheme.bodyMedium
                               ?.copyWith(decoration: TextDecoration.underline),
                         ),
@@ -195,21 +192,19 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
                 const SizedBox(height: 24),
                 AppElevatedButton(
-                  text: LocaleKeys.auth_signup_button.tr(),
+                  child: Text(LocaleKeys.app_auth_signup_button.tr()),
                   onPressed: _signup,
                 ),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(LocaleKeys.auth_already_have_account_prompt.tr()),
+                    Text(LocaleKeys.app_auth_already_have_account_prompt.tr()),
                     TextButton(
                       onPressed: () {
-                        // TODO: Navigate to Login screen
-                        Navigator.of(context)
-                            .pop(); // Example: Go back to login
+                        Navigator.of(context).pop();
                       },
-                      child: Text(LocaleKeys.auth_login_link.tr()),
+                      child: Text(LocaleKeys.app_auth_login_link.tr()),
                     ),
                   ],
                 ),

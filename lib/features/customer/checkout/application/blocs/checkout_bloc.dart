@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khubzati/features/customer/checkout/data/services/checkout_service.dart';
 
 part 'checkout_event.dart';
@@ -20,17 +20,19 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<PlaceOrder>(_onPlaceOrder);
   }
 
-  Future<void> _onInitializeCheckout(InitializeCheckout event, Emitter<CheckoutState> emit) async {
+  Future<void> _onInitializeCheckout(
+      InitializeCheckout event, Emitter<CheckoutState> emit) async {
     emit(CheckoutLoading());
     try {
       // Get cart data from event or from CartBloc
-      final cartItems = event.cartItems ?? {}; // Placeholder, should get from CartBloc if not provided
+      final cartItems = event.cartItems ??
+          {}; // Placeholder, should get from CartBloc if not provided
       final subtotal = event.subtotal ?? 0.0;
       final total = event.total ?? 0.0;
 
       // Proceed to address selection
       add(LoadDeliveryAddresses());
-      
+
       // Note: The actual transition to address selection state will happen in _onLoadDeliveryAddresses
       // This is just to initialize the checkout process
     } catch (e) {
@@ -38,23 +40,26 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  Future<void> _onLoadDeliveryAddresses(LoadDeliveryAddresses event, Emitter<CheckoutState> emit) async {
+  Future<void> _onLoadDeliveryAddresses(
+      LoadDeliveryAddresses event, Emitter<CheckoutState> emit) async {
     emit(CheckoutLoading());
     try {
       // Get addresses from the API
       final addressesResponse = await checkoutService.getDeliveryAddresses();
-      
+
       // Transform API response to the format expected by the UI
-      final addresses = addressesResponse.map((addr) => {
-        'id': addr['id'],
-        'name': addr['name'],
-        'street': addr['street'],
-        'city': addr['city'],
-        'state': addr['state'],
-        'country': addr['country'],
-        'postalCode': addr['postal_code'],
-        'isDefault': addr['is_default'] ?? false,
-      }).toList();
+      final addresses = addressesResponse
+          .map((addr) => {
+                'id': addr['id'],
+                'name': addr['name'],
+                'street': addr['street'],
+                'city': addr['city'],
+                'state': addr['state'],
+                'country': addr['country'],
+                'postalCode': addr['postal_code'],
+                'isDefault': addr['is_default'] ?? false,
+              })
+          .toList();
 
       // Get cart data (in a real app, this would come from CartBloc or be passed in the event)
       final cartItems = event.cartItems ?? {};
@@ -79,10 +84,11 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  void _onSelectDeliveryAddress(SelectDeliveryAddress event, Emitter<CheckoutState> emit) {
+  void _onSelectDeliveryAddress(
+      SelectDeliveryAddress event, Emitter<CheckoutState> emit) {
     if (state is CheckoutAddressSelectionState) {
       final currentState = state as CheckoutAddressSelectionState;
-      
+
       // Find the selected address
       final selectedAddress = currentState.availableAddresses.firstWhere(
         (addr) => addr['id'] == event.addressId,
@@ -98,7 +104,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           subtotal: currentState.subtotal,
           total: currentState.total,
         ));
-        
+
         // Move to payment selection
         add(LoadPaymentMethods());
       } else {
@@ -107,15 +113,17 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  Future<void> _onAddNewDeliveryAddress(AddNewDeliveryAddress event, Emitter<CheckoutState> emit) async {
+  Future<void> _onAddNewDeliveryAddress(
+      AddNewDeliveryAddress event, Emitter<CheckoutState> emit) async {
     if (state is CheckoutAddressSelectionState) {
       final currentState = state as CheckoutAddressSelectionState;
       emit(AddressAddingState());
-      
+
       try {
         // Call API to add new address
-        final newAddress = await checkoutService.addDeliveryAddress(event.address);
-        
+        final newAddress =
+            await checkoutService.addDeliveryAddress(event.address);
+
         // Transform API response to the format expected by the UI
         final formattedAddress = {
           'id': newAddress['id'],
@@ -139,27 +147,30 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  Future<void> _onLoadPaymentMethods(LoadPaymentMethods event, Emitter<CheckoutState> emit) async {
+  Future<void> _onLoadPaymentMethods(
+      LoadPaymentMethods event, Emitter<CheckoutState> emit) async {
     emit(CheckoutLoading());
     try {
       // Get payment methods from the API
       final paymentMethodsResponse = await checkoutService.getPaymentMethods();
-      
+
       // Transform API response to the format expected by the UI
-      final paymentMethods = paymentMethodsResponse.map((pm) => {
-        'id': pm['id'],
-        'type': pm['type'],
-        'brand': pm['brand'],
-        'last4': pm['last4'],
-        'isDefault': pm['is_default'] ?? false,
-        'name': pm['name'],
-      }).toList();
+      final paymentMethods = paymentMethodsResponse
+          .map((pm) => {
+                'id': pm['id'],
+                'type': pm['type'],
+                'brand': pm['brand'],
+                'last4': pm['last4'],
+                'isDefault': pm['is_default'] ?? false,
+                'name': pm['name'],
+              })
+          .toList();
 
       // Get current state data
       if (state is CheckoutAddressSelectionState) {
         final addressState = state as CheckoutAddressSelectionState;
         final selectedAddress = addressState.selectedAddress!;
-        
+
         // Find default payment method if any
         final defaultPaymentMethod = paymentMethods.firstWhere(
           (pm) => pm['isDefault'] == true,
@@ -168,7 +179,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
         emit(CheckoutPaymentSelectionState(
           availablePaymentMethods: paymentMethods,
-          selectedPaymentMethod: defaultPaymentMethod.isNotEmpty ? defaultPaymentMethod : null,
+          selectedPaymentMethod:
+              defaultPaymentMethod.isNotEmpty ? defaultPaymentMethod : null,
           selectedAddress: selectedAddress,
           cartItems: addressState.cartItems,
           subtotal: addressState.subtotal,
@@ -182,26 +194,29 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  void _onSelectPaymentMethod(SelectPaymentMethod event, Emitter<CheckoutState> emit) async {
+  void _onSelectPaymentMethod(
+      SelectPaymentMethod event, Emitter<CheckoutState> emit) async {
     if (state is CheckoutPaymentSelectionState) {
       final currentState = state as CheckoutPaymentSelectionState;
-      
+
       // Find the selected payment method
-      final selectedPaymentMethod = currentState.availablePaymentMethods.firstWhere(
+      final selectedPaymentMethod =
+          currentState.availablePaymentMethods.firstWhere(
         (pm) => pm['id'] == event.paymentMethodId,
         orElse: () => {},
       );
 
       if (selectedPaymentMethod.isNotEmpty) {
         emit(CheckoutLoading());
-        
+
         try {
           // Calculate delivery fees based on selected address and cart items
-          final deliveryFeesResponse = await checkoutService.calculateDeliveryFees(
+          final deliveryFeesResponse =
+              await checkoutService.calculateDeliveryFees(
             currentState.selectedAddress['id'],
             currentState.cartItems.values.toList(),
           );
-          
+
           // Extract delivery fee and tax from response
           final deliveryFee = deliveryFeesResponse['delivery_fee'] ?? 0.0;
           final tax = deliveryFeesResponse['tax'] ?? 0.0;
@@ -219,7 +234,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
             total: total,
           ));
         } catch (e) {
-          emit(CheckoutError('Failed to calculate delivery fees: ${e.toString()}'));
+          emit(CheckoutError(
+              'Failed to calculate delivery fees: ${e.toString()}'));
         }
       } else {
         emit(CheckoutError('Selected payment method not found'));
@@ -227,11 +243,12 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  Future<void> _onPlaceOrder(PlaceOrder event, Emitter<CheckoutState> emit) async {
+  Future<void> _onPlaceOrder(
+      PlaceOrder event, Emitter<CheckoutState> emit) async {
     if (state is CheckoutOrderSummaryState) {
       final currentState = state as CheckoutOrderSummaryState;
       emit(CheckoutProcessingOrder());
-      
+
       try {
         // Prepare order data
         final orderData = {
@@ -244,24 +261,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           'total': currentState.total,
           'notes': event.notes,
         };
-        
+
         // Validate checkout data first
         await checkoutService.validateCheckout(orderData);
-        
+
         // Place the order
         final orderResponse = await checkoutService.placeOrder(orderData);
-        
+
         // Extract order details from response
         final orderId = orderResponse['id'];
         final estimatedDeliveryTime = orderResponse['estimated_delivery_time'];
-        
+
         // Process payment if needed
         if (currentState.selectedPaymentMethod['type'] != 'cash_on_delivery') {
           final paymentData = {
             'payment_method_id': currentState.selectedPaymentMethod['id'],
             // Add any additional payment data required by the payment gateway
           };
-          
+
           await checkoutService.processPayment(orderId, paymentData);
         }
 

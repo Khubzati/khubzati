@@ -1,11 +1,12 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khubzati/features/bakery_owner/product_management/data/services/bakery_product_management_service.dart';
 
 part 'bakery_product_management_event.dart';
 part 'bakery_product_management_state.dart';
 
-class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, BakeryProductManagementState> {
+class BakeryProductManagementBloc
+    extends Bloc<BakeryProductManagementEvent, BakeryProductManagementState> {
   final BakeryProductManagementService productManagementService;
 
   BakeryProductManagementBloc({
@@ -24,12 +25,15 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
     on<DeleteBakeryProductImage>(_onDeleteBakeryProductImage);
   }
 
-  Future<void> _onLoadBakeryProducts(LoadBakeryProducts event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onLoadBakeryProducts(LoadBakeryProducts event,
+      Emitter<BakeryProductManagementState> emit) async {
     // If we're loading the first page or changing filters, emit loading state
-    if (event.page == 1 || 
-        (state is BakeryProductsLoaded && 
-         ((state as BakeryProductsLoaded).currentCategoryId != event.categoryId || 
-          (state as BakeryProductsLoaded).currentSearchQuery != event.searchQuery))) {
+    if (event.page == 1 ||
+        (state is BakeryProductsLoaded &&
+            ((state as BakeryProductsLoaded).currentCategoryId !=
+                    event.categoryId ||
+                (state as BakeryProductsLoaded).currentSearchQuery !=
+                    event.searchQuery))) {
       emit(BakeryProductsLoading());
     }
 
@@ -41,7 +45,7 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         page: event.page,
         limit: event.limit,
       );
-      
+
       final products = response['products'];
       final pagination = response['pagination'];
       final totalCount = pagination['total_count'] ?? 0;
@@ -70,11 +74,13 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         ));
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to load products: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to load products: ${e.toString()}'));
     }
   }
 
-  Future<void> _onLoadBakeryProductCategories(LoadBakeryProductCategories event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onLoadBakeryProductCategories(LoadBakeryProductCategories event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(BakeryCategoriesLoading());
     try {
       // Call API to get categories
@@ -82,15 +88,18 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
 
       emit(BakeryCategoriesLoaded(categories: categories));
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to load categories: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to load categories: ${e.toString()}'));
     }
   }
 
-  Future<void> _onAddBakeryProduct(AddBakeryProduct event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onAddBakeryProduct(AddBakeryProduct event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('add'));
     try {
       // Call API to add product
-      final newProduct = await productManagementService.createProduct(event.product);
+      final newProduct =
+          await productManagementService.createProduct(event.product);
 
       emit(BakeryProductOperationSuccess(
         operationType: 'add',
@@ -108,15 +117,18 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         ));
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to add product: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to add product: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateBakeryProduct(UpdateBakeryProduct event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onUpdateBakeryProduct(UpdateBakeryProduct event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('update'));
     try {
       // Call API to update product
-      final updatedProduct = await productManagementService.updateProduct(event.productId, event.updatedProduct);
+      final updatedProduct = await productManagementService.updateProduct(
+          event.productId, event.updatedProduct);
 
       emit(BakeryProductOperationSuccess(
         operationType: 'update',
@@ -127,9 +139,11 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Update product in list if we were in loaded state
       if (state is BakeryProductsLoaded) {
         final currentState = state as BakeryProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
@@ -143,11 +157,13 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         }
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to update product: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to update product: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteBakeryProduct(DeleteBakeryProduct event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onDeleteBakeryProduct(DeleteBakeryProduct event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('delete'));
     try {
       // Call API to delete product
@@ -161,17 +177,20 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Remove product from list if we were in loaded state
       if (state is BakeryProductsLoaded) {
         final currentState = state as BakeryProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products)
-          ..removeWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products)
+              ..removeWhere((p) => p['id'] == event.productId);
+
         emit(currentState.copyWith(products: updatedProducts));
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to delete product: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to delete product: ${e.toString()}'));
     }
   }
 
-  Future<void> _onAddBakeryProductCategory(AddBakeryProductCategory event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onAddBakeryProductCategory(AddBakeryProductCategory event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryCategoryOperationInProgress('add'));
     try {
       // Call API to add category
@@ -190,21 +209,25 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Refresh categories
       add(LoadBakeryProductCategories());
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to add category: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to add category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateBakeryProductCategory(UpdateBakeryProductCategory event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onUpdateBakeryProductCategory(UpdateBakeryProductCategory event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryCategoryOperationInProgress('update'));
     try {
       // Prepare update data
       final updateData = <String, dynamic>{};
       if (event.name != null) updateData['name'] = event.name;
-      if (event.description != null) updateData['description'] = event.description;
+      if (event.description != null)
+        updateData['description'] = event.description;
       // if (event.imageUrl != null) updateData['imageUrl'] = event.imageUrl; // Handle image upload separately
 
       // Call API to update category
-      final updatedCategory = await productManagementService.updateCategory(event.categoryId, updateData);
+      final updatedCategory = await productManagementService.updateCategory(
+          event.categoryId, updateData);
 
       emit(BakeryCategoryOperationSuccess(
         operationType: 'update',
@@ -215,11 +238,13 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Refresh categories
       add(LoadBakeryProductCategories());
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to update category: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to update category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteBakeryProductCategory(DeleteBakeryProductCategory event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onDeleteBakeryProductCategory(DeleteBakeryProductCategory event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryCategoryOperationInProgress('delete'));
     try {
       // Call API to delete category
@@ -232,7 +257,7 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
 
       // Refresh categories
       add(LoadBakeryProductCategories());
-      
+
       // If we were viewing products from this category, reset to all products
       if (state is BakeryProductsLoaded) {
         final currentState = state as BakeryProductsLoaded;
@@ -241,20 +266,24 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         }
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to delete category: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to delete category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateBakeryProductAvailability(UpdateBakeryProductAvailability event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onUpdateBakeryProductAvailability(
+      UpdateBakeryProductAvailability event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('update_availability'));
     try {
       // Call API to update availability
-      final updatedProduct = await productManagementService.updateProductAvailability(event.productId, event.isAvailable);
+      final updatedProduct = await productManagementService
+          .updateProductAvailability(event.productId, event.isAvailable);
 
-      final message = event.isAvailable 
-          ? 'Product is now available for purchase' 
+      final message = event.isAvailable
+          ? 'Product is now available for purchase'
           : 'Product is now unavailable for purchase';
-      
+
       emit(BakeryProductOperationSuccess(
         operationType: 'update_availability',
         message: message,
@@ -264,24 +293,29 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Update product in list if we were in loaded state
       if (state is BakeryProductsLoaded) {
         final currentState = state as BakeryProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
         }
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to update product availability: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to update product availability: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUploadBakeryProductImages(UploadBakeryProductImages event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onUploadBakeryProductImages(UploadBakeryProductImages event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('upload_images'));
     try {
       // Call API to upload images
-      final updatedProduct = await productManagementService.uploadProductImages(event.productId, event.imageFiles);
+      final updatedProduct = await productManagementService.uploadProductImages(
+          event.productId, event.imageFiles);
 
       emit(BakeryProductOperationSuccess(
         operationType: 'upload_images',
@@ -292,24 +326,29 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
       // Update product in list if we were in loaded state
       if (state is BakeryProductsLoaded) {
         final currentState = state as BakeryProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
         }
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to upload product images: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to upload product images: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteBakeryProductImage(DeleteBakeryProductImage event, Emitter<BakeryProductManagementState> emit) async {
+  Future<void> _onDeleteBakeryProductImage(DeleteBakeryProductImage event,
+      Emitter<BakeryProductManagementState> emit) async {
     emit(const BakeryProductOperationInProgress('delete_image'));
     try {
       // Call API to delete image
-      await productManagementService.deleteProductImage(event.productId, event.imageId);
+      await productManagementService.deleteProductImage(
+          event.productId, event.imageId);
 
       emit(BakeryProductOperationSuccess(
         operationType: 'delete_image',
@@ -327,7 +366,8 @@ class BakeryProductManagementBloc extends Bloc<BakeryProductManagementEvent, Bak
         ));
       }
     } catch (e) {
-      emit(BakeryProductManagementError('Failed to delete product image: ${e.toString()}'));
+      emit(BakeryProductManagementError(
+          'Failed to delete product image: ${e.toString()}'));
     }
   }
 }

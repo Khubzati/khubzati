@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:khubzati/core/extensions/context.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
@@ -17,7 +16,8 @@ class VendorListingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.vendor_listing_title.tr()), // Assuming this key exists
+        title: Text(
+            LocaleKeys.vendor_listing_title.tr()), // Assuming this key exists
         // TODO: Add filter/sort icons or other actions as per Figma
       ),
       body: SafeArea(
@@ -27,7 +27,8 @@ class VendorListingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               // TODO: Implement Filter and Sort options UI
-              Text("Filter/Sort Options Placeholder", style: context.theme.textTheme.titleMedium),
+              Text("Filter/Sort Options Placeholder",
+                  style: context.theme.textTheme.titleMedium),
               const SizedBox(height: 16),
 
               // TODO: Implement Vendor List using ListView.builder and VendorCard widgets
@@ -39,9 +40,13 @@ class VendorListingScreen extends StatelessWidget {
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
-                        leading: Icon(Icons.store, size: 40, color: context.colorScheme.primary),
-                        title: Text("${LocaleKeys.vendor_listing_vendor_name_placeholder.tr()} ${index + 1}"),
-                        subtitle: Text(LocaleKeys.vendor_listing_vendor_details_placeholder.tr()),
+                        leading: Icon(Icons.store,
+                            size: 40, color: context.colorScheme.primary),
+                        title: Text(
+                            "${LocaleKeys.vendor_listing_vendor_name_placeholder.tr()} ${index + 1}"),
+                        subtitle: Text(LocaleKeys
+                            .vendor_listing_vendor_details_placeholder
+                            .tr()),
                         onTap: () {
                           // TODO: Navigate to VendorDetailScreen
                           print("Tapped on Vendor ${index + 1}");
@@ -58,4 +63,3 @@ class VendorListingScreen extends StatelessWidget {
     );
   }
 }
-

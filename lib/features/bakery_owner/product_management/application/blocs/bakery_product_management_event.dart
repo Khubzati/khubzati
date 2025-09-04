@@ -110,3 +110,29 @@ class UpdateBakeryProductAvailability extends BakeryProductManagementEvent {
   @override
   List<Object?> get props => [productId, isAvailable];
 }
+
+class UploadBakeryProductImages extends BakeryProductManagementEvent {
+  final String productId;
+  final List<dynamic> imageFiles; // List of File objects or image data
+
+  const UploadBakeryProductImages({
+    required this.productId,
+    required this.imageFiles,
+  });
+
+  @override
+  List<Object?> get props => [productId, imageFiles];
+}
+
+class DeleteBakeryProductImage extends BakeryProductManagementEvent {
+  final String productId;
+  final String imageId;
+
+  const DeleteBakeryProductImage({
+    required this.productId,
+    required this.imageId,
+  });
+
+  @override
+  List<Object?> get props => [productId, imageId];
+}
