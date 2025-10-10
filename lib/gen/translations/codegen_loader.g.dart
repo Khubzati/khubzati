@@ -16,6 +16,33 @@ class CodegenLoader extends AssetLoader{
 
   static const Map<String,dynamic> _en = {
   "app": {
+    "profile": {
+      "title": "Profile",
+      "edit_profile_label": "Edit Profile",
+      "manage_addresses_label": "Manage Addresses",
+      "order_history_label": "Order History",
+      "notifications_label": "Notifications",
+      "language_label": "Language",
+      "help_support_label": "Help & Support",
+      "logout_button": "Logout",
+      "bakery_name": "Bakery Name",
+      "bakery_name_hint": "Enter bakery name",
+      "bakery_name_required": "Bakery name is required",
+      "address": "Address",
+      "address_hint": "Enter bakery address",
+      "address_required": "Address is required",
+      "phone_number": "Phone Number",
+      "phone_number_hint": "Enter phone number",
+      "phone_number_required": "Phone number is required",
+      "phone_number_invalid": "Please enter a valid phone number",
+      "edit_info": "Edit My Information",
+      "save_success": "Profile updated successfully"
+    },
+    "vendor_listing": {
+      "title": "Vendors",
+      "vendor_name_placeholder": "Vendor Name",
+      "vendor_details_placeholder": "Vendor Details"
+    },
     "otp_verification": {
       "title": "Verify the phone number",
       "instruction": "Please enter the 6-digit verification code sent to",
@@ -26,7 +53,9 @@ class CodegenLoader extends AssetLoader{
     "general": {
       "app_back": "back",
       "admin_succes_message": "Your request has been successfully sent!",
-      "logout": "Logout"
+      "logout": "Logout",
+      "next": "Next",
+      "browse": "Browse"
     },
     "userTypeSelection": {
       "addNewType": "Add another category",
@@ -176,7 +205,13 @@ class CodegenLoader extends AssetLoader{
       "password_hint": "Enter your password",
       "confirm_password_label": "Confirm Password",
       "confirm_password_hint": "Re-enter your password",
-      "forgot_password_title": "Forgot Password"
+      "forgot_password_title": "Forgot Password",
+      "bakery_name_label": "Bakery Name",
+      "bakery_name_hint": "Enter your bakery name",
+      "location_label": "Location",
+      "location_hint": "Enter bakery location",
+      "bakery_license_label": "Bakery License/Registration",
+      "bakery_license_placeholder": "No file selected"
     },
     "form_validation": {
       "required": "This field is required",
@@ -237,7 +272,10 @@ class CodegenLoader extends AssetLoader{
       "nearby_vendors_title": "Nearby Vendors",
       "popular_vendors_title": "Popular Vendors",
       "category_bakery": "Bakery",
-      "category_restaurant": "Restaurant"
+      "category_restaurant": "Restaurant",
+      "stats_total_revenue": "Total Revenue",
+      "stats_completed_orders": "Completed Orders",
+      "stats_incomplete_orders": "Incomplete Orders"
     },
     "order_confirmation": {
       "title": "Order Confirmation",
@@ -245,6 +283,124 @@ class CodegenLoader extends AssetLoader{
       "subheading": "Thank you for your order. You can track its status in your order history.",
       "track_order_button": "Track Your Order",
       "back_to_home_button": "Back to Home"
+    },
+    "product_detail": {
+      "title": "Product Details",
+      "add_to_cart_button": "Add to Cart"
+    },
+    "order_history": {
+      "title": "Order History",
+      "order_id_placeholder": "Order ID",
+      "date_placeholder": "Date",
+      "status_placeholder": "Status",
+      "total_placeholder": "Total",
+      "empty_message": "No orders found"
+    },
+    "vendor_detail": {
+      "title": "Vendor Details",
+      "product_categories_title": "Categories",
+      "products_title": "Products",
+      "reviews_title": "Reviews"
+    },
+    "restaurant_owner": {
+      "dashboard": {
+        "title": "Restaurant Dashboard",
+        "sales_overview_title": "Sales Overview",
+        "recent_orders_title": "Recent Orders",
+        "quick_stats_title": "Quick Stats",
+        "order_id_placeholder": "Order ID",
+        "order_status_placeholder": "Order Status",
+        "manage_menu": "Manage Menu",
+        "manage_orders": "Manage Orders",
+        "restaurant_settings": "Restaurant Settings"
+      },
+      "order_management": {
+        "title": "Order Management",
+        "order_id_placeholder": "Order ID",
+        "customer_name_placeholder": "Customer Name",
+        "order_status_placeholder": "Order Status"
+      },
+      "product_management": {
+        "title": "Product Management",
+        "add_item_button": "Add Item",
+        "item_name_placeholder": "Item Name",
+        "item_price_placeholder": "Price"
+      }
+    },
+    "navigation": {
+      "home": "Home",
+      "orders": "Orders",
+      "profile": "Profile",
+      "settings": "Settings"
+    },
+    "search": {
+      "hint": "Search for vendors or products...",
+      "no_results": "No results found",
+      "recent_searches": "Recent Searches"
+    },
+    "order_sheet": {
+      "notes": "Notes",
+      "view_order": "View Order",
+      "order_hash": "#Order",
+      "order_status": "Order Status",
+      "incomplete": "Incomplete",
+      "order_value": "Order Value",
+      "currency_jod": "JOD",
+      "date": "Date",
+      "location": "Location",
+      "default_restaurant_name": "Al Sarwat Restaurant",
+      "sample_items": "Toast, Shrak, Arabic, Brown Toast,\nArabic, Shrak",
+      "order_details": "Order Details",
+      "sample_item_names": "Toast \nShrak\nArabic\nBrown Toast\nArabic\nShrak\nTax\nDelivery",
+      "sample_quantities": "x2 \nx30\nx5\nx7\nx22\nx67",
+      "sample_prices": "1.75 \n0.8\n1.50\n1.25\n0.4\n0.9\n0.50\n2.00",
+      "total_value": "Total Value",
+      "print_invoice": "Print Invoice",
+      "order_in_preparation": "Order In Preparation",
+      "start_preparing_order": "Start Preparing Order",
+      "time": "Time"
+    },
+    "empty_state": {
+      "no_orders_title": "No Orders Yet",
+      "no_orders_subtitle": "No orders have been received yet",
+      "no_orders_description": "Orders will appear here once customers start placing them"
+    },
+    "order_details": {
+      "title": "Order Details",
+      "order_id": "Order",
+      "customer": "Customer",
+      "order_value": "Order Value",
+      "date": "Date",
+      "location": "Location",
+      "product_type": "Type",
+      "product_price": "Price",
+      "product_quantity": "Quantity",
+      "product_total": "Total",
+      "currency": "JOD",
+      "tax": "Tax",
+      "delivery": "Delivery",
+      "payment_method": "Payment Method",
+      "total_value": "Total Value",
+      "print_invoice": "Print Invoice",
+      "start_preparation": "Start Order Preparation"
+    },
+    "inventory": {
+      "title": "Inventory",
+      "description": "List of bread types and quantities available to you.",
+      "product_details": "Product Details",
+      "product_name": "White Toast Bread",
+      "price_per_quantity": "Price/Quantity",
+      "available": "Available",
+      "unit": "Unit",
+      "category": "Category",
+      "nutritional_value": "Nutritional Value",
+      "calories": "Calories",
+      "details": "Details",
+      "loading": "Loading inventory...",
+      "error": "Error loading inventory",
+      "retry": "Retry",
+      "editCategory": "Edit Category",
+      "saveChanges": "Save Changes"
     }
   }
 };
@@ -260,7 +416,9 @@ static const Map<String,dynamic> _ar = {
     "general": {
       "app_back": "رجوع",
       "admin_succes_message": "تم إرسال طلبك بنجاح!",
-      "logout": "تسجيل خروج"
+      "logout": "تسجيل خروج",
+      "next": "التالي",
+      "browse": "تصفح"
     },
     "userTypeSelection": {
       "addNewType": "إضافة صنف آخر",
@@ -409,7 +567,13 @@ static const Map<String,dynamic> _ar = {
       "password_hint": "أدخل كلمة المرور",
       "confirm_password_label": "تأكيد كلمة المرور",
       "confirm_password_hint": "أعد إدخال كلمة المرور",
-      "forgot_password_title": "نسيت كلمة المرور"
+      "forgot_password_title": "نسيت كلمة المرور",
+      "bakery_name_label": "اسم المخبز",
+      "bakery_name_hint": "أدخل اسم المخبز",
+      "location_label": "الموقع",
+      "location_hint": "أدخل موقع المخبز",
+      "bakery_license_label": "رخصة المخبز/التسجيل",
+      "bakery_license_placeholder": "لم يتم اختيار ملف"
     },
     "form_validation": {
       "required": "هذا الحقل مطلوب",
@@ -469,7 +633,10 @@ static const Map<String,dynamic> _ar = {
       "nearby_vendors_title": "المتاجر القريبة",
       "popular_vendors_title": "المتاجر الشائعة",
       "category_bakery": "مخبز",
-      "category_restaurant": "مطعم"
+      "category_restaurant": "مطعم",
+      "stats_total_revenue": "إجمالي الإيرادات",
+      "stats_completed_orders": "الطلبات المكتملة",
+      "stats_incomplete_orders": "الطلبات غير المكتملة"
     },
     "order_confirmation": {
       "title": "تأكيد الطلب",
@@ -477,6 +644,151 @@ static const Map<String,dynamic> _ar = {
       "subheading": "شكراً لطلبك. يمكنك تتبع حالته من سجل الطلبات.",
       "track_order_button": "تتبع طلبك",
       "back_to_home_button": "العودة إلى الرئيسية"
+    },
+    "profile": {
+      "title": "الملف الشخصي",
+      "edit_profile_label": "تعديل الملف الشخصي",
+      "manage_addresses_label": "إدارة العناوين",
+      "order_history_label": "سجل الطلبات",
+      "notifications_label": "الإشعارات",
+      "language_label": "اللغة",
+      "help_support_label": "المساعدة والدعم",
+      "logout_button": "تسجيل الخروج",
+      "bakery_name": "اسم المخبز",
+      "bakery_name_hint": "أدخل اسم المخبز",
+      "bakery_name_required": "اسم المخبز مطلوب",
+      "address": "العنوان",
+      "address_hint": "أدخل عنوان المخبز",
+      "address_required": "العنوان مطلوب",
+      "phone_number": "رقم الهاتف",
+      "phone_number_hint": "أدخل رقم الهاتف",
+      "phone_number_required": "رقم الهاتف مطلوب",
+      "phone_number_invalid": "يرجى إدخال رقم هاتف صحيح",
+      "edit_info": "تعديل معلوماتي",
+      "save_success": "تم تحديث الملف الشخصي بنجاح"
+    },
+    "vendor_listing": {
+      "title": "المتاجر",
+      "vendor_name_placeholder": "اسم المتجر",
+      "vendor_details_placeholder": "تفاصيل المتجر"
+    },
+    "product_detail": {
+      "title": "تفاصيل المنتج",
+      "add_to_cart_button": "أضف إلى السلة"
+    },
+    "order_history": {
+      "title": "سجل الطلبات",
+      "order_id_placeholder": "رقم الطلب",
+      "date_placeholder": "التاريخ",
+      "status_placeholder": "الحالة",
+      "total_placeholder": "المجموع",
+      "empty_message": "لا توجد طلبات"
+    },
+    "vendor_detail": {
+      "title": "تفاصيل المتجر",
+      "product_categories_title": "التصنيفات",
+      "products_title": "المنتجات",
+      "reviews_title": "التقييمات"
+    },
+    "restaurant_owner": {
+      "dashboard": {
+        "title": "لوحة تحكم المطعم",
+        "sales_overview_title": "نظرة عامة على المبيعات",
+        "recent_orders_title": "الطلبات الحديثة",
+        "quick_stats_title": "الإحصائيات السريعة",
+        "order_id_placeholder": "رقم الطلب",
+        "order_status_placeholder": "حالة الطلب",
+        "manage_menu": "إدارة القائمة",
+        "manage_orders": "إدارة الطلبات",
+        "restaurant_settings": "إعدادات المطعم"
+      },
+      "order_management": {
+        "title": "إدارة الطلبات",
+        "order_id_placeholder": "رقم الطلب",
+        "customer_name_placeholder": "اسم العميل",
+        "order_status_placeholder": "حالة الطلب"
+      },
+      "product_management": {
+        "title": "إدارة المنتجات",
+        "add_item_button": "إضافة عنصر",
+        "item_name_placeholder": "اسم العنصر",
+        "item_price_placeholder": "السعر"
+      }
+    },
+    "navigation": {
+      "home": "الرئيسية",
+      "orders": "الطلبات",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات"
+    },
+    "search": {
+      "hint": "ابحث عن المتاجر أو المنتجات...",
+      "no_results": "لا توجد نتائج",
+      "recent_searches": "البحث الحديث"
+    },
+    "order_sheet": {
+      "notes": "ملاحظات",
+      "view_order": "عرض الطلب",
+      "order_hash": "#طلب",
+      "order_status": "حالة الطلب",
+      "incomplete": "غير مكتمل",
+      "order_value": "قيمة الطلب",
+      "currency_jod": "د.أ",
+      "date": "التاريخ",
+      "location": "الموقع",
+      "default_restaurant_name": "مطعم السروات",
+      "sample_items": "توست، شراك، عربي، توست اسمر،\nعربي، شراك",
+      "order_details": "تفاصيل الطلب",
+      "sample_item_names": "توست \nشراك\nعربي\nتوست اسمر\nعربي\nشراك\nضريبة\nتوصيل",
+      "sample_quantities": "x2 \nx30\nx5\nx7\nx22\nx67",
+      "sample_prices": "1.75 \n0.8\n1.50\n1.25\n0.4\n0.9\n0.50\n2.00",
+      "total_value": "القيمة الكلية",
+      "print_invoice": "طباعة الفاتورة",
+      "order_in_preparation": "الطلب قيد التحضير",
+      "start_preparing_order": "بدء تحضير الطلب",
+      "time": "الوقت"
+    },
+    "empty_state": {
+      "no_orders_title": "لا توجد طلبات",
+      "no_orders_subtitle": "لم يتم استلام أي طلبات بعد",
+      "no_orders_description": "ستظهر الطلبات هنا بمجرد أن يبدأ العملاء في تقديم طلباتهم"
+    },
+    "order_details": {
+      "title": "تفاصيل الطلب",
+      "order_id": "طلب",
+      "customer": "الزبون",
+      "order_value": "قيمة الطلب",
+      "date": "التاريخ",
+      "location": "الموقع",
+      "product_type": "النوع",
+      "product_price": "القيمة",
+      "product_quantity": "الكمية",
+      "product_total": "القيمة الكلية",
+      "currency": "د.أ",
+      "tax": "الضريبة",
+      "delivery": "التوصيل",
+      "payment_method": "طريقة الدفع",
+      "total_value": "القيمة الكلية",
+      "print_invoice": "اصدار فاتورة",
+      "start_preparation": "بدء تحضير الطلب"
+    },
+    "inventory": {
+      "title": "المخزون",
+      "description": "قائمة أنواع وكميات الخبز المتوفر لديك.",
+      "product_details": "تفاصيل الصنف",
+      "product_name": "خبز توست أبيض",
+      "price_per_quantity": "السعر/كمية",
+      "available": "المتوفر",
+      "unit": "الوحدة",
+      "category": "الصنف",
+      "nutritional_value": "القيمة الغذائية",
+      "calories": "السعرات الحرارية",
+      "details": "التفاصيل",
+      "loading": "جاري تحميل المخزون...",
+      "error": "خطأ في تحميل المخزون",
+      "retry": "إعادة المحاولة",
+      "editCategory": "تعديل الصنف",
+      "saveChanges": "حفظ التعديلات"
     }
   }
 };

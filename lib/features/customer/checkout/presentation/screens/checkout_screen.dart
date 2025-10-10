@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:khubzati/core/extenstions/context.dart';
-import 'package:khubzati/core/widgets/app_elevated_button.dart';
+import 'package:khubzati/core/routes/app_router.dart';
+import 'package:khubzati/core/widgets/shared/app_button.dart';
+import 'package:khubzati/core/widgets/shared/app_text_field.dart';
+import 'package:khubzati/core/widgets/shared/app_card.dart';
+import 'package:khubzati/core/widgets/shared/app_loading_widget.dart';
+import 'package:khubzati/features/customer/checkout/application/blocs/checkout_bloc.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-// TODO: Implement CheckoutBloc for state management (address selection, payment method, order summary, place order)
-// TODO: Implement UI for Delivery Address, Payment Method, Order Summary sections
-// TODO: Implement navigation to OrderConfirmationScreen or handle order placement result
-
+@RoutePage()
 class CheckoutScreen extends StatefulWidget {
-  static const String routeName = '/checkout';
-
   const CheckoutScreen({super.key});
 
   @override
@@ -18,127 +20,365 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  // TODO: Add state variables for selected address, payment method, etc.
-  String? _selectedAddressId;
-  String? _selectedPaymentMethod;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
 
-  void _placeOrder() {
-    // TODO: Validate selections (address, payment)
-    // TODO: Call CheckoutBloc to place the order
-    print(
-        'Placing order with Address ID: $_selectedAddressId, Payment Method: $_selectedPaymentMethod');
-    // Placeholder for navigation or showing success/error
+  String _selectedPaymentMethod = 'cash';
+  String? _selectedAddressId;
+  Map<String, dynamic>? _selectedAddress;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CheckoutBloc>().add(const InitializeCheckout());
+    });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
+    final colorScheme = context.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.app_checkout_title.tr()),
-        centerTitle: true,
+        title: Text(
+          LocaleKeys.app_checkout_title.tr(),
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              // Section 1: Delivery Address
-              Text(LocaleKeys.app_checkout_delivery_address_title.tr(),
-                  style: context.theme.textTheme.titleLarge),
-              const SizedBox(height: 8),
-              // TODO: Implement Address Selection UI (e.g., dropdown, list, or a dedicated widget)
-              // Placeholder for address selection
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.location_on_outlined),
-                  title: Text(_selectedAddressId ??
-                      LocaleKeys.app_checkout_select_address_prompt.tr()),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                  onTap: () {
-                    // TODO: Navigate to Address Selection/Management Screen or show a dialog
-                    print('Select Address Tapped');
-                  },
+      body: BlocBuilder<CheckoutBloc, CheckoutState>(
+        builder: (context, state) {
+          if (state is CheckoutLoading) {
+            return const AppLoadingWidget(
+              message: 'Loading checkout...',
+            );
+          }
+
+          if (state is CheckoutError) {
+            return AppErrorWidget(
+              message: state.message,
+              onRetry: () {
+                context.read<CheckoutBloc>().add(const InitializeCheckout());
+              },
+            );
+          }
+
+          return _buildCheckoutContent(context, state);
+        },
+      ),
+      bottomNavigationBar: _buildBottomBar(context),
+    );
+  }
+
+  Widget _buildCheckoutContent(BuildContext context, CheckoutState state) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Contact Information
+            _buildSectionTitle(context, 'Contact Information'),
+            const SizedBox(height: 16),
+
+            AppTextField(
+              label: 'Full Name',
+              controller: _nameController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your name';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+
+            AppTextField(
+              label: 'Phone Number',
+              controller: _phoneController,
+              keyboardType: TextInputType.phone,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your phone number';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Address Selection
+            _buildAddressSection(context),
+            const SizedBox(height: 24),
+
+            // Payment Method
+            _buildSectionTitle(context, 'Payment Method'),
+            const SizedBox(height: 16),
+
+            _buildPaymentOption(
+                context, 'Cash on Delivery', 'cash', Icons.money),
+            const SizedBox(height: 12),
+            _buildPaymentOption(
+                context, 'Credit/Debit Card', 'card', Icons.credit_card),
+            const SizedBox(height: 12),
+            _buildPaymentOption(context, 'Digital Wallet', 'wallet',
+                Icons.account_balance_wallet),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(BuildContext context, String title) {
+    final theme = context.theme;
+    final colorScheme = context.colorScheme;
+
+    return Text(
+      title,
+      style: theme.textTheme.titleLarge?.copyWith(
+        color: colorScheme.onSurface,
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  Widget _buildPaymentOption(
+      BuildContext context, String title, String value, IconData icon) {
+    final theme = context.theme;
+    final colorScheme = context.colorScheme;
+    final isSelected = _selectedPaymentMethod == value;
+
+    return AppCard(
+      onTap: () {
+        setState(() {
+          _selectedPaymentMethod = value;
+        });
+      },
+      child: Row(
+        children: [
+          Radio<String>(
+            value: value,
+            groupValue: _selectedPaymentMethod,
+            onChanged: (value) {
+              setState(() {
+                _selectedPaymentMethod = value!;
+              });
+            },
+          ),
+          const SizedBox(width: 12),
+          Icon(
+            icon,
+            color: isSelected
+                ? colorScheme.primary
+                : colorScheme.onSurface.withOpacity(0.7),
+            size: 24,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar(BuildContext context) {
+    final theme = context.theme;
+    final colorScheme = context.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Order Total
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Order Total',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 24),
-
-              // Section 2: Payment Method
-              Text(LocaleKeys.app_checkout_payment_method_title.tr(),
-                  style: context.theme.textTheme.titleLarge),
-              const SizedBox(height: 8),
-              // TODO: Implement Payment Method Selection UI (e.g., radio buttons, list)
-              // Placeholder for payment method selection
-              Card(
-                child: ListTile(
-                  leading: const Icon(Icons.payment_outlined),
-                  title: Text(_selectedPaymentMethod ??
-                      LocaleKeys.app_checkout_select_payment_method_prompt
-                          .tr()),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                  onTap: () {
-                    // TODO: Navigate to Payment Method Selection Screen or show a dialog
-                    print('Select Payment Method Tapped');
-                  },
+              Text(
+                '\$25.99', // This should come from the cart state
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.bold,
                 ),
-              ),
-              const SizedBox(height: 24),
-
-              // Section 3: Order Summary
-              Text(LocaleKeys.app_checkout_order_summary_title.tr(),
-                  style: context.theme.textTheme.titleLarge),
-              const SizedBox(height: 8),
-              // TODO: Implement Order Summary UI (list of items, subtotal, delivery fee, total)
-              // Placeholder for order summary
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(LocaleKeys.app_cart_subtotal_label.tr()),
-                            const Text("SAR 20.00")
-                          ]),
-                      const SizedBox(height: 8),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(LocaleKeys.app_checkout_delivery_fee_label
-                                .tr()),
-                            const Text("SAR 5.00")
-                          ]),
-                      const Divider(height: 24),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(LocaleKeys.app_cart_total_label.tr(),
-                                style: context.theme.textTheme.titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold)),
-                            Text("SAR 25.00",
-                                style: context.theme.textTheme.titleMedium
-                                    ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: context.colorScheme.primary))
-                          ]),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-
-              // Place Order Button
-              AppElevatedButton(
-                child: Text(LocaleKeys.app_checkout_place_order_button.tr()),
-                onPressed: _placeOrder,
-                // TODO: Disable button if address/payment not selected or cart is empty
               ),
             ],
           ),
+          const SizedBox(height: 16),
+
+          // Place Order Button
+          AppButton(
+            text: 'Place Order',
+            onPressed: _placeOrder,
+            type: AppButtonType.primary,
+            size: AppButtonSize.large,
+            isFullWidth: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddressSection(BuildContext context) {
+    final theme = context.theme;
+    final colorScheme = context.colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle(context, 'Delivery Address'),
+        const SizedBox(height: 16),
+        if (_selectedAddress != null)
+          AppCard(
+            onTap: () => _selectAddress(context),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      color: colorScheme.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _selectedAddress!['label'] ?? 'Address',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: colorScheme.onSurface.withOpacity(0.5),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  _selectedAddress!['address'] ?? '',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface.withOpacity(0.8),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${_selectedAddress!['city'] ?? ''}, ${_selectedAddress!['state'] ?? ''} ${_selectedAddress!['postal_code'] ?? ''}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurface.withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          AppCard(
+            onTap: () => _selectAddress(context),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.add_location,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Select or add delivery address',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: colorScheme.onSurface.withOpacity(0.5),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  void _selectAddress(BuildContext context) async {
+    final result = await context.router.push(
+      AddressListRoute(isSelectionMode: true),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        _selectedAddress = result;
+        _selectedAddressId = result['id'];
+      });
+    }
+  }
+
+  void _placeOrder() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    if (_selectedAddress == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a delivery address'),
+          backgroundColor: Colors.orange,
         ),
+      );
+      return;
+    }
+
+    // Navigate to payment screen
+    context.router.push(
+      PaymentRoute(
+        orderId: 'ORDER_${DateTime.now().millisecondsSinceEpoch}',
+        amount: 25.99, // This should come from cart state
+        selectedAddressId: _selectedAddressId,
       ),
     );
   }

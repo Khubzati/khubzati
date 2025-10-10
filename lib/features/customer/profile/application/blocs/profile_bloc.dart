@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:khubzati/features/customer/profile/data/services/profile_service.dart';
 
 part 'profile_event.dart';
@@ -31,8 +32,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       // Get user profile from API
       final user = await profileService.getUserProfile();
 
-      // Get user addresses from API (in a real app, this might be a separate service)
-      final addresses = await profileService.getUserProfile();
+      // Get user addresses from API
+      final addresses = await profileService.getDeliveryAddresses();
 
       // Get saved payment methods
       final paymentMethods = await profileService.getSavedPaymentMethods();
@@ -151,7 +152,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(AddressManagementState(currentState.addresses));
     } else {
       // If we're not in loaded state, load the profile first
-      add(LoadUserProfile());
+      add(const LoadUserProfile());
     }
   }
 

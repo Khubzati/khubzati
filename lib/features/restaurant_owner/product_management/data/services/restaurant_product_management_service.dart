@@ -7,7 +7,7 @@ class RestaurantProductManagementService {
   final ApiClient _apiClient = ApiClient();
 
   /// Fetches all menu items for the restaurant owner
-  /// 
+  ///
   /// [page] is the page number for pagination (starts from 1)
   /// [limit] is the number of items per page
   /// [categoryId] optional filter for items in a specific category
@@ -25,24 +25,25 @@ class RestaurantProductManagementService {
         'page': page.toString(),
         'limit': limit.toString(),
       };
-      
+
       if (categoryId != null) {
         queryParams['category_id'] = categoryId;
       }
-      
+
       if (searchTerm != null) {
         queryParams['search'] = searchTerm;
       }
-      
+
       final response = await _apiClient.get(
         ApiConstants.restaurantProducts,
         queryParameters: queryParams,
         requiresAuth: true,
       );
-      
+
       return {
         'products': List<Map<String, dynamic>>.from(response['data'] ?? []),
-        'pagination': Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
+        'pagination':
+            Map<String, dynamic>.from(response['meta']['pagination'] ?? {}),
       };
     } catch (e) {
       if (e is ApiError) {
@@ -53,7 +54,7 @@ class RestaurantProductManagementService {
   }
 
   /// Fetches detailed information for a specific menu item
-  /// 
+  ///
   /// [itemId] is the ID of the menu item to fetch details for
   /// Returns comprehensive menu item details
   /// Throws [ApiError] if the request fails
@@ -63,7 +64,7 @@ class RestaurantProductManagementService {
         '${ApiConstants.restaurantProductDetail}$itemId',
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -74,18 +75,19 @@ class RestaurantProductManagementService {
   }
 
   /// Creates a new menu item
-  /// 
+  ///
   /// [itemData] contains all menu item details (name, description, price, category, etc.)
   /// Returns the newly created menu item data
   /// Throws [ApiError] if the creation fails
-  Future<Map<String, dynamic>> createMenuItem(Map<String, dynamic> itemData) async {
+  Future<Map<String, dynamic>> createMenuItem(
+      Map<String, dynamic> itemData) async {
     try {
       final response = await _apiClient.post(
         ApiConstants.restaurantProducts,
         data: itemData,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -96,19 +98,20 @@ class RestaurantProductManagementService {
   }
 
   /// Updates an existing menu item
-  /// 
+  ///
   /// [itemId] is the ID of the menu item to update
   /// [itemData] contains the updated menu item fields
   /// Returns the updated menu item data
   /// Throws [ApiError] if the update fails
-  Future<Map<String, dynamic>> updateMenuItem(String itemId, Map<String, dynamic> itemData) async {
+  Future<Map<String, dynamic>> updateMenuItem(
+      String itemId, Map<String, dynamic> itemData) async {
     try {
       final response = await _apiClient.put(
         '${ApiConstants.restaurantProductDetail}$itemId',
         data: itemData,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -119,7 +122,7 @@ class RestaurantProductManagementService {
   }
 
   /// Deletes a menu item
-  /// 
+  ///
   /// [itemId] is the ID of the menu item to delete
   /// Returns success status
   /// Throws [ApiError] if the deletion fails
@@ -129,7 +132,7 @@ class RestaurantProductManagementService {
         '${ApiConstants.restaurantProductDetail}$itemId',
         requiresAuth: true,
       );
-      
+
       return true;
     } catch (e) {
       if (e is ApiError) {
@@ -140,19 +143,20 @@ class RestaurantProductManagementService {
   }
 
   /// Updates menu item availability status
-  /// 
+  ///
   /// [itemId] is the ID of the menu item to update
   /// [isAvailable] indicates whether the menu item should be available or not
   /// Returns the updated menu item data
   /// Throws [ApiError] if the update fails
-  Future<Map<String, dynamic>> updateMenuItemAvailability(String itemId, bool isAvailable) async {
+  Future<Map<String, dynamic>> updateMenuItemAvailability(
+      String itemId, bool isAvailable) async {
     try {
       final response = await _apiClient.patch(
         '${ApiConstants.restaurantProductDetail}$itemId/availability',
         data: {'is_available': isAvailable},
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -163,15 +167,16 @@ class RestaurantProductManagementService {
   }
 
   /// Uploads menu item images
-  /// 
+  ///
   /// [itemId] is the ID of the menu item to upload images for
   /// [imageFiles] is a list of image files to upload
   /// Returns the updated menu item data with new image URLs
   /// Throws [ApiError] if the upload fails
-  Future<Map<String, dynamic>> uploadMenuItemImages(String itemId, List<dynamic> imageFiles) async {
+  Future<Map<String, dynamic>> uploadMenuItemImages(
+      String itemId, List<dynamic> imageFiles) async {
     try {
       final formData = FormData();
-      
+
       for (var i = 0; i < imageFiles.length; i++) {
         formData.files.add(
           MapEntry(
@@ -183,13 +188,13 @@ class RestaurantProductManagementService {
           ),
         );
       }
-      
+
       final response = await _apiClient.post(
         '${ApiConstants.restaurantProductDetail}$itemId/images',
         data: formData,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -200,7 +205,7 @@ class RestaurantProductManagementService {
   }
 
   /// Deletes a menu item image
-  /// 
+  ///
   /// [itemId] is the ID of the menu item
   /// [imageId] is the ID of the image to delete
   /// Returns success status
@@ -211,7 +216,7 @@ class RestaurantProductManagementService {
         '${ApiConstants.restaurantProductDetail}$itemId/images/$imageId',
         requiresAuth: true,
       );
-      
+
       return true;
     } catch (e) {
       if (e is ApiError) {
@@ -222,7 +227,7 @@ class RestaurantProductManagementService {
   }
 
   /// Fetches all menu categories
-  /// 
+  ///
   /// Returns list of menu categories
   /// Throws [ApiError] if the request fails
   Future<List<Map<String, dynamic>>> getCategories() async {
@@ -231,7 +236,7 @@ class RestaurantProductManagementService {
         ApiConstants.restaurantCategories,
         requiresAuth: true,
       );
-      
+
       return List<Map<String, dynamic>>.from(response['data'] ?? []);
     } catch (e) {
       if (e is ApiError) {
@@ -242,18 +247,19 @@ class RestaurantProductManagementService {
   }
 
   /// Creates a new menu category
-  /// 
+  ///
   /// [categoryData] contains category details (name, description, etc.)
   /// Returns the newly created category data
   /// Throws [ApiError] if the creation fails
-  Future<Map<String, dynamic>> createCategory(Map<String, dynamic> categoryData) async {
+  Future<Map<String, dynamic>> createCategory(
+      Map<String, dynamic> categoryData) async {
     try {
       final response = await _apiClient.post(
         ApiConstants.restaurantCategories,
         data: categoryData,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -264,19 +270,20 @@ class RestaurantProductManagementService {
   }
 
   /// Updates an existing menu category
-  /// 
+  ///
   /// [categoryId] is the ID of the category to update
   /// [categoryData] contains the updated category fields
   /// Returns the updated category data
   /// Throws [ApiError] if the update fails
-  Future<Map<String, dynamic>> updateCategory(String categoryId, Map<String, dynamic> categoryData) async {
+  Future<Map<String, dynamic>> updateCategory(
+      String categoryId, Map<String, dynamic> categoryData) async {
     try {
       final response = await _apiClient.put(
         '${ApiConstants.restaurantCategoryDetail}$categoryId',
         data: categoryData,
         requiresAuth: true,
       );
-      
+
       return Map<String, dynamic>.from(response['data'] ?? {});
     } catch (e) {
       if (e is ApiError) {
@@ -287,7 +294,7 @@ class RestaurantProductManagementService {
   }
 
   /// Deletes a menu category
-  /// 
+  ///
   /// [categoryId] is the ID of the category to delete
   /// Returns success status
   /// Throws [ApiError] if the deletion fails
@@ -297,7 +304,7 @@ class RestaurantProductManagementService {
         '${ApiConstants.restaurantCategoryDetail}$categoryId',
         requiresAuth: true,
       );
-      
+
       return true;
     } catch (e) {
       if (e is ApiError) {
@@ -305,5 +312,43 @@ class RestaurantProductManagementService {
       }
       throw ApiError(message: e.toString());
     }
+  }
+
+  /// Fetches all menu categories (alias for getCategories)
+  ///
+  /// Returns list of menu categories
+  /// Throws [ApiError] if the request fails
+  Future<List<Map<String, dynamic>>> getMenuCategories() async {
+    return getCategories();
+  }
+
+  /// Creates a new menu category (alias for createCategory)
+  ///
+  /// [categoryData] contains category details (name, description, etc.)
+  /// Returns the newly created category data
+  /// Throws [ApiError] if the creation fails
+  Future<Map<String, dynamic>> createMenuCategory(
+      Map<String, dynamic> categoryData) async {
+    return createCategory(categoryData);
+  }
+
+  /// Updates an existing menu category (alias for updateCategory)
+  ///
+  /// [categoryId] is the ID of the category to update
+  /// [categoryData] contains the updated category fields
+  /// Returns the updated category data
+  /// Throws [ApiError] if the update fails
+  Future<Map<String, dynamic>> updateMenuCategory(
+      String categoryId, Map<String, dynamic> categoryData) async {
+    return updateCategory(categoryId, categoryData);
+  }
+
+  /// Deletes a menu category (alias for deleteCategory)
+  ///
+  /// [categoryId] is the ID of the category to delete
+  /// Returns success status
+  /// Throws [ApiError] if the deletion fails
+  Future<bool> deleteMenuCategory(String categoryId) async {
+    return deleteCategory(categoryId);
   }
 }

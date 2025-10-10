@@ -38,14 +38,35 @@ class $AssetsImagesGen {
   /// File path: assets/images/baker.svg
   String get baker => 'assets/images/baker.svg';
 
+  /// File path: assets/images/closedToast.svg
+  String get closedToast => 'assets/images/closedToast.svg';
+
+  /// File path: assets/images/customAppBackground.jpg
+  AssetGenImage get customAppBackground =>
+      const AssetGenImage('assets/images/customAppBackground.jpg');
+
+  /// File path: assets/images/customAppBarBackground.svg
+  String get customAppBarBackground =>
+      'assets/images/customAppBarBackground.svg';
+
   /// File path: assets/images/driver.svg
   String get driver => 'assets/images/driver.svg';
 
   /// File path: assets/images/icon.png
   AssetGenImage get icon => const AssetGenImage('assets/images/icon.png');
 
+  /// File path: assets/images/loginBread.jpg
+  AssetGenImage get loginBreadJpg =>
+      const AssetGenImage('assets/images/loginBread.jpg');
+
+  /// File path: assets/images/loginBread.svg
+  String get loginBreadSvg => 'assets/images/loginBread.svg';
+
   /// File path: assets/images/otp.svg
   String get otp => 'assets/images/otp.svg';
+
+  /// File path: assets/images/prepainrBaker.svg
+  String get prepainrBaker => 'assets/images/prepainrBaker.svg';
 
   /// File path: assets/images/resturant.svg
   String get resturant => 'assets/images/resturant.svg';
@@ -56,20 +77,39 @@ class $AssetsImagesGen {
   /// File path: assets/images/sucessfullBakery.svg
   String get sucessfullBakery => 'assets/images/sucessfullBakery.svg';
 
+  /// File path: assets/images/toast.svg
+  String get toast => 'assets/images/toast.svg';
+
+  /// File path: assets/images/toastBread.svg
+  String get toastBread => 'assets/images/toastBread.svg';
+
+  /// File path: assets/images/toastPng.png
+  AssetGenImage get toastPng =>
+      const AssetGenImage('assets/images/toastPng.png');
+
   /// List of all assets
   List<dynamic> get values => [
-        appIcon,
-        arGif,
-        arLogo,
-        background,
-        baker,
-        driver,
-        icon,
-        otp,
-        resturant,
-        successMessage,
-        sucessfullBakery
-      ];
+    appIcon,
+    arGif,
+    arLogo,
+    background,
+    baker,
+    closedToast,
+    customAppBackground,
+    customAppBarBackground,
+    driver,
+    icon,
+    loginBreadJpg,
+    loginBreadSvg,
+    otp,
+    prepainrBaker,
+    resturant,
+    successMessage,
+    sucessfullBakery,
+    toast,
+    toastBread,
+    toastPng,
+  ];
 }
 
 class $AssetsSplashGen {
@@ -108,11 +148,7 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}});
 
   final String _assetName;
 
@@ -172,15 +208,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;

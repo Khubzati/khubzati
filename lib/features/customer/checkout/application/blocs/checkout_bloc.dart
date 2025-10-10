@@ -25,13 +25,12 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     emit(CheckoutLoading());
     try {
       // Get cart data from event or from CartBloc
-      final cartItems = event.cartItems ??
-          {}; // Placeholder, should get from CartBloc if not provided
-      final subtotal = event.subtotal ?? 0.0;
-      final total = event.total ?? 0.0;
+      // final cartItems = event.cartItems ?? {}; // Placeholder, should get from CartBloc if not provided
+      // final subtotal = event.subtotal ?? 0.0;
+      // final total = event.total ?? 0.0;
 
       // Proceed to address selection
-      add(LoadDeliveryAddresses());
+      add(const LoadDeliveryAddresses());
 
       // Note: The actual transition to address selection state will happen in _onLoadDeliveryAddresses
       // This is just to initialize the checkout process
@@ -108,7 +107,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         // Move to payment selection
         add(LoadPaymentMethods());
       } else {
-        emit(CheckoutError('Selected address not found'));
+        emit(const CheckoutError('Selected address not found'));
       }
     }
   }
@@ -116,7 +115,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   Future<void> _onAddNewDeliveryAddress(
       AddNewDeliveryAddress event, Emitter<CheckoutState> emit) async {
     if (state is CheckoutAddressSelectionState) {
-      final currentState = state as CheckoutAddressSelectionState;
+      // final currentState = state as CheckoutAddressSelectionState;
       emit(AddressAddingState());
 
       try {
@@ -140,7 +139,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         emit(AddressAddedState(formattedAddress));
 
         // Reload addresses to include the new one
-        add(LoadDeliveryAddresses());
+        add(const LoadDeliveryAddresses());
       } catch (e) {
         emit(CheckoutError('Failed to add new address: ${e.toString()}'));
       }
@@ -187,7 +186,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           total: addressState.total,
         ));
       } else {
-        emit(CheckoutError('Invalid state transition to payment selection'));
+        emit(const CheckoutError(
+            'Invalid state transition to payment selection'));
       }
     } catch (e) {
       emit(CheckoutError('Failed to load payment methods: ${e.toString()}'));
@@ -238,7 +238,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
               'Failed to calculate delivery fees: ${e.toString()}'));
         }
       } else {
-        emit(CheckoutError('Selected payment method not found'));
+        emit(const CheckoutError('Selected payment method not found'));
       }
     }
   }

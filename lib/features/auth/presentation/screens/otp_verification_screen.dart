@@ -1,31 +1,40 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:khubzati/core/extenstions/context.dart';
-import 'package:khubzati/core/widgets/app_elevated_button.dart';
-import 'package:khubzati/gen/translations/locale_keys.g.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../../core/routes/app_router.dart';
+import '../../../../core/theme/styles/app_colors.dart';
+import '../../../../core/theme/styles/app_text_style.dart';
+import '../../../../core/widgets/app_bloc_wrapper_screen.dart';
+import '../../../../core/widgets/app_custom_scroll_view.dart';
+import '../../../../core/widgets/app_elevated_button.dart';
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../gen/translations/locale_keys.g.dart';
+import '../../../../core/widgets/otp_input_field.dart';
 
-// TODO: Implement AuthBloc for state management and API calls for OTP verification and resend
-// TODO: Implement navigation to Home screen or relevant next step upon successful verification
-// TODO: Implement timer for resend OTP functionality
-
+@RoutePage()
 class OtpVerificationScreen extends StatefulWidget {
-  static const String routeName = '/otp-verification';
-  final String?
-      verificationId; // Or email/phone, depending on what's needed for verification
+  final String phoneNumber;
+  final String verificationId;
 
-  const OtpVerificationScreen({super.key, this.verificationId});
+  const OtpVerificationScreen({
+    super.key,
+    required this.phoneNumber,
+    required this.verificationId,
+  });
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final List<TextEditingController> _otpControllers = List.generate(
+  final List<TextEditingController> _controllers = List.generate(
     6,
     (index) => TextEditingController(),
   );
+
   final List<FocusNode> _focusNodes = List.generate(
     6,
     (index) => FocusNode(),
@@ -33,112 +42,97 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   void dispose() {
-    for (var controller in _otpControllers) {
+    for (var controller in _controllers) {
       controller.dispose();
     }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
+    for (var node in _focusNodes) {
+      node.dispose();
     }
     super.dispose();
   }
 
-  String get _otpCode =>
-      _otpControllers.map((controller) => controller.text).join();
-
-  void _verifyOtp() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Call AuthBloc to perform OTP verification with _otpCode and widget.verificationId
-      print('OTP Code: $_otpCode');
-      print('Verification ID: ${widget.verificationId}');
-      // Placeholder for navigation or showing success/error
-    }
-  }
-
-  void _resendOtp() {
-    // TODO: Call AuthBloc to resend OTP
-    print('Resend OTP Tapped for ${widget.verificationId}');
-    // Placeholder for showing confirmation or starting timer
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.app_auth_otp_verification_title.tr()),
-        centerTitle: true,
+    return AppBlocWrapperScreen(
+      appBar: const CustomAppBar(
+        title: LocaleKeys.app_otp_verification_title,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const SizedBox(height: 48),
-                Text(
-                  LocaleKeys.app_auth_otp_verification_heading.tr(),
-                  style: context.theme.textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+      child: Column(
+        children: [
+          LinearProgressIndicator(
+            value: 0,
+            backgroundColor: AppColors.tertiaryOliveGreen.withOpacity(0.7),
+          ),
+          Expanded(
+            child: AppCustomScrollView(
+              children: [
+                35.verticalSpace,
+                Center(child: SvgPicture.asset(Assets.images.otp)),
+                32.verticalSpace,
+                Text(context.tr(LocaleKeys.app_otp_verification_instruction),
+                    style: AppTextStyles.font16textDarkBrownBold),
+                Center(
+                  child: Text(widget.phoneNumber,
+                      style: AppTextStyles.font16textDarkBrownBold),
                 ),
-                const SizedBox(height: 16),
-                Text(
-                  LocaleKeys.app_auth_otp_verification_subheading.tr(),
-                  style: context.theme.textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.generate(
-                    6,
-                    (index) => SizedBox(
-                      width: 45,
-                      height: 49,
-                      child: TextField(
-                        controller: _otpControllers[index],
-                        focusNode: _focusNodes[index],
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          if (value.length == 1 && index < 5) {
-                            _focusNodes[index + 1].requestFocus();
-                          } else if (value.isEmpty && index > 0) {
-                            _focusNodes[index - 1].requestFocus();
-                          }
-                        },
-                      ),
-                    ),
+                35.verticalSpace,
+                _buildOtpInputs(),
+                35.verticalSpace,
+                InkWell(
+                  onTap: () {
+                    // Handle resend code
+                  },
+                  child: Text(
+                    context.tr(LocaleKeys.app_otp_verification_resend_code),
+                    style: AppTextStyles.font16PrimaryBold,
                   ),
                 ),
-                const SizedBox(height: 32),
-                AppElevatedButton(
-                  child: Text(LocaleKeys.app_auth_otp_verify_button.tr()),
-                  onPressed: _verifyOtp,
+                16.verticalSpace,
+                InkWell(
+                  onTap: () {
+                    // Handle change phone number
+                  },
+                  child: Text(
+                    context.tr(LocaleKeys.app_otp_verification_change_phone),
+                    style: AppTextStyles.font16PrimaryBold,
+                  ),
                 ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(LocaleKeys.app_auth_otp_did_not_receive_prompt.tr()),
-                    TextButton(
-                      onPressed: _resendOtp,
-                      child: Text(LocaleKeys.app_auth_otp_resend_link.tr()),
-                    ),
-                  ],
-                ),
-                // TODO: Add timer display for resend OTP cooldown if required by Figma
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: AppElevatedButton(
+              onPressed: () {
+                // Navigate to verify page after successful OTP verification
+                context.router.push(const VerifyRoute());
+              },
+              child: Text(context.tr(LocaleKeys.app_otp_verification_verify)),
+            ),
+          ),
+          40.verticalSpace,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOtpInputs() {
+    return Center(
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 290),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(
+            6,
+            (index) => OtpInputField(
+              controller: _controllers[index],
+              focusNode: _focusNodes[index],
+              autoFocus: index == 0,
+              onChanged: (value) {
+                if (value.isNotEmpty && index < 5) {
+                  _focusNodes[index + 1].requestFocus();
+                }
+              },
             ),
           ),
         ),

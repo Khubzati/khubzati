@@ -14,13 +14,15 @@ class VendorListingLoading extends VendorListingState {}
 class VendorListingLoaded extends VendorListingState {
   // final List<VendorModel> vendors;
   // final bool hasReachedMax;
-  final List<String> vendors; // Placeholder
+  final List<Map<String, dynamic>>
+      vendors; // Changed from List<String> to List<Map<String, dynamic>>
   final bool hasReachedMax; // Placeholder for pagination
 
-  const VendorListingLoaded({required this.vendors, this.hasReachedMax = false});
+  const VendorListingLoaded(
+      {required this.vendors, this.hasReachedMax = false});
 
   VendorListingLoaded copyWith({
-    List<String>? vendors,
+    List<Map<String, dynamic>>? vendors,
     bool? hasReachedMax,
   }) {
     return VendorListingLoaded(
@@ -44,6 +46,5 @@ class VendorListingError extends VendorListingState {
 
 // Specific state for when filters are applied, might not be needed if handled within VendorListingLoaded
 class VendorListingFiltered extends VendorListingLoaded {
-    const VendorListingFiltered({required super.vendors, super.hasReachedMax});
+  const VendorListingFiltered({required super.vendors, super.hasReachedMax});
 }
-

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
 // TODO: Implement RestaurantOrderManagementBloc for state management and API calls
@@ -17,7 +17,8 @@ class RestaurantOrderManagementScreen extends StatelessWidget {
     // TODO: Fetch orders using RestaurantOrderManagementBloc
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.restaurant_owner_order_management_title.tr()), // Assuming this key exists
+        title:
+            Text(LocaleKeys.app_restaurant_owner_order_management_title.tr()),
         centerTitle: true,
         // TODO: Add any filter/sort options if required by Figma
       ),
@@ -32,16 +33,22 @@ class RestaurantOrderManagementScreen extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
-                  leading: Icon(Icons.dinner_dining_outlined, size: 40, color: context.colorScheme.secondary),
-                  title: Text("${LocaleKeys.restaurant_owner_order_management_order_id_placeholder.tr()} #${4000 + index}"),
+                  leading: Icon(Icons.dinner_dining_outlined,
+                      size: 40, color: context.colorScheme.secondary),
+                  title: Text(
+                      "${LocaleKeys.app_restaurant_owner_order_management_order_id_placeholder.tr()} #${4000 + index}"),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${LocaleKeys.restaurant_owner_order_management_customer_name_placeholder.tr()}: Customer Name ${index + 1}"),
-                      Text("${LocaleKeys.restaurant_owner_order_management_order_status_placeholder.tr()}: Accepted", style: TextStyle(color: Colors.blue[700])),
+                      Text(
+                          "${LocaleKeys.app_restaurant_owner_order_management_customer_name_placeholder.tr()}: Customer Name ${index + 1}"),
+                      Text(
+                          "${LocaleKeys.app_restaurant_owner_order_management_order_status_placeholder.tr()}: Accepted",
+                          style: TextStyle(color: Colors.blue[700])),
                     ],
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios_rounded, size: 16),
+                  trailing:
+                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
                   isThreeLine: true,
                   onTap: () {
                     // TODO: Navigate to VendorOrderDetailScreen with the specific order ID for restaurant
@@ -56,4 +63,3 @@ class RestaurantOrderManagementScreen extends StatelessWidget {
     );
   }
 }
-

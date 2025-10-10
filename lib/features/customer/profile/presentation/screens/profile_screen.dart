@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
 // TODO: Implement ProfileBloc for state management (fetching user data, updating profile, managing addresses)
@@ -17,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.profile_title.tr()), // Assuming this key exists
+        title: Text(LocaleKeys.app_profile_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -53,7 +54,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.person_outline,
-                title: LocaleKeys.profile_edit_profile_label
+                title: LocaleKeys.app_profile_edit_profile_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to EditProfileScreen
@@ -63,7 +64,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.location_on_outlined,
-                title: LocaleKeys.profile_manage_addresses_label
+                title: LocaleKeys.app_profile_manage_addresses_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to ManageAddressesScreen
@@ -73,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.history_outlined,
-                title: LocaleKeys.profile_order_history_label
+                title: LocaleKeys.app_profile_order_history_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to OrderHistoryScreen
@@ -84,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.notifications_none_outlined,
-                title: LocaleKeys.profile_notifications_label
+                title: LocaleKeys.app_profile_notifications_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to NotificationsSettingsScreen
@@ -94,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.language_outlined,
-                title: LocaleKeys.profile_language_label
+                title: LocaleKeys.app_profile_language_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to LanguageSelectionScreen or show language dialog
@@ -104,7 +105,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.help_outline_outlined,
-                title: LocaleKeys.profile_help_support_label
+                title: LocaleKeys.app_profile_help_support_label
                     .tr(), // Assuming this key exists
                 onTap: () {
                   // TODO: Navigate to Help/Support Screen
@@ -115,7 +116,7 @@ class ProfileScreen extends StatelessWidget {
               _buildProfileMenuItem(
                 context,
                 icon: Icons.logout_outlined,
-                title: LocaleKeys.profile_logout_button
+                title: LocaleKeys.app_profile_logout_button
                     .tr(), // Assuming this key exists
                 textColor: context.colorScheme.error,
                 onTap: () {

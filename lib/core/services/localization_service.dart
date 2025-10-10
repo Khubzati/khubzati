@@ -38,4 +38,12 @@ class LocalizationService {
 
   String getCurrentLanguageCode(BuildContext context) =>
       context.locale.languageCode;
+
+  /// Gets the current locale from the context
+  Locale getCurrentLocale(BuildContext context) => context.locale;
+
+  /// Sets the locale using a Locale object
+  void setLocaleFromLocale(BuildContext context, Locale locale) {
+    context.setLocale(locale);
+  }
 }

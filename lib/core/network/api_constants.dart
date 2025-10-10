@@ -21,33 +21,34 @@ class DioConstants {
 
   static const getFileByIdEndpoint = '/File/GetFileById';
 
-  static List<Interceptor> defaultInterceptors = [
-    InterceptorsWrapper(
-      onRequest: (options, handler) {
-        final appPreferences = getIt<AppPreferences>();
-        options.headers['Authorization'] =
-            'Bearer ${appPreferences.accessToken}';
-        options.headers['Lang'] = getIt<AppPreferences>().getLang;
+  static List<Interceptor> get defaultInterceptors => [
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            final appPreferences = getIt<AppPreferences>();
+            options.headers['Authorization'] =
+                'Bearer ${appPreferences.accessToken}';
+            options.headers['Lang'] = getIt<AppPreferences>().getLang;
 
-        handler.next(options);
-      },
-      onError: (DioException error, handler) {
-        if (error.response?.statusCode == 401) {
-          triggerDataEvent(LocaleKeys.app_apiError_sessionExpired, true, 401);
-        } else {
-          final errorMsg = handleError(error);
-          triggerDataEvent(errorMsg, true);
-        }
+            handler.next(options);
+          },
+          onError: (DioException error, handler) {
+            if (error.response?.statusCode == 401) {
+              triggerDataEvent(
+                  LocaleKeys.app_apiError_sessionExpired, true, 401);
+            } else {
+              final errorMsg = handleError(error);
+              triggerDataEvent(errorMsg, true);
+            }
 
-        return handler.next(error);
-      },
-    ),
-    DioCacheInterceptor(
-      options: CacheOptions(
-        store: MemCacheStore(),
-        policy: CachePolicy.request,
-        hitCacheOnErrorExcept: [401, 403],
-      ),
-    ),
-  ];
+            return handler.next(error);
+          },
+        ),
+        DioCacheInterceptor(
+          options: CacheOptions(
+            store: MemCacheStore(),
+            policy: CachePolicy.request,
+            hitCacheOnErrorExcept: [401, 403],
+          ),
+        ),
+      ];
 }

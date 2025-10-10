@@ -9,7 +9,7 @@ import '../theme/styles/app_colors.dart';
 
 import '../utils/snackbar.dart';
 
-class AppBlocWrapperScreen<TBloc extends Cubit<TState>, TState>
+class AppBlocWrapperScreen<TBloc extends Bloc<dynamic, TState>, TState>
     extends StatelessWidget {
   final TBloc? bloc;
   final BlocListener? blocListener;

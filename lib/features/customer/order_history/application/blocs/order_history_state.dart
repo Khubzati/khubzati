@@ -17,12 +17,14 @@ class OrderHistoryLoaded extends OrderHistoryState {
   final bool hasReachedMax;
   final String currentFilter; // "all", "completed", "cancelled", "in_progress"
   final int totalOrders;
+  final String? searchTerm;
 
   const OrderHistoryLoaded({
     required this.orders,
     this.hasReachedMax = false,
     this.currentFilter = "all",
     this.totalOrders = 0,
+    this.searchTerm,
   });
 
   OrderHistoryLoaded copyWith({
@@ -30,17 +32,20 @@ class OrderHistoryLoaded extends OrderHistoryState {
     bool? hasReachedMax,
     String? currentFilter,
     int? totalOrders,
+    String? searchTerm,
   }) {
     return OrderHistoryLoaded(
       orders: orders ?? this.orders,
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
       currentFilter: currentFilter ?? this.currentFilter,
       totalOrders: totalOrders ?? this.totalOrders,
+      searchTerm: searchTerm ?? this.searchTerm,
     );
   }
 
   @override
-  List<Object?> get props => [orders, hasReachedMax, currentFilter, totalOrders];
+  List<Object?> get props =>
+      [orders, hasReachedMax, currentFilter, totalOrders, searchTerm];
 }
 
 class OrderHistoryError extends OrderHistoryState {

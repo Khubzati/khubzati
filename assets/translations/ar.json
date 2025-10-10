@@ -10,7 +10,9 @@
         "general": {
             "app_back": "رجوع",
             "admin_succes_message": "تم إرسال طلبك بنجاح!",
-            "logout": "تسجيل خروج"
+            "logout": "تسجيل خروج",
+            "next": "التالي",
+            "browse": "تصفح"
         },
         "userTypeSelection": {
             "addNewType": "إضافة صنف آخر",
@@ -159,7 +161,13 @@
             "password_hint": "أدخل كلمة المرور",
             "confirm_password_label": "تأكيد كلمة المرور",
             "confirm_password_hint": "أعد إدخال كلمة المرور",
-            "forgot_password_title": "نسيت كلمة المرور"
+            "forgot_password_title": "نسيت كلمة المرور",
+            "bakery_name_label": "اسم المخبز",
+            "bakery_name_hint": "أدخل اسم المخبز",
+            "location_label": "الموقع",
+            "location_hint": "أدخل موقع المخبز",
+            "bakery_license_label": "رخصة المخبز/التسجيل",
+            "bakery_license_placeholder": "لم يتم اختيار ملف"
         },
         "form_validation": {
             "required": "هذا الحقل مطلوب",
@@ -219,7 +227,10 @@
             "nearby_vendors_title": "المتاجر القريبة",
             "popular_vendors_title": "المتاجر الشائعة",
             "category_bakery": "مخبز",
-            "category_restaurant": "مطعم"
+            "category_restaurant": "مطعم",
+            "stats_total_revenue": "إجمالي الإيرادات",
+            "stats_completed_orders": "الطلبات المكتملة",
+            "stats_incomplete_orders": "الطلبات غير المكتملة"
         },
         "order_confirmation": {
             "title": "تأكيد الطلب",
@@ -227,6 +238,178 @@
             "subheading": "شكراً لطلبك. يمكنك تتبع حالته من سجل الطلبات.",
             "track_order_button": "تتبع طلبك",
             "back_to_home_button": "العودة إلى الرئيسية"
+        },
+        "profile": {
+            "title": "الملف الشخصي",
+            "edit_profile_label": "تعديل الملف الشخصي",
+            "manage_addresses_label": "إدارة العناوين",
+            "order_history_label": "سجل الطلبات",
+            "notifications_label": "الإشعارات",
+            "language_label": "اللغة",
+            "help_support_label": "المساعدة والدعم",
+            "logout_button": "تسجيل الخروج",
+            "bakery_name": "اسم المخبز",
+            "bakery_name_hint": "أدخل اسم المخبز",
+            "bakery_name_required": "اسم المخبز مطلوب",
+            "address": "العنوان",
+            "address_hint": "أدخل عنوان المخبز",
+            "address_required": "العنوان مطلوب",
+            "phone_number": "رقم الهاتف",
+            "phone_number_hint": "أدخل رقم الهاتف",
+            "phone_number_required": "رقم الهاتف مطلوب",
+            "phone_number_invalid": "يرجى إدخال رقم هاتف صحيح",
+            "edit_info": "تعديل معلوماتي",
+            "save_success": "تم تحديث الملف الشخصي بنجاح"
+        },
+        "vendor_listing": {
+            "title": "المتاجر",
+            "vendor_name_placeholder": "اسم المتجر"
+        },
+        "product_detail": {
+            "title": "تفاصيل المنتج",
+            "add_to_cart_button": "أضف إلى السلة"
+        },
+        "order_history": {
+            "title": "سجل الطلبات",
+            "order_id_placeholder": "رقم الطلب",
+            "date_placeholder": "التاريخ",
+            "status_placeholder": "الحالة",
+            "total_placeholder": "المجموع",
+            "empty_message": "لا توجد طلبات"
+        },
+        "vendor_detail": {
+            "title": "تفاصيل المتجر",
+            "product_categories_title": "التصنيفات",
+            "products_title": "المنتجات",
+            "reviews_title": "التقييمات"
+        },
+        "restaurant_owner": {
+            "dashboard": {
+                "title": "لوحة تحكم المطعم",
+                "sales_overview_title": "نظرة عامة على المبيعات",
+                "recent_orders_title": "الطلبات الحديثة",
+                "quick_stats_title": "الإحصائيات السريعة",
+                "order_id_placeholder": "رقم الطلب",
+                "order_status_placeholder": "حالة الطلب",
+                "manage_menu": "إدارة القائمة",
+                "manage_orders": "إدارة الطلبات",
+                "restaurant_settings": "إعدادات المطعم"
+            },
+            "order_management": {
+                "title": "إدارة الطلبات",
+                "order_id_placeholder": "رقم الطلب"
+            }
+        },
+        "navigation": {
+            "home": "الرئيسية",
+            "orders": "الطلبات",
+            "profile": "الملف الشخصي",
+            "settings": "الإعدادات"
+        },
+        "search": {
+            "hint": "ابحث عن المتاجر أو المنتجات...",
+            "no_results": "لا توجد نتائج",
+            "recent_searches": "البحث الحديث"
+        },
+        "restaurant_owner": {
+            "dashboard": {
+                "title": "لوحة تحكم المطعم",
+                "sales_overview_title": "نظرة عامة على المبيعات",
+                "recent_orders_title": "الطلبات الحديثة",
+                "quick_stats_title": "الإحصائيات السريعة",
+                "order_id_placeholder": "رقم الطلب",
+                "order_status_placeholder": "حالة الطلب",
+                "manage_menu": "إدارة القائمة",
+                "manage_orders": "إدارة الطلبات",
+                "restaurant_settings": "إعدادات المطعم"
+            },
+            "order_management": {
+                "title": "إدارة الطلبات",
+                "order_id_placeholder": "رقم الطلب",
+                "customer_name_placeholder": "اسم العميل",
+                "order_status_placeholder": "حالة الطلب"
+            },
+            "product_management": {
+                "title": "إدارة المنتجات",
+                "add_item_button": "إضافة عنصر",
+                "item_name_placeholder": "اسم العنصر",
+                "item_price_placeholder": "السعر"
+            }
+        },
+        "vendor_detail": {
+            "title": "تفاصيل المتجر",
+            "product_categories_title": "التصنيفات",
+            "products_title": "المنتجات",
+            "reviews_title": "التقييمات"
+        },
+        "vendor_listing": {
+            "title": "المتاجر",
+            "vendor_name_placeholder": "اسم المتجر",
+            "vendor_details_placeholder": "تفاصيل المتجر"
+        },
+        "order_sheet": {
+            "notes": "ملاحظات",
+            "view_order": "عرض الطلب",
+            "order_hash": "#طلب",
+            "order_status": "حالة الطلب",
+            "incomplete": "غير مكتمل",
+            "order_value": "قيمة الطلب",
+            "currency_jod": "د.أ",
+            "date": "التاريخ",
+            "location": "الموقع",
+            "default_restaurant_name": "مطعم السروات",
+            "sample_items": "توست، شراك، عربي، توست اسمر،\nعربي، شراك",
+            "order_details": "تفاصيل الطلب",
+            "sample_item_names": "توست \nشراك\nعربي\nتوست اسمر\nعربي\nشراك\nضريبة\nتوصيل",
+            "sample_quantities": "x2 \nx30\nx5\nx7\nx22\nx67",
+            "sample_prices": "1.75 \n0.8\n1.50\n1.25\n0.4\n0.9\n0.50\n2.00",
+            "total_value": "القيمة الكلية",
+            "print_invoice": "طباعة الفاتورة",
+            "order_in_preparation": "الطلب قيد التحضير",
+            "start_preparing_order": "بدء تحضير الطلب",
+            "time": "الوقت"
+        },
+        "empty_state": {
+            "no_orders_title": "لا توجد طلبات",
+            "no_orders_subtitle": "لم يتم استلام أي طلبات بعد",
+            "no_orders_description": "ستظهر الطلبات هنا بمجرد أن يبدأ العملاء في تقديم طلباتهم"
+        },
+        "order_details": {
+            "title": "تفاصيل الطلب",
+            "order_id": "طلب",
+            "customer": "الزبون",
+            "order_value": "قيمة الطلب",
+            "date": "التاريخ",
+            "location": "الموقع",
+            "product_type": "النوع",
+            "product_price": "القيمة",
+            "product_quantity": "الكمية",
+            "product_total": "القيمة الكلية",
+            "currency": "د.أ",
+            "tax": "الضريبة",
+            "delivery": "التوصيل",
+            "payment_method": "طريقة الدفع",
+            "total_value": "القيمة الكلية",
+            "print_invoice": "اصدار فاتورة",
+            "start_preparation": "بدء تحضير الطلب"
+        },
+        "inventory": {
+            "title": "المخزون",
+            "description": "قائمة أنواع وكميات الخبز المتوفر لديك.",
+            "product_details": "تفاصيل الصنف",
+            "product_name": "خبز توست أبيض",
+            "price_per_quantity": "السعر/كمية",
+            "available": "المتوفر",
+            "unit": "الوحدة",
+            "category": "الصنف",
+            "nutritional_value": "القيمة الغذائية",
+            "calories": "السعرات الحرارية",
+            "details": "التفاصيل",
+            "loading": "جاري تحميل المخزون...",
+            "error": "خطأ في تحميل المخزون",
+            "retry": "إعادة المحاولة",
+            "editCategory": "تعديل الصنف",
+            "saveChanges": "حفظ التعديلات"
         }
     }
 }

@@ -13,16 +13,18 @@ class AppConfig {
   final String firebaseAppName;
   final FirebaseOptions firebaseOptions;
 
-  static AppConfig shared = AppConfig.create(appProdConfig);
+  static AppConfig? _shared;
+  static AppConfig get shared => _shared ?? AppConfig.create(appProdConfig);
 
   factory AppConfig.create(AppConfig appConfig) {
-    return shared = AppConfig(
+    _shared = AppConfig(
       appName: appConfig.appName,
       baseUrl: appConfig.baseUrl,
       flavor: appConfig.flavor,
       firebaseAppName: appConfig.firebaseAppName,
       firebaseOptions: appConfig.firebaseOptions,
     );
+    return _shared!;
   }
 
   AppConfig(

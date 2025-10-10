@@ -50,3 +50,18 @@ class ReorderItems extends OrderHistoryEvent {
   @override
   List<Object?> get props => [orderId];
 }
+
+class SearchOrders extends OrderHistoryEvent {
+  final String searchTerm;
+  final DateTime? startDate;
+  final DateTime? endDate;
+
+  const SearchOrders({
+    required this.searchTerm,
+    this.startDate,
+    this.endDate,
+  });
+
+  @override
+  List<Object?> get props => [searchTerm, startDate, endDate];
+}

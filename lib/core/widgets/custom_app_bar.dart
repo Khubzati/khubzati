@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:khubzati/core/theme/styles/app_text_style.dart';
 import '../../gen/assets.gen.dart';
 import '../theme/styles/app_colors.dart';
 
@@ -19,7 +20,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             context.tr(title),
-            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
+            style: AppTextStyles.font24TextW700,
           ),
           SvgPicture.asset(
             Assets.images.appIcon, // Update with your asset path

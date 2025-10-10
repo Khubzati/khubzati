@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // Import your models and services here
 // e.g., import 'package:khubzati/core/models/product_model.dart';

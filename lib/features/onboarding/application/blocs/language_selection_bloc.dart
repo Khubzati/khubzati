@@ -1,29 +1,35 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:khubzati/core/services/localization_service.dart'; // Assuming this service exists
+import 'package:khubzati/core/services/localization_service.dart';
 
 part 'language_selection_event.dart';
 part 'language_selection_state.dart';
 
-class LanguageSelectionBloc extends Bloc<LanguageSelectionEvent, LanguageSelectionState> {
+class LanguageSelectionBloc
+    extends Bloc<LanguageSelectionEvent, LanguageSelectionState> {
   final LocalizationService localizationService;
+  final BuildContext context;
 
-  LanguageSelectionBloc({required this.localizationService}) : super(LanguageSelectionInitial()) {
+  LanguageSelectionBloc({
+    required this.localizationService,
+    required this.context,
+  }) : super(LanguageSelectionInitial()) {
     on<LoadInitialLanguage>(_onLoadInitialLanguage);
     on<SelectLanguage>(_onSelectLanguage);
   }
 
-  Future<void> _onLoadInitialLanguage(LoadInitialLanguage event, Emitter<LanguageSelectionState> emit) async {
+  Future<void> _onLoadInitialLanguage(
+      LoadInitialLanguage event, Emitter<LanguageSelectionState> emit) async {
     emit(LanguageLoadInProgress());
-    final currentLocale = await localizationService.getCurrentLocale();
+    final currentLocale = localizationService.getCurrentLocale(context);
     emit(LanguageSelected(currentLocale));
   }
 
-  Future<void> _onSelectLanguage(SelectLanguage event, Emitter<LanguageSelectionState> emit) async {
+  Future<void> _onSelectLanguage(
+      SelectLanguage event, Emitter<LanguageSelectionState> emit) async {
     emit(LanguageLoadInProgress());
-    await localizationService.setLocale(event.locale);
+    localizationService.setLocaleFromLocale(context, event.locale);
     emit(LanguageSelected(event.locale));
   }
 }
-

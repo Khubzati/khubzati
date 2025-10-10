@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
+import 'package:khubzati/core/extenstions/context.dart';
+import 'package:khubzati/features/customer/order_history/application/blocs/order_history_bloc.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
-
-// TODO: Implement OrderHistoryBloc for state management and API calls to fetch orders
-// TODO: Implement OrderHistoryItem widget and ListView.builder to display past orders
-// TODO: Implement navigation to OrderDetailScreen
+import '../widgets/order_search_bar.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
   static const String routeName = '/order-history';
@@ -14,72 +13,129 @@ class OrderHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Fetch order history using OrderHistoryBloc
-    // bool hasOrders = false; // Placeholder, get from OrderHistoryBloc
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            LocaleKeys.order_history_title.tr()), // Assuming this key exists
+        title: Text(LocaleKeys.app_order_history_title.tr()),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          // TODO: Replace with actual order list or empty state message
-          child: ListView.builder(
-            itemCount:
-                3, // Placeholder count, replace with actual order count from OrderHistoryBloc
-            itemBuilder: (context, index) {
-              // Replace with actual OrderHistoryItemWidget and data
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListTile(
-                  leading: Icon(Icons.receipt_long_outlined,
-                      size: 40, color: context.colorScheme.primary),
-                  title: Text(
-                      "${LocaleKeys.order_history_order_id_placeholder.tr()} #12345${index + 1}"), // Placeholder
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                          "${LocaleKeys.order_history_date_placeholder.tr()}: 2024-07-${20 + index}"), // Placeholder
-                      Text(
-                          "${LocaleKeys.order_history_status_placeholder.tr()}: Delivered",
-                          style: TextStyle(
-                              color: Colors.green[700])), // Placeholder
-                      Text(
-                          "${LocaleKeys.order_history_total_placeholder.tr()}: SAR 75.00"), // Placeholder
-                    ],
-                  ),
-                  trailing:
-                      const Icon(Icons.arrow_forward_ios_rounded, size: 16),
-                  isThreeLine: true,
-                  onTap: () {
-                    // TODO: Navigate to OrderDetailScreen with the specific order ID
-                    print("Tapped on Order #12345${index + 1}");
-                  },
-                ),
-              );
-            },
-          ),
-          // child: hasOrders
-          //     ? ListView.builder(
-          //         itemCount: 0, // TODO: Get from OrderHistoryBloc
-          //         itemBuilder: (context, index) {
-          //           // TODO: Return OrderHistoryItemWidget
-          //           return const SizedBox.shrink();
-          //         },
-          //       )
-          //     : Center(
-          //         child: Text(
-          //           LocaleKeys.order_history_empty_message.tr(), // Assuming this key exists
-          //           style: context.theme.textTheme.headlineSmall,
-          //           textAlign: TextAlign.center,
-          //         ),
-          //       ),
+        child: Column(
+          children: [
+            // Search Bar
+            const OrderSearchBar(),
+
+            // Order List
+            Expanded(
+              child: BlocBuilder<OrderHistoryBloc, OrderHistoryState>(
+                builder: (context, state) {
+                  if (state is OrderHistoryLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is OrderHistoryLoaded) {
+                    if (state.orders.isEmpty) {
+                      return Center(
+                        child: Text(
+                          LocaleKeys.app_order_history_empty_message.tr(),
+                          style: context.theme.textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(16.0),
+                      itemCount: state.orders.length,
+                      itemBuilder: (context, index) {
+                        final order = state.orders[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.receipt_long_outlined,
+                              size: 40,
+                              color: context.colorScheme.primary,
+                            ),
+                            title: Text(
+                              "${LocaleKeys.app_order_history_order_id_placeholder.tr()} #${order['id'] ?? 'N/A'}",
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${LocaleKeys.app_order_history_date_placeholder.tr()}: ${order['created_at'] ?? 'N/A'}",
+                                ),
+                                Text(
+                                  "${LocaleKeys.app_order_history_status_placeholder.tr()}: ${order['status'] ?? 'N/A'}",
+                                  style: TextStyle(
+                                    color: _getStatusColor(order['status']),
+                                  ),
+                                ),
+                                Text(
+                                  "${LocaleKeys.app_order_history_total_placeholder.tr()}: SAR ${order['total'] ?? '0.00'}",
+                                ),
+                              ],
+                            ),
+                            trailing: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 16),
+                            isThreeLine: true,
+                            onTap: () {
+                              context.read<OrderHistoryBloc>().add(
+                                    ViewOrderDetails(
+                                        order['id']?.toString() ?? ''),
+                                  );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  } else if (state is OrderHistoryError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            state.message,
+                            style: context.theme.textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<OrderHistoryBloc>().add(
+                                    const FetchOrderHistory(),
+                                  );
+                            },
+                            child: const Text('Retry'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return const Center(
+                    child: Text('No data available'),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'delivered':
+      case 'completed':
+        return Colors.green[700]!;
+      case 'cancelled':
+        return Colors.red[700]!;
+      case 'processing':
+      case 'in_progress':
+        return Colors.orange[700]!;
+      default:
+        return Colors.grey[700]!;
+    }
   }
 }

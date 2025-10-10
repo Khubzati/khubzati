@@ -1,140 +1,131 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:khubzati/core/extenstions/context.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:khubzati/core/widgets/app_elevated_button.dart';
-import 'package:khubzati/core/widgets/app_text_field.dart';
-import 'package:khubzati/gen/translations/locale_keys.g.dart';
-
-// TODO: Implement AuthBloc for state management and API calls
-// TODO: Implement navigation to Signup, Forgot Password, and Home screens
-// TODO: Implement social login buttons and logic
+import '../../../../core/theme/styles/app_colors.dart';
+import '../../../../core/services/localization_service.dart';
+import '../../../../core/di/injection.dart';
+import '../widgets/widgets.dart';
 
 @RoutePage()
 class LoginScreen extends StatefulWidget {
-  static const String routeName = '/login';
-
   const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _slideController;
+  late AnimationController _scaleController;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _scaleAnimation;
+
+  final TextEditingController _phoneController = TextEditingController();
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAnimations();
+    _startAnimations();
+  }
+
+  LocalizationService get localizationService {
+    try {
+      return getIt<LocalizationService>();
+    } catch (e) {
+      // Return a default service if dependency injection fails
+      return LocalizationService();
+    }
+  }
+
+  void _initializeAnimations() {
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _scaleController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeInOut),
+    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(
+        CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic));
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
+    );
+  }
+
+  void _startAnimations() {
+    _fadeController.forward();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _slideController.forward();
+    });
+    Future.delayed(const Duration(milliseconds: 600), () {
+      _scaleController.forward();
+    });
+  }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    _fadeController.dispose();
+    _slideController.dispose();
+    _scaleController.dispose();
+    _phoneController.dispose();
     super.dispose();
-  }
-
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Call AuthBloc to perform login
-      print('Email: ${_emailController.text}');
-      print('Password: ${_passwordController.text}');
-      // Placeholder for navigation or showing success/error
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.app_login_title.tr()),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primaryBurntOrange.withOpacity(0.1),
+              AppColors.pageBackground,
+              AppColors.secondaryLightCream,
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                // TODO: Add App Logo or relevant image as per Figma
-                const SizedBox(height: 48),
-                Text(
-                  LocaleKeys.app_login.tr(),
-                  style: context.theme.textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
+              children: [
+                LoginHeaderWidget(
+                  fadeAnimation: _fadeAnimation,
+                  scaleAnimation: _scaleAnimation,
+                  onLanguageToggle: _toggleLanguage,
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  LocaleKeys.app_auth_login_subheading.tr(),
-                  style: context.theme.textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                AppTextFormField(
-                  textEditingController: _emailController,
-                  label: LocaleKeys.app_form_email_label.tr(),
-                  hintText: LocaleKeys.app_form_email_hint.tr(),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return LocaleKeys.app_form_validation_required
-                          .tr(args: [LocaleKeys.app_form_email_label.tr()]);
-                    }
-                    // TODO: Add more sophisticated email validation if needed
-                    if (!value.contains('@')) {
-                      // Basic check
-                      return LocaleKeys.app_form_validation_invalid_email.tr();
-                    }
-                    return null;
+                LoginFormWidget(
+                  slideAnimation: _slideAnimation,
+                  phoneController: _phoneController,
+                  onPhoneChanged: (phone) {
+                    // Handle phone number change
                   },
                 ),
-                const SizedBox(height: 16),
-                AppTextFormField(
-                  textEditingController: _passwordController,
-                  label: LocaleKeys.app_form_password_label.tr(),
-                  hintText: LocaleKeys.app_form_password_hint.tr(),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return LocaleKeys.app_form_validation_required
-                          .tr(args: [LocaleKeys.app_form_password_label.tr()]);
-                    }
-                    // TODO: Add password strength validation if needed
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: TextButton(
-                    onPressed: () {
-                      // TODO: Navigate to Forgot Password screen
-                      print('Forgot Password Tapped');
-                    },
-                    child: Text(LocaleKeys.app_auth_forgot_password_link.tr()),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                AppElevatedButton(
-                  child: Text(LocaleKeys.app_auth_login_button.tr()),
-                  onPressed: _login,
-                ),
-                const SizedBox(height: 32),
-                // TODO: Add "Or continue with" text and social login buttons (Google, Apple) as per Figma
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(LocaleKeys.app_auth_no_account_prompt.tr()),
-                    TextButton(
-                      onPressed: () {
-                        // TODO: Navigate to Signup screen
-                        print('Sign Up Tapped');
-                      },
-                      child: Text(LocaleKeys.app_auth_signup_link.tr()),
-                    ),
-                  ],
+                40.verticalSpace,
+                AuthSectionWidget(
+                  onAuthPressed: _isLoading ? null : _handleAuth,
                 ),
               ],
             ),
@@ -142,5 +133,40 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void _toggleLanguage() {
+    try {
+      final currentLocale = localizationService.getCurrentLocale(context);
+      final newLocale = currentLocale.languageCode == 'ar'
+          ? const Locale('en')
+          : const Locale('ar');
+
+      localizationService.setLocaleFromLocale(context, newLocale);
+    } catch (e) {
+      // Fallback: use context directly if service is not available
+      final currentLocale = context.locale;
+      final newLocale = currentLocale.languageCode == 'ar'
+          ? const Locale('en')
+          : const Locale('ar');
+
+      context.setLocale(newLocale);
+    }
+  }
+
+  void _handleAuth() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulate API call
+    await Future.delayed(const Duration(seconds: 2));
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Handle login logic here
+    // TODO: Implement actual login logic
   }
 }

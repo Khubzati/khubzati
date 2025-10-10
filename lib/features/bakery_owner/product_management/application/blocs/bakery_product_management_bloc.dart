@@ -169,7 +169,7 @@ class BakeryProductManagementBloc
       // Call API to delete product
       await productManagementService.deleteProduct(event.productId);
 
-      emit(BakeryProductOperationSuccess(
+      emit(const BakeryProductOperationSuccess(
         operationType: 'delete',
         message: 'Product deleted successfully',
       ));
@@ -221,8 +221,9 @@ class BakeryProductManagementBloc
       // Prepare update data
       final updateData = <String, dynamic>{};
       if (event.name != null) updateData['name'] = event.name;
-      if (event.description != null)
+      if (event.description != null) {
         updateData['description'] = event.description;
+      }
       // if (event.imageUrl != null) updateData['imageUrl'] = event.imageUrl; // Handle image upload separately
 
       // Call API to update category
@@ -250,7 +251,7 @@ class BakeryProductManagementBloc
       // Call API to delete category
       await productManagementService.deleteCategory(event.categoryId);
 
-      emit(BakeryCategoryOperationSuccess(
+      emit(const BakeryCategoryOperationSuccess(
         operationType: 'delete',
         message: 'Category deleted successfully',
       ));
@@ -350,7 +351,7 @@ class BakeryProductManagementBloc
       await productManagementService.deleteProductImage(
           event.productId, event.imageId);
 
-      emit(BakeryProductOperationSuccess(
+      emit(const BakeryProductOperationSuccess(
         operationType: 'delete_image',
         message: 'Product image deleted successfully',
       ));

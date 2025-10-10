@@ -70,7 +70,7 @@ class AppTextFormField extends StatelessWidget {
           textInputAction: textInputAction ?? TextInputAction.next,
           decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            label: Text(label!).tr(),
+            label: label != null ? Text(label!).tr() : null,
             floatingLabelStyle: AppTextStyles.font20textDarkBrownbold,
             suffixIcon: suffixIcon,
             filled: filled,

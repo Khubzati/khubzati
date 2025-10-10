@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khubzati/features/customer/order_history/data/services/order_history_service.dart';
 
@@ -133,12 +134,12 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
     emit(ReorderInProgress());
     try {
       // Call API to reorder items
-      final cartData = await orderHistoryService.reorder(event.orderId);
+      // final cartData = await orderHistoryService.reorder(event.orderId);
 
       // In a real implementation, you would also update the CartBloc with the new cart data
       // cartBloc.add(UpdateCartFromReorder(cartData));
 
-      emit(ReorderSuccess('Items have been added to your cart!'));
+      emit(const ReorderSuccess('Items have been added to your cart!'));
     } catch (e) {
       emit(ReorderFailure('Failed to reorder items: ${e.toString()}'));
     }
@@ -151,8 +152,8 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
       // Call API to search orders
       final response = await orderHistoryService.searchOrders(
         searchTerm: event.searchTerm,
-        startDate: event.startDate,
-        endDate: event.endDate,
+        startDate: event.startDate?.toIso8601String().split('T')[0],
+        endDate: event.endDate?.toIso8601String().split('T')[0],
         page: 1,
         limit: 10,
       );

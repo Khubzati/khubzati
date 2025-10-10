@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:khubzati/core/extensions/context.dart';
-import 'package:khubzati/core/widgets/app_elevated_button.dart';
+import 'package:khubzati/core/extenstions/context.dart';
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
 // TODO: Implement RestaurantProductManagementBloc for state management and API calls
@@ -18,12 +17,15 @@ class RestaurantProductManagementScreen extends StatelessWidget {
     // TODO: Fetch menu items using RestaurantProductManagementBloc
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.restaurant_owner_product_management_title.tr()), // Assuming this key exists
+        title:
+            Text(LocaleKeys.app_restaurant_owner_product_management_title.tr()),
         centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle_outline),
-            tooltip: LocaleKeys.restaurant_owner_product_management_add_item_button.tr(),
+            tooltip: LocaleKeys
+                .app_restaurant_owner_product_management_add_item_button
+                .tr(),
             onPressed: () {
               // TODO: Navigate to AddMenuItemScreen
               print("Add Menu Item Tapped");
@@ -42,14 +44,25 @@ class RestaurantProductManagementScreen extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 child: ListTile(
-                  leading: Icon(Icons.ramen_dining_outlined, size: 40, color: context.colorScheme.primary),
-                  title: Text("${LocaleKeys.restaurant_owner_product_management_item_name_placeholder.tr()} ${index + 1}"),
-                  subtitle: Text("${LocaleKeys.restaurant_owner_product_management_item_price_placeholder.tr()}: \SAR ${25 + index * 5}.00"),
+                  leading: Icon(Icons.ramen_dining_outlined,
+                      size: 40, color: context.colorScheme.primary),
+                  title: Text(
+                      "${LocaleKeys.app_restaurant_owner_product_management_item_name_placeholder.tr()} ${index + 1}"),
+                  subtitle: Text(
+                      "${LocaleKeys.app_restaurant_owner_product_management_item_price_placeholder.tr()}: SAR ${25 + index * 5}.00"),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      IconButton(icon: Icon(Icons.edit_outlined, color: context.colorScheme.secondary), onPressed: () { /* TODO: Navigate to EditMenuItemScreen */ }),
-                      IconButton(icon: Icon(Icons.delete_outline, color: context.colorScheme.error), onPressed: () { /* TODO: Show delete confirmation */ }),
+                      IconButton(
+                          icon: Icon(Icons.edit_outlined,
+                              color: context.colorScheme.secondary),
+                          onPressed: () {
+                            /* TODO: Navigate to EditMenuItemScreen */
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.delete_outline,
+                              color: context.colorScheme.error),
+                          onPressed: () {/* TODO: Show delete confirmation */}),
                     ],
                   ),
                   onTap: () {
@@ -65,4 +78,3 @@ class RestaurantProductManagementScreen extends StatelessWidget {
     );
   }
 }
-

@@ -134,7 +134,7 @@ class OrderConfirmationBloc
           message: 'Receipt has been sent to ${event.email ?? 'your email'}.',
         ));
       } else {
-        emit(OrderConfirmationError('Failed to send receipt.'));
+        emit(const OrderConfirmationError('Failed to send receipt.'));
       }
     } catch (e) {
       emit(OrderConfirmationError('Failed to send receipt: ${e.toString()}'));

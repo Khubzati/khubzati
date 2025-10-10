@@ -11,7 +11,15 @@ import '../theme/styles/app_text_style.dart';
 
 class BackgroundWithLogo extends StatelessWidget {
   final Widget child;
-  const BackgroundWithLogo({super.key, required this.child});
+  final bool showLogo;
+  final bool showTitle;
+
+  const BackgroundWithLogo({
+    super.key,
+    required this.child,
+    this.showLogo = true,
+    this.showTitle = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +35,30 @@ class BackgroundWithLogo extends StatelessWidget {
             color: const Color(0x66000000),
           ),
         ),
-        Positioned(
-          // left: 120.h,
-          child: Column(
-            children: [
-              160.verticalSpace,
-              SvgPicture.asset(Assets.images.arLogo),
-              10.verticalSpace,
-              Padding(
-                padding: EdgeInsets.only(left: 20.h),
-                child: Text(context.tr(LocaleKeys.app_userTypeSelection_title),
-                    style: AppTextStyles.font47TextW700),
+        Positioned.fill(
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (showLogo || showTitle) ...[
+                    160.verticalSpace,
+                    if (showLogo) SvgPicture.asset(Assets.images.arLogo),
+                    if (showLogo && showTitle) 10.verticalSpace,
+                    if (showTitle)
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.h),
+                        child: Text(
+                          context.tr(LocaleKeys.app_userTypeSelection_title),
+                          style: AppTextStyles.font47TextW700,
+                        ),
+                      ),
+                  ],
+                  child,
+                ],
               ),
-              child
-            ],
+            ),
           ),
         ),
       ],

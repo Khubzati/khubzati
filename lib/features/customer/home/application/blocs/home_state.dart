@@ -18,10 +18,10 @@ class HomeLoaded extends HomeState {
   // final List<VendorModel> nearbyVendors; // Assuming VendorModel exists
 
   // Using placeholders for now
-  final List<String> banners;
-  final List<String> categories;
-  final List<String> popularVendors;
-  final List<String> nearbyVendors;
+  final List<Map<String, dynamic>> banners;
+  final List<Map<String, dynamic>> categories;
+  final List<Map<String, dynamic>> popularVendors;
+  final List<Map<String, dynamic>> nearbyVendors;
 
   const HomeLoaded({
     required this.banners,
@@ -31,7 +31,8 @@ class HomeLoaded extends HomeState {
   });
 
   @override
-  List<Object> get props => [banners, categories, popularVendors, nearbyVendors];
+  List<Object> get props =>
+      [banners, categories, popularVendors, nearbyVendors];
 }
 
 class HomeError extends HomeState {
@@ -51,7 +52,6 @@ class HomeSearchLoaded extends HomeState {
   final List<String> searchResults;
   const HomeSearchLoaded(this.searchResults);
 
-   @override
+  @override
   List<Object> get props => [searchResults];
 }
-

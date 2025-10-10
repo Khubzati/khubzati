@@ -84,9 +84,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
                 const SizedBox(height: 32),
                 AppElevatedButton(
+                  onPressed: _sendResetLink,
                   child: Text(
                       LocaleKeys.app_auth_forgot_password_send_button.tr()),
-                  onPressed: _sendResetLink,
                 ),
                 const SizedBox(height: 24),
                 TextButton(

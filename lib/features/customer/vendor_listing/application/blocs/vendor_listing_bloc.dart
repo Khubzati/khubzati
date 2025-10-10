@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-// Import your models and services here
-// e.g., import 'package:khubzati/core/models/vendor_model.dart';
-// import 'package:khubzati/core/services/vendor_service.dart';
+import 'package:equatable/equatable.dart';
+import 'package:khubzati/features/customer/vendor_listing/data/services/vendor_listing_service.dart';
 
 part 'vendor_listing_event.dart';
 part 'vendor_listing_state.dart';
@@ -9,9 +8,9 @@ part 'vendor_listing_state.dart';
 const _vendorLimit = 10; // Number of vendors to fetch per page
 
 class VendorListingBloc extends Bloc<VendorListingEvent, VendorListingState> {
-  // final VendorService vendorService; // Assuming a service to fetch vendor data
+  final VendorListingService vendorService;
 
-  VendorListingBloc(/*{required this.vendorService}*/)
+  VendorListingBloc({required this.vendorService})
       : super(VendorListingInitial()) {
     on<FetchVendorsByCategory>(_onFetchVendorsByCategory);
     on<SearchVendorsInListing>(_onSearchVendorsInListing);
@@ -24,16 +23,16 @@ class VendorListingBloc extends Bloc<VendorListingEvent, VendorListingState> {
       FetchVendorsByCategory event, Emitter<VendorListingState> emit) async {
     emit(VendorListingLoading());
     try {
-      // TODO: Replace with actual API call from vendorService
-      // final vendors = await vendorService.getVendorsByCategory(event.categoryId, limit: _vendorLimit, page: 1);
+      final response = await vendorService.getVendors(
+        type: event.categoryId,
+        page: 1,
+        limit: _vendorLimit,
+      );
 
-      // Placeholder data
-      await Future.delayed(const Duration(milliseconds: 700));
-      final vendors = List.generate(
-          _vendorLimit, (i) => 'Vendor for ${event.categoryId} ${i + 1}');
+      final vendors = List<Map<String, dynamic>>.from(response['data'] ?? []);
+      final hasReachedMax = vendors.length < _vendorLimit;
 
-      emit(VendorListingLoaded(
-          vendors: vendors, hasReachedMax: vendors.length < _vendorLimit));
+      emit(VendorListingLoaded(vendors: vendors, hasReachedMax: hasReachedMax));
     } catch (e) {
       emit(VendorListingError('Failed to fetch vendors: ${e.toString()}'));
     }
@@ -41,22 +40,19 @@ class VendorListingBloc extends Bloc<VendorListingEvent, VendorListingState> {
 
   Future<void> _onSearchVendorsInListing(
       SearchVendorsInListing event, Emitter<VendorListingState> emit) async {
-    emit(VendorListingLoading()); // Or a specific SearchLoading state
+    emit(VendorListingLoading());
     try {
-      // TODO: Replace with actual API call from vendorService for search
-      // final vendors = await vendorService.searchVendors(query: event.query, categoryId: event.categoryId, limit: _vendorLimit, page: 1);
+      final response = await vendorService.getVendors(
+        type: event.categoryId,
+        searchQuery: event.query,
+        page: 1,
+        limit: _vendorLimit,
+      );
 
-      // Placeholder data
-      await Future.delayed(const Duration(milliseconds: 500));
-      final vendors = List.generate(
-          5,
-          (i) =>
-              'Searched Vendor ${i + 1} for "${event.query}" in category ${event.categoryId ?? "All"}');
+      final vendors = List<Map<String, dynamic>>.from(response['data'] ?? []);
+      final hasReachedMax = vendors.length < _vendorLimit;
 
-      emit(VendorListingLoaded(
-          vendors: vendors,
-          hasReachedMax:
-              true)); // Assuming search doesn't paginate or resets pagination
+      emit(VendorListingLoaded(vendors: vendors, hasReachedMax: hasReachedMax));
     } catch (e) {
       emit(VendorListingError('Failed to search vendors: ${e.toString()}'));
     }
@@ -66,19 +62,25 @@ class VendorListingBloc extends Bloc<VendorListingEvent, VendorListingState> {
       ApplyVendorFilters event, Emitter<VendorListingState> emit) async {
     emit(VendorListingLoading());
     try {
-      // TODO: Apply filters and fetch data from vendorService
-      // final vendors = await vendorService.getVendorsWithFilters(event.filters, limit: _vendorLimit, page: 1);
+      final response = await vendorService.getVendors(
+        type: event.filters['type'],
+        searchQuery: event.filters['searchQuery'],
+        sortBy: event.filters['sortBy'],
+        sortOrder: event.filters['sortOrder'],
+        minRating: event.filters['minRating'],
+        maxDeliveryTime: event.filters['maxDeliveryTime'],
+        priceRange: event.filters['priceRange'],
+        latitude: event.filters['latitude'],
+        longitude: event.filters['longitude'],
+        page: 1,
+        limit: _vendorLimit,
+      );
 
-      // Placeholder data
-      await Future.delayed(const Duration(milliseconds: 600));
-      final vendors = List.generate(
-          3,
-          (i) =>
-              'Filtered Vendor ${i + 1} with filters: ${event.filters.toString()}');
+      final vendors = List<Map<String, dynamic>>.from(response['data'] ?? []);
+      final hasReachedMax = vendors.length < _vendorLimit;
 
       emit(VendorListingFiltered(
-          vendors: vendors,
-          hasReachedMax: true)); // Assuming filter resets pagination
+          vendors: vendors, hasReachedMax: hasReachedMax));
     } catch (e) {
       emit(VendorListingError('Failed to apply filters: ${e.toString()}'));
     }
@@ -100,16 +102,15 @@ class VendorListingBloc extends Bloc<VendorListingEvent, VendorListingState> {
         !(state as VendorListingLoaded).hasReachedMax) {
       final currentState = state as VendorListingLoaded;
       try {
-        // TODO: Replace with actual API call for pagination
-        // final nextPage = (currentState.vendors.length ~/ _vendorLimit) + 1;
-        // final newVendors = await vendorService.getVendorsByCategory(event.categoryId, limit: _vendorLimit, page: nextPage);
+        final nextPage = (currentState.vendors.length ~/ _vendorLimit) + 1;
+        final response = await vendorService.getVendors(
+          type: event.categoryId,
+          page: nextPage,
+          limit: _vendorLimit,
+        );
 
-        // Placeholder data
-        await Future.delayed(const Duration(milliseconds: 700));
-        final newVendors = List.generate(
-            _vendorLimit - 5,
-            (i) =>
-                'More Vendor for ${event.categoryId} ${currentState.vendors.length + i + 1}');
+        final newVendors =
+            List<Map<String, dynamic>>.from(response['data'] ?? []);
 
         if (newVendors.isEmpty) {
           emit(currentState.copyWith(hasReachedMax: true));

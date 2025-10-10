@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/services/auth_service.dart'; // Assuming this service exists
 import 'package:khubzati/core/services/app_preferences.dart'; // Assuming this service exists
 // import 'package:khubzati/core/models/user_model.dart'; // Assuming a User model
 
-part '../states/auth_state.dart';
-part '../events/auth_event.dart';
+part 'auth_state.dart';
+part 'auth_event.dart';
 
+@injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthService authService;
   final AppPreferences appPreferences;
@@ -20,7 +22,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ForgotPasswordOtpRequested>(_onForgotPasswordOtpRequested);
     on<ResetPasswordRequested>(_onResetPasswordRequested);
     on<LogoutRequested>(_onLogoutRequested);
-    // TODO: Add handlers for social login events (GoogleLoginRequested, AppleLoginRequested)
+    on<GoogleLoginRequested>(_onGoogleLoginRequested);
+    on<AppleLoginRequested>(_onAppleLoginRequested);
   }
 
   Future<void> _onAuthCheckRequested(
@@ -51,27 +54,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Replace with actual API call from authService
-      // final loginResponse = await authService.login(event.emailOrPhone, event.password);
-      // await appPreferences.setUserToken(loginResponse.token);
-      // await appPreferences.setUserId(loginResponse.user.id);
-      // await appPreferences.setUserRole(loginResponse.user.role);
-      // emit(Authenticated(userId: loginResponse.user.id, role: loginResponse.user.role));
-
-      // Placeholder logic until API integration
-      await Future.delayed(
-          const Duration(seconds: 1)); // Simulate network delay
-      if (event.emailOrPhone == "test@example.com" &&
-          event.password == "password") {
-        const placeholderUserId = "user123";
-        const placeholderRole = "customer"; // or determine from login response
-        await appPreferences.setUserToken("fake_token_123");
-        await appPreferences.setUserId(placeholderUserId);
-        await appPreferences.setUserRole(placeholderRole);
-        emit(Authenticated(userId: placeholderUserId, role: placeholderRole));
-      } else {
-        emit(const AuthError("Invalid credentials. Please try again."));
-      }
+      final loginResponse =
+          await authService.login(event.emailOrPhone, event.password);
+      await appPreferences.setUserToken(loginResponse['token']);
+      await appPreferences.setUserId(loginResponse['user']['id']);
+      await appPreferences.setUserRole(loginResponse['user']['role']);
+      emit(Authenticated(
+          userId: loginResponse['user']['id'],
+          role: loginResponse['user']['role']));
     } catch (e) {
       emit(AuthError('Login failed: ${e.toString()}'));
     }
@@ -81,21 +71,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignupRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Replace with actual API call from authService for signup
-      // final signupResponse = await authService.signup(
-      //   username: event.username,
-      //   email: event.email,
-      //   phone: event.phone,
-      //   password: event.password,
-      //   role: event.role,
-      // );
-      // emit(OtpSent(verificationId: signupResponse.verificationId, message: "OTP sent to ${event.phone}"));
-
-      // Placeholder logic
-      await Future.delayed(const Duration(seconds: 1));
-      emit(const OtpSent(
-          verificationId: "signup_otp_123",
-          message: "OTP sent to your phone for signup."));
+      final signupResponse = await authService.signup(
+        username: event.username,
+        email: event.email,
+        phone: event.phone,
+        password: event.password,
+        role: event.role,
+      );
+      emit(OtpSent(
+          verificationId: signupResponse['verification_id'],
+          message: "OTP sent to ${event.phone}"));
     } catch (e) {
       emit(AuthError('Signup failed: ${e.toString()}'));
     }
@@ -105,35 +90,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       OtpVerificationRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Replace with actual API call from authService to verify OTP
-      // final otpResponse = await authService.verifyOtp(event.verificationId, event.otp);
-      // if (otpResponse.isVerified) {
-      //   // If OTP was for signup, token and user details might be returned here or require another step
-      //   // For simplicity, assuming it leads to Authenticated state for now
-      //   await appPreferences.setUserToken(otpResponse.token); 
-      //   await appPreferences.setUserId(otpResponse.user.id);
-      //   await appPreferences.setUserRole(otpResponse.user.role);
-      //   emit(Authenticated(userId: otpResponse.user.id, role: otpResponse.user.role));
-      // } else {
-      //   emit(const AuthError("Invalid OTP. Please try again."));
-      // }
-
-      // Placeholder logic
-      await Future.delayed(const Duration(seconds: 1));
-      if (event.otp == "123456") {
-         // Check if this OTP was for signup or password reset based on verificationId or state
-        if (event.verificationId.startsWith("signup")) {
-            const placeholderUserId = "user_signup_123";
-          const placeholderRole =
-              "customer"; // Role should be known from signup request
-            await appPreferences.setUserToken("fake_signup_token_123");
-            await appPreferences.setUserId(placeholderUserId);
-            await appPreferences.setUserRole(placeholderRole);
-            emit(Authenticated(userId: placeholderUserId, role: placeholderRole));
-        } else if (event.verificationId.startsWith("reset")) {
-          emit(OtpVerified(
-              verificationId: event
-                  .verificationId)); // Transition to allow new password entry
+      final otpResponse =
+          await authService.verifyOtp(event.verificationId, event.otp);
+      if (otpResponse['is_verified']) {
+        // If OTP was for signup, token and user details might be returned here
+        if (otpResponse['token'] != null) {
+          await appPreferences.setUserToken(otpResponse['token']);
+          await appPreferences.setUserId(otpResponse['user']['id']);
+          await appPreferences.setUserRole(otpResponse['user']['role']);
+          emit(Authenticated(
+              userId: otpResponse['user']['id'],
+              role: otpResponse['user']['role']));
+        } else {
+          // OTP verified but no token (e.g., for password reset)
+          emit(OtpVerified(verificationId: event.verificationId));
         }
       } else {
         emit(const AuthError("Invalid OTP. Please try again."));
@@ -147,15 +117,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ForgotPasswordOtpRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Replace with actual API call from authService to request OTP for password reset
-      // final response = await authService.requestPasswordResetOtp(event.emailOrPhone);
-      // emit(OtpSent(verificationId: response.verificationId, message: "OTP sent to ${event.emailOrPhone}"));
-
-      // Placeholder logic
-      await Future.delayed(const Duration(seconds: 1));
-      emit(const OtpSent(
-          verificationId: "reset_otp_123",
-          message: "OTP for password reset sent."));
+      final response =
+          await authService.requestPasswordResetOtp(event.emailOrPhone);
+      emit(OtpSent(
+          verificationId: response['verification_id'],
+          message: "OTP sent to ${event.emailOrPhone}"));
     } catch (e) {
       emit(AuthError('Failed to request OTP: ${e.toString()}'));
     }
@@ -165,19 +131,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ResetPasswordRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Replace with actual API call from authService to reset password
-      // await authService.resetPassword(
-      //   verificationId: event.emailOrPhone, // or the verificationId from OtpSent state
-      //   otp: event.otp,
-      //   newPassword: event.newPassword,
-      // );
-      // emit(const PasswordResetSuccess(message: "Password reset successfully. Please login."));
-
-      // Placeholder logic
-      await Future.delayed(const Duration(seconds: 1));
-      // Assuming OTP was already verified and we are in a state to accept new password
+      await authService.resetPassword(
+        verificationId: event.verificationId,
+        otp: event.otp,
+        newPassword: event.newPassword,
+      );
       emit(const PasswordResetSuccess(
-          message: "Password has been reset successfully. Please login."));
+          message: "Password reset successfully. Please login."));
     } catch (e) {
       emit(AuthError('Password reset failed: ${e.toString()}'));
     }
@@ -187,11 +147,55 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LogoutRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      // TODO: Call authService.logout() if there's a backend logout endpoint
+      await authService.logout(); // Call backend logout endpoint
       await appPreferences.clearUserSession(); // Clear token and user details
       emit(Unauthenticated());
     } catch (e) {
       emit(AuthError('Logout failed: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onGoogleLoginRequested(
+      GoogleLoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      // TODO: Implement Google Sign-In using Firebase Auth
+      // final googleUser = await GoogleSignIn().signIn();
+      // if (googleUser != null) {
+      //   final googleAuth = await googleUser.authentication;
+      //   final credential = GoogleAuthProvider.credential(
+      //     accessToken: googleAuth.accessToken,
+      //     idToken: googleAuth.idToken,
+      //   );
+      //   final userCredential = await firebaseAuth.signInWithCredential(credential);
+      //   // Handle successful login
+      // }
+      emit(const AuthError("Google Sign-In not implemented yet"));
+    } catch (e) {
+      emit(AuthError('Google Sign-In failed: ${e.toString()}'));
+    }
+  }
+
+  Future<void> _onAppleLoginRequested(
+      AppleLoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      // TODO: Implement Apple Sign-In using Firebase Auth
+      // final appleCredential = await SignInWithApple.getAppleIDCredential(
+      //   scopes: [
+      //     AppleIDAuthorizationScopes.email,
+      //     AppleIDAuthorizationScopes.fullName,
+      //   ],
+      // );
+      // final oauthCredential = OAuthProvider("apple.com").credential(
+      //   idToken: appleCredential.identityToken,
+      //   accessToken: appleCredential.authorizationCode,
+      // );
+      // final userCredential = await firebaseAuth.signInWithCredential(oauthCredential);
+      // // Handle successful login
+      emit(const AuthError("Apple Sign-In not implemented yet"));
+    } catch (e) {
+      emit(AuthError('Apple Sign-In failed: ${e.toString()}'));
     }
   }
 }

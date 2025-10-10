@@ -5,7 +5,8 @@ import 'package:khubzati/features/restaurant_owner/product_management/data/servi
 part 'restaurant_product_management_event.dart';
 part 'restaurant_product_management_state.dart';
 
-class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEvent, RestaurantProductManagementState> {
+class RestaurantProductManagementBloc extends Bloc<
+    RestaurantProductManagementEvent, RestaurantProductManagementState> {
   final RestaurantProductManagementService productManagementService;
 
   RestaurantProductManagementBloc({
@@ -19,17 +20,21 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
     on<AddRestaurantProductCategory>(_onAddRestaurantProductCategory);
     on<UpdateRestaurantProductCategory>(_onUpdateRestaurantProductCategory);
     on<DeleteRestaurantProductCategory>(_onDeleteRestaurantProductCategory);
-    on<UpdateRestaurantProductAvailability>(_onUpdateRestaurantProductAvailability);
+    on<UpdateRestaurantProductAvailability>(
+        _onUpdateRestaurantProductAvailability);
     on<UploadRestaurantProductImages>(_onUploadRestaurantProductImages);
     on<DeleteRestaurantProductImage>(_onDeleteRestaurantProductImage);
   }
 
-  Future<void> _onLoadRestaurantProducts(LoadRestaurantProducts event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onLoadRestaurantProducts(LoadRestaurantProducts event,
+      Emitter<RestaurantProductManagementState> emit) async {
     // If we're loading the first page or changing filters, emit loading state
-    if (event.page == 1 || 
-        (state is RestaurantProductsLoaded && 
-         ((state as RestaurantProductsLoaded).currentCategoryId != event.categoryId || 
-          (state as RestaurantProductsLoaded).currentSearchQuery != event.searchQuery))) {
+    if (event.page == 1 ||
+        (state is RestaurantProductsLoaded &&
+            ((state as RestaurantProductsLoaded).currentCategoryId !=
+                    event.categoryId ||
+                (state as RestaurantProductsLoaded).currentSearchQuery !=
+                    event.searchQuery))) {
       emit(RestaurantProductsLoading());
     }
 
@@ -41,7 +46,7 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         page: event.page,
         limit: event.limit,
       );
-      
+
       final products = response['menu_items'];
       final pagination = response['pagination'];
       final totalCount = pagination['total_count'] ?? 0;
@@ -70,27 +75,33 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         ));
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to load menu items: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to load menu items: ${e.toString()}'));
     }
   }
 
-  Future<void> _onLoadRestaurantProductCategories(LoadRestaurantProductCategories event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onLoadRestaurantProductCategories(
+      LoadRestaurantProductCategories event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(RestaurantCategoriesLoading());
     try {
       // Call API to get categories
-      final categories = await productManagementService.getMenuCategories();
+      final categories = await productManagementService.getCategories();
 
       emit(RestaurantCategoriesLoaded(categories: categories));
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to load categories: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to load categories: ${e.toString()}'));
     }
   }
 
-  Future<void> _onAddRestaurantProduct(AddRestaurantProduct event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onAddRestaurantProduct(AddRestaurantProduct event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('add'));
     try {
       // Call API to add product
-      final newProduct = await productManagementService.createMenuItem(event.product);
+      final newProduct =
+          await productManagementService.createMenuItem(event.product);
 
       emit(RestaurantProductOperationSuccess(
         operationType: 'add',
@@ -108,15 +119,18 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         ));
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to add menu item: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to add menu item: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateRestaurantProduct(UpdateRestaurantProduct event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onUpdateRestaurantProduct(UpdateRestaurantProduct event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('update'));
     try {
       // Call API to update product
-      final updatedProduct = await productManagementService.updateMenuItem(event.productId, event.updatedProduct);
+      final updatedProduct = await productManagementService.updateMenuItem(
+          event.productId, event.updatedProduct);
 
       emit(RestaurantProductOperationSuccess(
         operationType: 'update',
@@ -127,9 +141,11 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       // Update product in list if we were in loaded state
       if (state is RestaurantProductsLoaded) {
         final currentState = state as RestaurantProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
@@ -143,17 +159,19 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         }
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to update menu item: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to update menu item: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteRestaurantProduct(DeleteRestaurantProduct event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onDeleteRestaurantProduct(DeleteRestaurantProduct event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('delete'));
     try {
       // Call API to delete product
       await productManagementService.deleteMenuItem(event.productId);
 
-      emit(RestaurantProductOperationSuccess(
+      emit(const RestaurantProductOperationSuccess(
         operationType: 'delete',
         message: 'Menu item deleted successfully',
       ));
@@ -161,21 +179,25 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       // Remove product from list if we were in loaded state
       if (state is RestaurantProductsLoaded) {
         final currentState = state as RestaurantProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products)
-          ..removeWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products)
+              ..removeWhere((p) => p['id'] == event.productId);
+
         emit(currentState.copyWith(products: updatedProducts));
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to delete menu item: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to delete menu item: ${e.toString()}'));
     }
   }
 
-  Future<void> _onAddRestaurantProductCategory(AddRestaurantProductCategory event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onAddRestaurantProductCategory(
+      AddRestaurantProductCategory event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantCategoryOperationInProgress('add'));
     try {
       // Call API to add category
-      final newCategory = await productManagementService.createMenuCategory({
+      final newCategory = await productManagementService.createCategory({
         'name': event.name,
         'description': event.description,
         // 'imageUrl': event.imageUrl, // Handle image upload separately if needed
@@ -188,23 +210,29 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       ));
 
       // Refresh categories
-      add(LoadRestaurantProductCategories());
+      add(const LoadRestaurantProductCategories());
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to add category: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to add category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateRestaurantProductCategory(UpdateRestaurantProductCategory event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onUpdateRestaurantProductCategory(
+      UpdateRestaurantProductCategory event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantCategoryOperationInProgress('update'));
     try {
       // Prepare update data
       final updateData = <String, dynamic>{};
       if (event.name != null) updateData['name'] = event.name;
-      if (event.description != null) updateData['description'] = event.description;
+      if (event.description != null) {
+        updateData['description'] = event.description;
+      }
       // if (event.imageUrl != null) updateData['imageUrl'] = event.imageUrl; // Handle image upload separately
 
       // Call API to update category
-      final updatedCategory = await productManagementService.updateMenuCategory(event.categoryId, updateData);
+      final updatedCategory = await productManagementService.updateCategory(
+          event.categoryId, updateData);
 
       emit(RestaurantCategoryOperationSuccess(
         operationType: 'update',
@@ -213,26 +241,29 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       ));
 
       // Refresh categories
-      add(LoadRestaurantProductCategories());
+      add(const LoadRestaurantProductCategories());
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to update category: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to update category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteRestaurantProductCategory(DeleteRestaurantProductCategory event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onDeleteRestaurantProductCategory(
+      DeleteRestaurantProductCategory event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantCategoryOperationInProgress('delete'));
     try {
       // Call API to delete category
-      await productManagementService.deleteMenuCategory(event.categoryId);
+      await productManagementService.deleteCategory(event.categoryId);
 
-      emit(RestaurantCategoryOperationSuccess(
+      emit(const RestaurantCategoryOperationSuccess(
         operationType: 'delete',
         message: 'Category deleted successfully',
       ));
 
       // Refresh categories
-      add(LoadRestaurantProductCategories());
-      
+      add(const LoadRestaurantProductCategories());
+
       // If we were viewing products from this category, reset to all products
       if (state is RestaurantProductsLoaded) {
         final currentState = state as RestaurantProductsLoaded;
@@ -241,20 +272,24 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         }
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to delete category: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to delete category: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUpdateRestaurantProductAvailability(UpdateRestaurantProductAvailability event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onUpdateRestaurantProductAvailability(
+      UpdateRestaurantProductAvailability event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('update_availability'));
     try {
       // Call API to update availability
-      final updatedProduct = await productManagementService.updateMenuItemAvailability(event.productId, event.isAvailable);
+      final updatedProduct = await productManagementService
+          .updateMenuItemAvailability(event.productId, event.isAvailable);
 
-      final message = event.isAvailable 
-          ? 'Menu item is now available for ordering' 
+      final message = event.isAvailable
+          ? 'Menu item is now available for ordering'
           : 'Menu item is now unavailable for ordering';
-      
+
       emit(RestaurantProductOperationSuccess(
         operationType: 'update_availability',
         message: message,
@@ -264,24 +299,30 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       // Update product in list if we were in loaded state
       if (state is RestaurantProductsLoaded) {
         final currentState = state as RestaurantProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
         }
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to update menu item availability: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to update menu item availability: ${e.toString()}'));
     }
   }
 
-  Future<void> _onUploadRestaurantProductImages(UploadRestaurantProductImages event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onUploadRestaurantProductImages(
+      UploadRestaurantProductImages event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('upload_images'));
     try {
       // Call API to upload images
-      final updatedProduct = await productManagementService.uploadMenuItemImages(event.productId, event.imageFiles);
+      final updatedProduct = await productManagementService
+          .uploadMenuItemImages(event.productId, event.imageFiles);
 
       emit(RestaurantProductOperationSuccess(
         operationType: 'upload_images',
@@ -292,26 +333,32 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
       // Update product in list if we were in loaded state
       if (state is RestaurantProductsLoaded) {
         final currentState = state as RestaurantProductsLoaded;
-        final updatedProducts = List<Map<String, dynamic>>.from(currentState.products);
-        final index = updatedProducts.indexWhere((p) => p['id'] == event.productId);
-        
+        final updatedProducts =
+            List<Map<String, dynamic>>.from(currentState.products);
+        final index =
+            updatedProducts.indexWhere((p) => p['id'] == event.productId);
+
         if (index != -1) {
           updatedProducts[index] = updatedProduct;
           emit(currentState.copyWith(products: updatedProducts));
         }
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to upload menu item images: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to upload menu item images: ${e.toString()}'));
     }
   }
 
-  Future<void> _onDeleteRestaurantProductImage(DeleteRestaurantProductImage event, Emitter<RestaurantProductManagementState> emit) async {
+  Future<void> _onDeleteRestaurantProductImage(
+      DeleteRestaurantProductImage event,
+      Emitter<RestaurantProductManagementState> emit) async {
     emit(const RestaurantProductOperationInProgress('delete_image'));
     try {
       // Call API to delete image
-      await productManagementService.deleteMenuItemImage(event.productId, event.imageId);
+      await productManagementService.deleteMenuItemImage(
+          event.productId, event.imageId);
 
-      emit(RestaurantProductOperationSuccess(
+      emit(const RestaurantProductOperationSuccess(
         operationType: 'delete_image',
         message: 'Menu item image deleted successfully',
       ));
@@ -327,7 +374,8 @@ class RestaurantProductManagementBloc extends Bloc<RestaurantProductManagementEv
         ));
       }
     } catch (e) {
-      emit(RestaurantProductManagementError('Failed to delete menu item image: ${e.toString()}'));
+      emit(RestaurantProductManagementError(
+          'Failed to delete menu item image: ${e.toString()}'));
     }
   }
 }

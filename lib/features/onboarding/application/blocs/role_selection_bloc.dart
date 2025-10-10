@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:khubzati/core/services/app_preferences.dart'; // Assuming this service exists for storing role
 
 part 'role_selection_event.dart';

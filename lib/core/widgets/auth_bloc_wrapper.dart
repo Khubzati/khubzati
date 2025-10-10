@@ -31,8 +31,8 @@ class AuthBlocWrapper extends StatelessWidget {
           } else if (state is AuthError) {
             context.router.popForced();
           } else if (state is Authenticated) {
-              context.router.popForced();
-              success?.call();
+            context.router.popForced();
+            success?.call();
           }
         },
       ),

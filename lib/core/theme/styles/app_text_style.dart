@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:khubzati/gen/fonts.gen.dart';
+// import 'package:khubzati/gen/fonts.gen.dart';
 import '../../di/injection.dart';
 import '../../services/app_preferences.dart';
 import 'app_colors.dart';
@@ -12,7 +12,7 @@ TextTheme get appTextTheme {
         decorationColor: AppColors.textDarkBrown,
         bodyColor: AppColors.textDarkBrown,
         displayColor: AppColors.textDarkBrown,
-        fontFamily: isAr ? FontFamily.gEDinarOne : FontFamily.lato,
+        // fontFamily: isAr ? FontFamily.gEDinarOne : FontFamily.lato,
       );
 }
 
@@ -22,7 +22,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.textDarkBrown,
   );
-
+  static TextStyle font12PrimaryBurntOrange = TextStyle(
+    fontSize: 12,
+    color: AppColors.primaryBurntOrange.withOpacity(0.46),
+    fontWeight: FontWeight.normal,
+  );
   static TextStyle otpInput = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,

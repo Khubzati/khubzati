@@ -5,7 +5,8 @@ import 'package:khubzati/features/restaurant_owner/dashboard/data/services/resta
 part 'restaurant_owner_dashboard_event.dart';
 part 'restaurant_owner_dashboard_state.dart';
 
-class RestaurantOwnerDashboardBloc extends Bloc<RestaurantOwnerDashboardEvent, RestaurantOwnerDashboardState> {
+class RestaurantOwnerDashboardBloc
+    extends Bloc<RestaurantOwnerDashboardEvent, RestaurantOwnerDashboardState> {
   final RestaurantDashboardService restaurantDashboardService;
 
   RestaurantOwnerDashboardBloc({
@@ -18,7 +19,9 @@ class RestaurantOwnerDashboardBloc extends Bloc<RestaurantOwnerDashboardEvent, R
     on<UpdateRestaurantOwnerStatus>(_onUpdateRestaurantOwnerStatus);
   }
 
-  Future<void> _onLoadRestaurantOwnerDashboard(LoadRestaurantOwnerDashboard event, Emitter<RestaurantOwnerDashboardState> emit) async {
+  Future<void> _onLoadRestaurantOwnerDashboard(
+      LoadRestaurantOwnerDashboard event,
+      Emitter<RestaurantOwnerDashboardState> emit) async {
     emit(RestaurantOwnerDashboardLoading());
     try {
       // Fetch all required data concurrently
@@ -33,7 +36,7 @@ class RestaurantOwnerDashboardBloc extends Bloc<RestaurantOwnerDashboardEvent, R
       final stats = results[1] as Map<String, dynamic>;
       final recentOrders = results[2] as List<Map<String, dynamic>>;
       final popularItems = results[3] as List<Map<String, dynamic>>;
-      
+
       // Assuming 'isOpen' status is part of the summary or profile info
       final isOpen = restaurantInfo['is_open'] ?? true;
 
@@ -46,95 +49,111 @@ class RestaurantOwnerDashboardBloc extends Bloc<RestaurantOwnerDashboardEvent, R
         timeRange: 'today',
       ));
     } catch (e) {
-      emit(RestaurantOwnerDashboardError('Failed to load dashboard: ${e.toString()}'));
+      emit(RestaurantOwnerDashboardError(
+          'Failed to load dashboard: ${e.toString()}'));
     }
   }
 
-  Future<void> _onFetchRestaurantOwnerStats(FetchRestaurantOwnerStats event, Emitter<RestaurantOwnerDashboardState> emit) async {
+  Future<void> _onFetchRestaurantOwnerStats(FetchRestaurantOwnerStats event,
+      Emitter<RestaurantOwnerDashboardState> emit) async {
     if (state is RestaurantOwnerDashboardLoaded) {
       final currentState = state as RestaurantOwnerDashboardLoaded;
       emit(RestaurantOwnerStatsLoading(event.timeRange));
-      
+
       try {
         // Fetch stats for the requested time range
-        final stats = await restaurantDashboardService.getSalesStatistics(period: event.timeRange);
+        final stats = await restaurantDashboardService.getSalesStatistics(
+            period: event.timeRange);
 
         emit(currentState.copyWith(
           stats: stats,
           timeRange: event.timeRange,
         ));
       } catch (e) {
-        emit(RestaurantOwnerDashboardError('Failed to fetch stats: ${e.toString()}'));
+        emit(RestaurantOwnerDashboardError(
+            'Failed to fetch stats: ${e.toString()}'));
         // Revert to previous state after error
         emit(currentState);
       }
     }
   }
 
-  Future<void> _onFetchRestaurantOwnerRecentOrders(FetchRestaurantOwnerRecentOrders event, Emitter<RestaurantOwnerDashboardState> emit) async {
+  Future<void> _onFetchRestaurantOwnerRecentOrders(
+      FetchRestaurantOwnerRecentOrders event,
+      Emitter<RestaurantOwnerDashboardState> emit) async {
     if (state is RestaurantOwnerDashboardLoaded) {
       final currentState = state as RestaurantOwnerDashboardLoaded;
       // Could emit a specific loading state for orders, but for simplicity using the main state
-      
+
       try {
         // Fetch recent orders
-        final recentOrders = await restaurantDashboardService.getRecentOrders(limit: event.limit, page: event.page);
+        final recentOrders = await restaurantDashboardService.getRecentOrders(
+            limit: event.limit);
 
         emit(currentState.copyWith(
           recentOrders: recentOrders,
         ));
       } catch (e) {
-        emit(RestaurantOwnerDashboardError('Failed to fetch recent orders: ${e.toString()}'));
+        emit(RestaurantOwnerDashboardError(
+            'Failed to fetch recent orders: ${e.toString()}'));
         // Revert to previous state after error
         emit(currentState);
       }
     }
   }
 
-  Future<void> _onFetchRestaurantOwnerPopularItems(FetchRestaurantOwnerPopularItems event, Emitter<RestaurantOwnerDashboardState> emit) async {
+  Future<void> _onFetchRestaurantOwnerPopularItems(
+      FetchRestaurantOwnerPopularItems event,
+      Emitter<RestaurantOwnerDashboardState> emit) async {
     if (state is RestaurantOwnerDashboardLoaded) {
       final currentState = state as RestaurantOwnerDashboardLoaded;
       // Could emit a specific loading state for items, but for simplicity using the main state
-      
+
       try {
         // Fetch popular items
-        final popularItems = await restaurantDashboardService.getTopSellingItems(limit: event.limit);
+        final popularItems = await restaurantDashboardService
+            .getTopSellingItems(limit: event.limit);
 
         emit(currentState.copyWith(
           popularItems: popularItems,
         ));
       } catch (e) {
-        emit(RestaurantOwnerDashboardError('Failed to fetch popular items: ${e.toString()}'));
+        emit(RestaurantOwnerDashboardError(
+            'Failed to fetch popular items: ${e.toString()}'));
         // Revert to previous state after error
         emit(currentState);
       }
     }
   }
 
-  Future<void> _onUpdateRestaurantOwnerStatus(UpdateRestaurantOwnerStatus event, Emitter<RestaurantOwnerDashboardState> emit) async {
+  Future<void> _onUpdateRestaurantOwnerStatus(UpdateRestaurantOwnerStatus event,
+      Emitter<RestaurantOwnerDashboardState> emit) async {
     if (state is RestaurantOwnerDashboardLoaded) {
       final currentState = state as RestaurantOwnerDashboardLoaded;
       emit(RestaurantOwnerStatusUpdateInProgress());
-      
+
       try {
         // In a real app, this would call a specific endpoint to update status
         // For now, we assume it's part of the profile update or a dedicated endpoint
         // await restaurantDashboardService.updateRestaurantStatus(isOpen: event.isOpen);
-        
+
         // Placeholder: simulate API call
         await Future.delayed(const Duration(milliseconds: 500));
-        
-        final message = event.isOpen ? 'Restaurant is now open for orders' : 'Restaurant is now closed';
-        emit(RestaurantOwnerStatusUpdateSuccess(isOpen: event.isOpen, message: message));
-        
+
+        final message = event.isOpen
+            ? 'Restaurant is now open for orders'
+            : 'Restaurant is now closed';
+        emit(RestaurantOwnerStatusUpdateSuccess(
+            isOpen: event.isOpen, message: message));
+
         // Update the main state
         emit(currentState.copyWith(isOpen: event.isOpen));
       } catch (e) {
-        emit(RestaurantOwnerDashboardError('Failed to update restaurant status: ${e.toString()}'));
+        emit(RestaurantOwnerDashboardError(
+            'Failed to update restaurant status: ${e.toString()}'));
         // Revert to previous state after error
         emit(currentState);
       }
     }
   }
 }
-
