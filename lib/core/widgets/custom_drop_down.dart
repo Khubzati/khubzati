@@ -62,6 +62,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
           // Field container with outer border
           Container(
             decoration: BoxDecoration(
+              color: Colors.white,
               border: Border.all(
                 color: _isFocused
                     ? AppColors.primaryBurntOrange
@@ -76,44 +77,61 @@ class _CustomDropDownState extends State<CustomDropDown> {
             ),
             width: double.infinity,
             child: DropdownButtonHideUnderline(
-              child: DropdownButtonFormField<String>(
-                focusNode: _focusNode,
-                initialValue: widget.selectedItem,
-                isExpanded: true,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                  counterText: '',
-                ),
-                hint: Text(
-                  widget.hintText,
-                  style: AppTextStyles.font15TextW400.copyWith(
-                    color: AppColors.primaryBurntOrange.withOpacity(0.46),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  dropdownMenuTheme: DropdownMenuThemeData(
+                    menuStyle: MenuStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.white),
+                      shape: WidgetStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.r),
+                        ),
+                      ),
+                      elevation: WidgetStateProperty.all(4),
+                    ),
                   ),
                 ),
-                icon: Icon(
-                  Icons.arrow_drop_down,
-                  color: AppColors.primaryBurntOrange,
-                  size: 20.sp,
+                child: DropdownButtonFormField<String>(
+                  focusNode: _focusNode,
+                  value: widget.selectedItem,
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                  menuMaxHeight: 200.h,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    focusedErrorBorder: InputBorder.none,
+                    counterText: '',
+                  ),
+                  hint: Text(
+                    widget.hintText,
+                    style: AppTextStyles.font15TextW400.copyWith(
+                      color: AppColors.primaryBurntOrange.withOpacity(0.46),
+                    ),
+                  ),
+                  icon: Icon(
+                    Icons.arrow_drop_down,
+                    color: AppColors.primaryBurntOrange,
+                    size: 20.sp,
+                  ),
+                  style: AppTextStyles.font15TextW400.copyWith(
+                    color: AppColors.textDarkBrown,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  onChanged: widget.onChanged,
+                  items: widget.items.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
                 ),
-                style: AppTextStyles.font15TextW400.copyWith(
-                  color: AppColors.textDarkBrown,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                ),
-                onChanged: widget.onChanged,
-                items: widget.items.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(item),
-                  );
-                }).toList(),
               ),
             ),
           ),

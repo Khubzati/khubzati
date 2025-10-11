@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_logger/easy_logger.dart';
@@ -41,7 +43,7 @@ void initApp() async {
           supportedLocales: localizationService.supportedLocales,
           saveLocale: localizationService.saveLocale,
           path: localizationService.langAssetPath,
-          assetLoader: const CodegenLoader(),
+          assetLoader: const RootBundleAssetLoader(),
           child: KhubzatiApp(),
         ),
       ),

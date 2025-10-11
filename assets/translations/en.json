@@ -411,7 +411,16 @@
             "error": "Error loading inventory",
             "retry": "Retry",
             "editCategory": "Edit Category",
-            "saveChanges": "Save Changes"
+            "saveChanges": "Save Changes",
+            "confirmation": {
+                "title": "Confirm Changes",
+                "message": "Are you sure you want to make changes to the bread item?",
+                "no_button": "No",
+                "yes_button": "Yes, I'm sure"
+            },
+            "save_success": "Successfully!",
+            "save_error": "Error occurred while saving",
+            "ok_button": "OK"
         }
     }
 }

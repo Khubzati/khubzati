@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:khubzati/core/theme/styles/app_colors.dart';
+import 'package:khubzati/core/theme/styles/app_text_style.dart';
+import 'package:khubzati/core/widgets/custom_drop_down.dart';
 import 'package:khubzati/core/widgets/shared_app_background.dart';
 import 'package:khubzati/core/widgets/shared_form_text_field_bloc.dart';
+import 'package:khubzati/gen/assets.gen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khubzati/core/bloc/form/form_bloc.dart' as form_bloc;
 import 'package:khubzati/gen/translations/locale_keys.g.dart';
 
@@ -94,49 +98,234 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _formBloc.add(const form_bloc.FormValidationRequested());
 
     if (_formBloc.isFormValid) {
-      _formBloc.add(const form_bloc.FormSubmitted());
+      _showConfirmationBottomSheet();
+    }
+  }
 
-      try {
-        // Simulate API call
-        await Future.delayed(const Duration(seconds: 1));
+  void _showConfirmationBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _buildConfirmationBottomSheet(),
+    );
+  }
 
-        // Show success message
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'تم حفظ التعديلات بنجاح',
-                style: TextStyle(
-                  color: Color(0xFFF9F2E4),
-                  fontFamily: 'Tajawal',
+  Widget _buildConfirmationBottomSheet() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.creamColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.r),
+          topRight: Radius.circular(25.r),
+        ),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                100.verticalSpace, // Space for the SVG that will be positioned
+
+                // Confirmation message
+                Text(
+                  LocaleKeys.app_inventory_confirmation_message.tr(),
+                  style: AppTextStyles.font20textDarkBrownbold,
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              backgroundColor: Color(0xFFC25E3E),
-              duration: Duration(seconds: 2),
-            ),
-          );
+                32.verticalSpace,
 
-          // Navigate back
-          context.router.maybePop();
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'حدث خطأ أثناء الحفظ',
-                style: TextStyle(
-                  color: Color(0xFFF9F2E4),
-                  fontFamily: 'Tajawal',
+                // Action buttons
+                Row(
+                  children: [
+                    // No button
+                    Expanded(
+                      child: SizedBox(
+                        height: 48.h,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: AppColors.primaryBurntOrange,
+                              width: 1.w,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            backgroundColor: AppColors.creamColor,
+                          ),
+                          child: Text(
+                            LocaleKeys.app_inventory_confirmation_no_button
+                                .tr(),
+                            style: AppTextStyles.font16textDarkBrownBold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    16.horizontalSpace,
+
+                    // Yes button
+                    Expanded(
+                      child: SizedBox(
+                        height: 48.h,
+                        child: ElevatedButton(
+                          onPressed: _confirmSave,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryBurntOrange,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            LocaleKeys.app_inventory_confirmation_yes_button
+                                .tr(),
+                            style: AppTextStyles.font16TextW500.copyWith(
+                              color: AppColors.secondaryLightCream,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 2),
+                24.verticalSpace,
+              ],
             ),
-          );
-        }
+          ),
+          // Baker illustration positioned at the top
+          Positioned(
+            top: -100,
+            left: 0,
+            right: 0,
+            child: SvgPicture.asset(
+              Assets.images.editSuccessfully,
+              height: 200.h,
+              width: 200.w,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmSave() async {
+    Navigator.of(context).pop(); // Close confirmation bottom sheet
+
+    _formBloc.add(const form_bloc.FormSubmitted());
+
+    try {
+      // Simulate API call
+      await Future.delayed(const Duration(seconds: 1));
+
+      // Show success bottom sheet
+      if (mounted) {
+        _showSuccessBottomSheet();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              LocaleKeys.app_inventory_error.tr(),
+              style: AppTextStyles.font16TextW500.copyWith(
+                color: AppColors.secondaryLightCream,
+              ),
+            ),
+            backgroundColor: AppColors.error,
+            duration: const Duration(seconds: 2),
+          ),
+        );
       }
     }
+  }
+
+  void _showSuccessBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _buildSuccessBottomSheet(),
+    );
+  }
+
+  Widget _buildSuccessBottomSheet() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.creamColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.r),
+          topRight: Radius.circular(25.r),
+        ),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                100.verticalSpace, // Space for the SVG that will be positioned
+
+                // Success message
+                Text(
+                  LocaleKeys.app_inventory_save_success.tr(),
+                  style: AppTextStyles.font20textDarkBrownbold,
+                  textAlign: TextAlign.center,
+                ),
+                32.verticalSpace,
+
+                // OK button
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close success bottom sheet
+                      context.router
+                          .maybePop(); // Navigate back to previous screen
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryBurntOrange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      LocaleKeys.app_inventory_ok_button.tr(),
+                      style: AppTextStyles.font16TextW500.copyWith(
+                        color: AppColors.secondaryLightCream,
+                      ),
+                    ),
+                  ),
+                ),
+                24.verticalSpace,
+              ],
+            ),
+          ),
+          // Success illustration positioned at the top
+          Positioned(
+            top: -100,
+            left: 0,
+            right: 0,
+            child: SvgPicture.asset(
+              Assets.images.successMessage,
+              height: 200.h,
+              width: 200.w,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -185,11 +374,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                           16.verticalSpace,
                           // Product Type Field
-                          _buildDropdownField(
+                          CustomDropDown(
                             label: LocaleKeys.app_bread_type_type.tr(),
-                            hint:
+                            hintText:
                                 LocaleKeys.app_bread_type_type_placeholder.tr(),
-                            value: _selectedType,
+                            items: const ['خبز', 'معجنات', 'حلويات'],
+                            selectedItem: ['خبز', 'معجنات', 'حلويات']
+                                    .contains(_selectedType)
+                                ? _selectedType
+                                : null,
                             onChanged: (value) {
                               setState(() {
                                 _selectedType = value ?? '';
@@ -214,11 +407,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           16.verticalSpace,
 
                           // Unit Field
-                          _buildDropdownField(
+                          CustomDropDown(
                             label: LocaleKeys.app_bread_type_unit.tr(),
-                            hint:
+                            hintText:
                                 LocaleKeys.app_bread_type_unit_placeholder.tr(),
-                            value: _selectedUnit,
+                            items: const ['كيلو', 'قطعة', 'صندوق'],
+                            selectedItem: ['كيلو', 'قطعة', 'صندوق']
+                                    .contains(_selectedUnit)
+                                ? _selectedUnit
+                                : null,
                             onChanged: (value) {
                               setState(() {
                                 _selectedUnit = value ?? '';
@@ -247,21 +444,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     // Nutritional Value Section
                     Container(
                       margin: const EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
                       width: double.infinity,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            margin: const EdgeInsets.only(right: 17),
                             child: Text(
-                              LocaleKeys.app_inventory_nutritional_value.tr(),
-                              style: TextStyle(
-                                color: const Color(0xFF67392A),
-                                fontSize: 16.sp,
-                                fontFamily: 'Tajawal',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                                LocaleKeys.app_inventory_nutritional_value.tr(),
+                                style: AppTextStyles.font20textDarkBrownbold),
                           ),
                         ],
                       ),
@@ -319,10 +510,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         ? _saveProduct
                         : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC25E3E),
+                      backgroundColor: AppColors.primaryBurntOrange,
                       disabledBackgroundColor:
-                          const Color(0xFFC25E3E).withValues(alpha: 0.5),
-                      foregroundColor: const Color(0xFFF9F2E4),
+                          AppColors.primaryBurntOrange.withValues(alpha: 0.5),
+                      foregroundColor: AppColors.secondaryLightCream,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
                       ),
@@ -335,17 +526,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             child: const CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFFF9F2E4),
+                                AppColors.secondaryLightCream,
                               ),
                             ),
                           )
                         : Text(
                             LocaleKeys.app_bread_type_submit.tr(),
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontFamily: 'Tajawal',
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: AppTextStyles.font16TextW500,
                           ),
                   ),
                 );
@@ -384,103 +571,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   icon: Icon(
                     Icons.arrow_back_ios,
                     size: 24.sp,
-                    color: const Color(0xFFF9F2E4),
+                    color: AppColors.secondaryLightCream,
                   ),
                 ),
                 Text(
                   LocaleKeys.app_inventory_editCategory.tr(),
-                  style: TextStyle(
-                    color: const Color(0xFFF9F2E4),
-                    fontSize: 20.sp,
-                    fontFamily: 'Tajawal',
-                    fontWeight: FontWeight.w700,
+                  style: AppTextStyles.font20TextW500.copyWith(
+                    color: AppColors.secondaryLightCream,
                     height: 1.5,
                   ),
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String label,
-    required String hint,
-    required String value,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Floating label
-          SizedBox(
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                  color: const Color(0xFFF8F2E8),
-                  padding: const EdgeInsets.only(
-                      top: 4, bottom: 4, left: 5, right: 5),
-                  margin: const EdgeInsets.only(right: 11),
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      color: const Color(0xFF67392A),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Dropdown field
-          GestureDetector(
-            onTap: () {
-              // TODO: Implement dropdown functionality
-              print('Dropdown pressed');
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0x75965641),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Transform.rotate(
-                    angle: -1.57, // -90 degrees
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: const Color(0x75965641),
-                      size: 20.sp,
-                    ),
-                  ),
-                  Text(
-                    value.isEmpty ? hint : value,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: value.isEmpty
-                          ? const Color(0x75965641)
-                          : const Color(0xFF67392A),
-                      fontSize: 12.sp,
-                      fontFamily: 'Tajawal',
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         ],

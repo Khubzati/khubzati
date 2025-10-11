@@ -340,6 +340,14 @@ abstract class  LocaleKeys {
   static const app_inventory_retry = 'app.inventory.retry';
   static const app_inventory_editCategory = 'app.inventory.editCategory';
   static const app_inventory_saveChanges = 'app.inventory.saveChanges';
+  static const app_inventory_confirmation_title = 'app.inventory.confirmation.title';
+  static const app_inventory_confirmation_message = 'app.inventory.confirmation.message';
+  static const app_inventory_confirmation_no_button = 'app.inventory.confirmation.no_button';
+  static const app_inventory_confirmation_yes_button = 'app.inventory.confirmation.yes_button';
+  static const app_inventory_confirmation = 'app.inventory.confirmation';
+  static const app_inventory_save_success = 'app.inventory.save_success';
+  static const app_inventory_save_error = 'app.inventory.save_error';
+  static const app_inventory_ok_button = 'app.inventory.ok_button';
   static const app_inventory = 'app.inventory';
   static const app = 'app';
 

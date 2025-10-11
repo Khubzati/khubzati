@@ -52,6 +52,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/driver.svg
   String get driver => 'assets/images/driver.svg';
 
+  /// File path: assets/images/editSuccessfully.svg
+  String get editSuccessfully => 'assets/images/editSuccessfully.svg';
+
   /// File path: assets/images/icon.png
   AssetGenImage get icon => const AssetGenImage('assets/images/icon.png');
 
@@ -98,6 +101,7 @@ class $AssetsImagesGen {
     customAppBackground,
     customAppBarBackground,
     driver,
+    editSuccessfully,
     icon,
     loginBreadJpg,
     loginBreadSvg,

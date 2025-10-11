@@ -400,7 +400,16 @@ class CodegenLoader extends AssetLoader{
       "error": "Error loading inventory",
       "retry": "Retry",
       "editCategory": "Edit Category",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "confirmation": {
+        "title": "Confirm Changes",
+        "message": "Are you sure you want to make changes to the bread item?",
+        "no_button": "No",
+        "yes_button": "Yes, I'm sure"
+      },
+      "save_success": "Successfully!",
+      "save_error": "Error occurred while saving",
+      "ok_button": "OK"
     }
   }
 };
@@ -788,7 +797,16 @@ static const Map<String,dynamic> _ar = {
       "error": "خطأ في تحميل المخزون",
       "retry": "إعادة المحاولة",
       "editCategory": "تعديل الصنف",
-      "saveChanges": "حفظ التعديلات"
+      "saveChanges": "حفظ التعديلات",
+      "confirmation": {
+        "title": "تأكيد التعديل",
+        "message": "هل أنت متأكد من اجراء التعديلات على صنف الخبز؟",
+        "no_button": "لا",
+        "yes_button": "نعم، متأكد"
+      },
+      "save_success": "تم بنجاح!",
+      "save_error": "حدث خطأ أثناء الحفظ",
+      "ok_button": "موافق"
     }
   }
 };
