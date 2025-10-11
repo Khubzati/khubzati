@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:auto_route/auto_route.dart';
 
 import '../theme/styles/app_colors.dart';
+import '../routes/app_router.dart';
 import 'shared_bottom_navbar.dart';
 import '../../features/home_page/presentation/page/home_page.dart';
 import '../../features/inventory/presentation/pages/inventory_screen.dart';
@@ -169,10 +171,8 @@ class GlobalNavigationWrapperState extends State<GlobalNavigationWrapper> {
       bottomNavigationBar: SharedBottomNavbar(
         currentIndex: _currentIndex,
         onCenterButtonTap: () {
-          // Handle center button tap - could be add new item, etc.
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Center button tapped')),
-          );
+          // Navigate to Add New Item screen
+          context.router.push(const AddNewItemRoute());
         },
       ),
     );

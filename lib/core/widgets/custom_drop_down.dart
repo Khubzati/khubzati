@@ -93,7 +93,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                 ),
                 child: DropdownButtonFormField<String>(
                   focusNode: _focusNode,
-                  value: widget.selectedItem,
+                  initialValue: widget.selectedItem,
                   isExpanded: true,
                   dropdownColor: Colors.white,
                   menuMaxHeight: 200.h,

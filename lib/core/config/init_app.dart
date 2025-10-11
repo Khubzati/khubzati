@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../gen/translations/codegen_loader.g.dart';
 import '../di/injection.dart';
 import '../khubzati_app.dart';
 import '../services/localization_service.dart';

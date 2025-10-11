@@ -84,8 +84,8 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   Widget _buildHeader() {
     return Container(
       height: 125.h,
-      decoration: BoxDecoration(
-        image: const DecorationImage(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
           image: NetworkImage(
             "https://api.builder.io/api/v1/image/assets/TEMP/de10d90a694f734400b0d04df185773f2f050380?width=780",
           ),

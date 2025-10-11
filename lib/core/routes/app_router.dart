@@ -26,6 +26,7 @@ import 'package:khubzati/features/customer/order_details/presentation/screens/or
 import 'package:khubzati/features/inventory/presentation/pages/inventory_screen.dart';
 import 'package:khubzati/features/inventory/presentation/pages/product_detail_screen.dart';
 import 'package:khubzati/features/inventory/presentation/pages/edit_product_screen.dart';
+import 'package:khubzati/features/inventory/presentation/pages/add_new_item_screen.dart';
 import 'package:khubzati/features/customer/profile/presentation/screens/profile_settings_screen.dart';
 import 'main_navigation_screen.dart';
 
@@ -90,6 +91,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: InventoryRoute.page, initial: false),
         AutoRoute(page: InventoryProductDetailRoute.page, initial: false),
         AutoRoute(page: EditProductRoute.page, initial: false),
+        AutoRoute(page: AddNewItemRoute.page, initial: false),
         AutoRoute(page: ProfileSettingsRoute.page, initial: false),
       ];
 }

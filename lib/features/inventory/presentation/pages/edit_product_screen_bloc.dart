@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class EditProductScreenBloc extends StatefulWidget {
-  const EditProductScreenBloc({Key? key}) : super(key: key);
+  const EditProductScreenBloc({super.key});
 
   @override
   State<EditProductScreenBloc> createState() => _EditProductScreenState();
@@ -71,19 +71,19 @@ class _EditProductScreenState extends State<EditProductScreenBloc> {
                       ),
                     ),
                     // Title
-                    SafeArea(
+                    const SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 24),
+                        padding: EdgeInsets.only(top: 24),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.chevron_left,
                               color: Color(0xFFF9F2E4),
                               size: 24,
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
+                            SizedBox(width: 8),
+                            Text(
                               'تعديل على الصنف',
                               style: TextStyle(
                                 color: Color(0xFFF9F2E4),
@@ -343,7 +343,7 @@ class _EditProductScreenState extends State<EditProductScreenBloc> {
             left: 0,
             right: 0,
             child: DropdownButtonFormField<String>(
-              value: value,
+              initialValue: value,
               isExpanded: true,
               decoration: InputDecoration(
                 hintText: placeholder,

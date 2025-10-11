@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen({Key? key}) : super(key: key);
+  const EditProductScreen({super.key});
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -14,7 +14,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _caloriesController = TextEditingController();
-  
+
   String? _selectedType;
   String? _selectedUnit;
 
@@ -71,19 +71,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       ),
                     ),
                     // Title
-                    SafeArea(
+                    const SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 24),
+                        padding: EdgeInsets.only(top: 24),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.chevron_left,
                               color: Color(0xFFF9F2E4),
                               size: 24,
                             ),
-                            const SizedBox(width: 8),
-                            const Text(
+                            SizedBox(width: 8),
+                            Text(
                               'تعديل على الصنف',
                               style: TextStyle(
                                 color: Color(0xFFF9F2E4),
@@ -98,7 +98,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     ),
                   ],
                 ),
-                
+
                 // Form fields
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -108,7 +108,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         const SizedBox(height: 20),
-                        
+
                         // Product Name
                         _buildTextFieldWithLabel(
                           label: 'اسم الصنف',
@@ -116,7 +116,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           controller: _nameController,
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Type Dropdown
                         _buildDropdownWithLabel(
                           label: 'النوع',
@@ -130,7 +130,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Quantity
                         _buildTextFieldWithLabel(
                           label: 'الكمية',
@@ -139,7 +139,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           keyboardType: TextInputType.number,
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Unit Dropdown
                         _buildDropdownWithLabel(
                           label: 'x',
@@ -153,7 +153,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Price
                         _buildTextFieldWithLabel(
                           label: 'السعر/الكمية',
@@ -162,7 +162,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           keyboardType: TextInputType.number,
                         ),
                         const SizedBox(height: 28),
-                        
+
                         // Nutritional Value Header
                         const Align(
                           alignment: Alignment.centerRight,
@@ -177,7 +177,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Calories
                         _buildTextFieldWithLabel(
                           label: 'السعرات الحرارية',
@@ -185,7 +185,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           controller: _caloriesController,
                           keyboardType: TextInputType.number,
                         ),
-                        
+
                         const SizedBox(height: 120),
                       ],
                     ),
@@ -194,7 +194,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               ],
             ),
           ),
-          
+
           // Bottom button
           Positioned(
             bottom: 0,
@@ -213,7 +213,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ],
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 21),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 21),
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -342,7 +343,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             left: 0,
             right: 0,
             child: DropdownButtonFormField<String>(
-              value: value,
+              initialValue: value,
               isExpanded: true,
               decoration: InputDecoration(
                 hintText: placeholder,

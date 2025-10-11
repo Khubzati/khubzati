@@ -61,6 +61,22 @@ class AddEditAddressRouteArgs {
 }
 
 /// generated route for
+/// [AddNewItemScreen]
+class AddNewItemRoute extends PageRouteInfo<void> {
+  const AddNewItemRoute({List<PageRouteInfo>? children})
+    : super(AddNewItemRoute.name, initialChildren: children);
+
+  static const String name = 'AddNewItemRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const AddNewItemScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [AddReviewScreen]
 class AddReviewRoute extends PageRouteInfo<AddReviewRouteArgs> {
   AddReviewRoute({
