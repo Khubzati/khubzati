@@ -1,44 +1,48 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_constants.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@lazySingleton
 class AuthService {
   final ApiClient _apiClient = ApiClient();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-  
-  // Singleton pattern
-  static final AuthService _instance = AuthService._internal();
-  factory AuthService() => _instance;
-  AuthService._internal();
-  
+
   // Login with email/phone and password
   Future<Map<String, dynamic>> login({
     required String emailOrPhone,
     required String password,
     required String role, // 'customer', 'bakery_owner', 'restaurant_owner'
   }) async {
-    try {
-      final response = await _apiClient.post(
-        ApiConstants.login,
-        data: {
-          'emailOrPhone': emailOrPhone,
-          'password': password,
-          'role': role,
-        },
-        requiresAuth: false,
-      );
-      
-      // Save tokens
-      await _saveAuthData(response);
-      
-      return response;
-    } catch (e) {
-      throw _handleAuthError(e);
-    }
+    // TODO: Mock login for development - remove when backend is ready
+    print('DEBUG: Mock login for $emailOrPhone with role $role');
+
+    // Simulate network delay
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Return mock response - only phone number required
+    final mockResponse = {
+      'success': true,
+      'message': 'Login successful',
+      'token': 'mock_jwt_token_${DateTime.now().millisecondsSinceEpoch}',
+      'user': {
+        'id': 'user_${DateTime.now().millisecondsSinceEpoch}',
+        'name': 'Mock User',
+        'phone': emailOrPhone,
+        'role': role, // Use the role passed from the login request
+        'is_verified': true,
+      },
+      'expires_in': 3600,
+    };
+
+    // Save tokens
+    await _saveAuthData(mockResponse);
+
+    return mockResponse;
   }
-  
+
   // Register new user
   Future<Map<String, dynamic>> register({
     required String name,
@@ -59,18 +63,19 @@ class AuthService {
         },
         requiresAuth: false,
       );
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Verify OTP
   Future<Map<String, dynamic>> verifyOtp({
     required String emailOrPhone,
     required String otp,
-    required String verificationPurpose, // 'registration', 'password_reset', etc.
+    required String
+        verificationPurpose, // 'registration', 'password_reset', etc.
   }) async {
     try {
       final response = await _apiClient.post(
@@ -82,22 +87,24 @@ class AuthService {
         },
         requiresAuth: false,
       );
-      
+
       // If this is for registration or login, save tokens
-      if (verificationPurpose == 'registration' || verificationPurpose == 'login') {
+      if (verificationPurpose == 'registration' ||
+          verificationPurpose == 'login') {
         await _saveAuthData(response);
       }
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Resend OTP
   Future<Map<String, dynamic>> resendOtp({
     required String emailOrPhone,
-    required String verificationPurpose, // 'registration', 'password_reset', etc.
+    required String
+        verificationPurpose, // 'registration', 'password_reset', etc.
   }) async {
     try {
       final response = await _apiClient.post(
@@ -108,13 +115,13 @@ class AuthService {
         },
         requiresAuth: false,
       );
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Forgot password - request password reset
   Future<Map<String, dynamic>> forgotPassword({
     required String emailOrPhone,
@@ -127,13 +134,13 @@ class AuthService {
         },
         requiresAuth: false,
       );
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Reset password with OTP
   Future<Map<String, dynamic>> resetPassword({
     required String emailOrPhone,
@@ -150,13 +157,13 @@ class AuthService {
         },
         requiresAuth: false,
       );
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Change password (when logged in)
   Future<Map<String, dynamic>> changePassword({
     required String currentPassword,
@@ -171,13 +178,13 @@ class AuthService {
         },
         requiresAuth: true,
       );
-      
+
       return response;
     } catch (e) {
       throw _handleAuthError(e);
     }
   }
-  
+
   // Logout
   Future<void> logout() async {
     try {
@@ -194,46 +201,48 @@ class AuthService {
       await _clearAuthData();
     }
   }
-  
+
   // Check if user is logged in
   Future<bool> isLoggedIn() async {
     final token = await _secureStorage.read(key: 'auth_token');
     return token != null;
   }
-  
+
   // Get current user role
   Future<String?> getUserRole() async {
     return await _secureStorage.read(key: 'user_role');
   }
-  
+
   // Get user ID
   Future<String?> getUserId() async {
     return await _secureStorage.read(key: 'user_id');
   }
-  
+
   // Save authentication data
   Future<void> _saveAuthData(Map<String, dynamic> data) async {
     if (data.containsKey('token')) {
       await _secureStorage.write(key: 'auth_token', value: data['token']);
     }
-    
+
     if (data.containsKey('refreshToken')) {
-      await _secureStorage.write(key: 'refresh_token', value: data['refreshToken']);
+      await _secureStorage.write(
+          key: 'refresh_token', value: data['refreshToken']);
     }
-    
+
     if (data.containsKey('user') && data['user'] is Map) {
       final user = data['user'];
-      
+
       if (user.containsKey('id')) {
-        await _secureStorage.write(key: 'user_id', value: user['id'].toString());
+        await _secureStorage.write(
+            key: 'user_id', value: user['id'].toString());
       }
-      
+
       if (user.containsKey('role')) {
         await _secureStorage.write(key: 'user_role', value: user['role']);
       }
     }
   }
-  
+
   // Clear authentication data
   Future<void> _clearAuthData() async {
     await _secureStorage.delete(key: 'auth_token');
@@ -241,7 +250,7 @@ class AuthService {
     await _secureStorage.delete(key: 'user_id');
     await _secureStorage.delete(key: 'user_role');
   }
-  
+
   // Handle authentication errors
   ApiError _handleAuthError(dynamic error) {
     if (error is DioException) {
@@ -249,7 +258,8 @@ class AuthService {
       if (error.response?.statusCode == 401) {
         return ApiError(
           statusCode: 401,
-          message: 'Invalid credentials. Please check your email/phone and password.',
+          message:
+              'Invalid credentials. Please check your email/phone and password.',
           data: error.response?.data,
         );
       } else if (error.response?.statusCode == 422) {
@@ -260,12 +270,12 @@ class AuthService {
         );
       }
     }
-    
+
     // If it's already an ApiError, return it
     if (error is ApiError) {
       return error;
     }
-    
+
     // Default error
     return ApiError(message: error.toString());
   }

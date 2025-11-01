@@ -14,8 +14,13 @@ import '../widgets/totals_section.dart';
 @RoutePage()
 class OrderDetailsScreen extends StatelessWidget {
   final String orderId;
+  final bool isHistoryOrder;
 
-  const OrderDetailsScreen({super.key, required this.orderId});
+  const OrderDetailsScreen({
+    super.key,
+    required this.orderId,
+    this.isHistoryOrder = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,10 @@ class OrderDetailsScreen extends StatelessWidget {
             left: 0,
             right: 0,
             bottom: 0,
-            child: BottomActions(order: order),
+            child: BottomActions(
+              order: order,
+              isHistoryOrder: isHistoryOrder,
+            ),
           ),
         ],
       ),

@@ -43,7 +43,7 @@ class _CustomerHomeView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              // TODO: Implement search functionality
+              context.router.push(const SearchRoute());
             },
           ),
           NotificationBadge(
@@ -141,13 +141,7 @@ class _CustomerHomeView extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            // TODO: Implement search functionality
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Search functionality coming soon'),
-                backgroundColor: colorScheme.primary,
-              ),
-            );
+            context.router.push(const SearchRoute());
           },
           borderRadius: BorderRadius.circular(20),
           child: Padding(

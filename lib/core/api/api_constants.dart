@@ -61,6 +61,7 @@ class ApiConstants {
   static const String restaurantOrderDetail =
       '/restaurant/orders/'; // Append order ID
   static const String restaurantProfile = '/restaurant/profile';
+  static const String restaurantAnalytics = '/restaurant/analytics';
 
   // Driver endpoints
   static const String driverDashboard = '/driver/dashboard';

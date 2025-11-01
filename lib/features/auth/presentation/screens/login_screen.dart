@@ -1,11 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/theme/styles/app_colors.dart';
 import '../../../../core/services/localization_service.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/routes/app_router.dart';
+import '../../application/blocs/auth_bloc.dart';
 import '../widgets/widgets.dart';
 
 @RoutePage()
@@ -92,42 +95,67 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.primaryBurntOrange.withOpacity(0.1),
-              AppColors.pageBackground,
-              AppColors.secondaryLightCream,
-            ],
-            stops: const [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                LoginHeaderWidget(
-                  fadeAnimation: _fadeAnimation,
-                  scaleAnimation: _scaleAnimation,
-                  onLanguageToggle: _toggleLanguage,
-                ),
-                LoginFormWidget(
-                  slideAnimation: _slideAnimation,
-                  phoneController: _phoneController,
-                  onPhoneChanged: (phone) {
-                    // Handle phone number change
-                  },
-                ),
-                40.verticalSpace,
-                AuthSectionWidget(
-                  onAuthPressed: _isLoading ? null : _handleAuth,
-                ),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoading) {
+          setState(() {
+            _isLoading = true;
+          });
+        } else if (state is AuthError) {
+          setState(() {
+            _isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (state is Authenticated) {
+          setState(() {
+            _isLoading = false;
+          });
+          // Navigate to appropriate screen based on user role
+          _navigateToHomeScreen(context, state.role);
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primaryBurntOrange.withOpacity(0.1),
+                AppColors.pageBackground,
+                AppColors.secondaryLightCream,
               ],
+              stops: const [0.0, 0.5, 1.0],
+            ),
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  LoginHeaderWidget(
+                    fadeAnimation: _fadeAnimation,
+                    scaleAnimation: _scaleAnimation,
+                    onLanguageToggle: _toggleLanguage,
+                  ),
+                  LoginFormWidget(
+                    slideAnimation: _slideAnimation,
+                    phoneController: _phoneController,
+                    onPhoneChanged: (phone) {
+                      // Handle phone number change
+                    },
+                  ),
+                  40.verticalSpace,
+                  AuthSectionWidget(
+                    onAuthPressed: _isLoading ? null : _handleAuth,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -155,18 +183,43 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _handleAuth() async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (_phoneController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your phone number'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+    // Trigger login with AuthBloc
+    context.read<AuthBloc>().add(LoginRequested(
+          emailOrPhone: _phoneController.text.trim(),
+          password:
+              'default_password', // This should be handled properly in a real app
+        ));
+  }
 
-    setState(() {
-      _isLoading = false;
-    });
-
-    // Handle login logic here
-    // TODO: Implement actual login logic
+  void _navigateToHomeScreen(BuildContext context, String role) {
+    // Navigate to appropriate screen based on user role
+    switch (role.toLowerCase()) {
+      case 'customer':
+        context.router.push(MainNavigationRoute());
+        break;
+      case 'bakery_owner':
+        // Navigate to bakery dashboard
+        context.router.push(MainNavigationRoute());
+        break;
+      case 'restaurant_owner':
+        // Navigate to restaurant dashboard
+        context.router.push(const RestaurantOwnerHomeRoute());
+        break;
+      case 'driver':
+        context.router.push(MainNavigationRoute());
+        break;
+      default:
+        context.router.push(MainNavigationRoute());
+    }
   }
 }

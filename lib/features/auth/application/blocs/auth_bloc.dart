@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:khubzati/core/services/auth_service.dart'; // Assuming this service exists
+import 'package:khubzati/features/auth/data/services/auth_service.dart';
 import 'package:khubzati/core/services/app_preferences.dart'; // Assuming this service exists
 // import 'package:khubzati/core/models/user_model.dart'; // Assuming a User model
 
@@ -54,8 +54,34 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LoginRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final loginResponse =
-          await authService.login(event.emailOrPhone, event.password);
+      // Get the role from preferences (set during role selection)
+      final selectedRole = await appPreferences.getUserRole();
+      print('DEBUG: Selected role: $selectedRole'); // Debug log
+
+      if (selectedRole == null || selectedRole.isEmpty) {
+        // For now, use a default role to allow login
+        print('DEBUG: No role found, using default customer role');
+        const defaultRole = 'customer';
+
+        final loginResponse = await authService.login(
+          emailOrPhone: event.emailOrPhone,
+          password: event.password,
+          role: defaultRole,
+        );
+        await appPreferences.setUserToken(loginResponse['token']);
+        await appPreferences.setUserId(loginResponse['user']['id']);
+        await appPreferences.setUserRole(loginResponse['user']['role']);
+        emit(Authenticated(
+            userId: loginResponse['user']['id'],
+            role: loginResponse['user']['role']));
+        return;
+      }
+
+      final loginResponse = await authService.login(
+        emailOrPhone: event.emailOrPhone,
+        password: event.password,
+        role: selectedRole,
+      );
       await appPreferences.setUserToken(loginResponse['token']);
       await appPreferences.setUserId(loginResponse['user']['id']);
       await appPreferences.setUserRole(loginResponse['user']['role']);
@@ -71,8 +97,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SignupRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final signupResponse = await authService.signup(
-        username: event.username,
+      final signupResponse = await authService.register(
+        name: event.username,
         email: event.email,
         phone: event.phone,
         password: event.password,
@@ -90,8 +116,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       OtpVerificationRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final otpResponse =
-          await authService.verifyOtp(event.verificationId, event.otp);
+      final otpResponse = await authService.verifyOtp(
+        emailOrPhone: event.verificationId,
+        otp: event.otp,
+        verificationPurpose: 'registration',
+      );
       if (otpResponse['is_verified']) {
         // If OTP was for signup, token and user details might be returned here
         if (otpResponse['token'] != null) {
@@ -117,8 +146,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       ForgotPasswordOtpRequested event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final response =
-          await authService.requestPasswordResetOtp(event.emailOrPhone);
+      final response = await authService.forgotPassword(
+        emailOrPhone: event.emailOrPhone,
+      );
       emit(OtpSent(
           verificationId: response['verification_id'],
           message: "OTP sent to ${event.emailOrPhone}"));
@@ -132,7 +162,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       await authService.resetPassword(
-        verificationId: event.verificationId,
+        emailOrPhone: event.verificationId,
         otp: event.otp,
         newPassword: event.newPassword,
       );

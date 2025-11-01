@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../../core/routes/app_router.dart';
 
 import '../../../../core/theme/styles/app_colors.dart';
 import '../../../../core/theme/styles/app_text_style.dart';
@@ -63,7 +64,9 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         icon: const Icon(Icons.notifications_outlined),
                         color: AppColors.pageBackground,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.router.push(const NotificationRoute());
+                        },
                       ),
                     ],
                   ),

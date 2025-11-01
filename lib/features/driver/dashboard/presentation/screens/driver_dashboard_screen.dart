@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:khubzati/core/extenstions/context.dart';
+import 'package:khubzati/core/routes/app_router.dart';
 import 'package:khubzati/core/widgets/shared/app_button.dart';
 import 'package:khubzati/core/widgets/shared/app_card.dart';
 import 'package:khubzati/core/widgets/shared/app_loading_widget.dart';
@@ -43,7 +44,7 @@ class _DriverDashboardView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
-              // TODO: Navigate to notifications
+              context.router.push(const NotificationRoute());
             },
           ),
           IconButton(

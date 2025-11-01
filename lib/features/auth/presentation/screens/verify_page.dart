@@ -50,7 +50,7 @@ class VerifyPage extends StatelessWidget {
             child: AppElevatedButton(
               onPressed: () {
                 // Navigate to HomePage
-                context.router.push(const HomeRoute());
+                context.router.push(MainNavigationRoute());
               },
               child: Text(context.tr(LocaleKeys.app_signup_login)),
             ),

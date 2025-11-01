@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import '../features/auth/application/blocs/auth_bloc.dart';
 import '../features/user_type_selection/application/blocs/carousel_bloc.dart';
+import 'package:khubzati/features/menu/application/blocs/profile/profile_bloc.dart';
+import 'package:khubzati/features/menu/application/blocs/menu/profile_menu_cubit.dart';
+import 'package:khubzati/features/menu/data/services/profile_service.dart';
 import 'theme/app_theme.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'bloc/app/app_cubit.dart';
@@ -32,6 +35,10 @@ class KhubzatiApp extends StatelessWidget {
           BlocProvider(create: (context) => getIt<AppCubit>()),
           BlocProvider(create: (context) => getIt<DataCubit>()),
           BlocProvider(create: (context) => CarouselBloc()),
+          BlocProvider(
+              create: (context) =>
+                  ProfileBloc(profileService: getIt<ProfileService>())),
+          BlocProvider(create: (context) => getIt<ProfileMenuCubit>()),
         ],
         child: MaterialApp.router(
           scaffoldMessengerKey: scaffoldMessengerKey,

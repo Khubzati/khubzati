@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../routes/app_router.dart';
@@ -78,7 +79,14 @@ class SharedBottomNavbar extends StatelessWidget {
           Positioned(
             top: -40.h,
             child: GestureDetector(
-              onTap: onCenterButtonTap,
+              onTap: () {
+                print('🔍 Center button tapped - calling callback');
+                // Add haptic feedback for better user experience
+                HapticFeedback.lightImpact();
+                onCenterButtonTap?.call();
+                print('🔍 Center button callback completed');
+              },
+              behavior: HitTestBehavior.opaque,
               child: Container(
                 width: centerButtonSize ?? 70.w,
                 height: centerButtonSize ?? 70.h,
@@ -133,15 +141,15 @@ class SharedBottomNavbar extends StatelessWidget {
       },
       {
         'icon': Icons.history,
-        'label': LocaleKeys.app_navigation_profile.tr(),
+        'label': LocaleKeys.app_history_title.tr(),
         'route': MainNavigationRoute(initialIndex: 2),
-        'pageIndex': 2, // Profile page index in PageView
+        'pageIndex': 2, // History page index in PageView
       },
       {
-        'icon': Icons.menu,
-        'label': LocaleKeys.app_navigation_settings.tr(),
+        'icon': Icons.person,
+        'label': LocaleKeys.app_navigation_profile.tr(),
         'route': MainNavigationRoute(initialIndex: 3),
-        'pageIndex': 3, // Settings page index in PageView
+        'pageIndex': 3, // Profile page index in PageView
       },
     ];
 
@@ -153,12 +161,6 @@ class SharedBottomNavbar extends StatelessWidget {
             if (context.mounted) {
               final pageIndex = navData[i]['pageIndex'] as int;
               final currentRouteName = context.router.current.name;
-              final label = navData[i]['label'] as String;
-
-              print('🔍 Navigation Debug:');
-              print('  Button: $label');
-              print('  Target Page Index: $pageIndex');
-              print('  Current Route: $currentRouteName');
 
               // Check if we're already in the main navigation context
               if (currentRouteName == 'MainNavigationRoute') {

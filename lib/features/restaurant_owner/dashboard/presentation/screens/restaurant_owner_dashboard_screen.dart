@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:khubzati/core/extenstions/context.dart';
+import 'package:khubzati/core/routes/app_router.dart';
 import 'package:khubzati/core/widgets/shared/app_button.dart';
 import 'package:khubzati/core/widgets/shared/app_card.dart';
 import 'package:khubzati/core/widgets/shared/app_loading_widget.dart';
@@ -45,7 +46,7 @@ class _RestaurantDashboardView extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {
-              // TODO: Navigate to notifications
+              context.router.push(const NotificationRoute());
             },
           ),
           IconButton(
@@ -627,25 +628,16 @@ class _RestaurantDashboardView extends StatelessWidget {
             // Already on dashboard
             break;
           case 1:
-            // TODO: Navigate to order management
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Navigate to order management'),
-                backgroundColor: context.colorScheme.primary,
-              ),
-            );
+            // Navigate to order management
+            context.router.push(const RestaurantOrderManagementRoute());
             break;
           case 2:
-            // TODO: Navigate to product management
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: const Text('Navigate to product management'),
-                backgroundColor: context.colorScheme.primary,
-              ),
-            );
+            // Navigate to product management
+            context.router.push(const RestaurantProductManagementRoute());
             break;
           case 3:
-            // TODO: Navigate to analytics
+            // Navigate to analytics
+            context.router.push(const RestaurantAnalyticsRoute());
             break;
         }
       },

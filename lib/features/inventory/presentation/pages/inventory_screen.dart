@@ -64,7 +64,9 @@ class _InventoryView extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.notifications_outlined),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.router.push(const NotificationRoute());
+                  },
                 ),
               ],
             ),

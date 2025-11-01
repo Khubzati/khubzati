@@ -1,219 +1,100 @@
-import 'package:dio/dio.dart';
-import 'package:khubzati/core/api/api_client.dart';
-import 'package:khubzati/core/api/api_constants.dart';
-import 'package:khubzati/core/api/api_error.dart';
+import 'package:injectable/injectable.dart';
+import 'package:khubzati/features/notifications/domain/models/notification_item.dart';
 
+@injectable
 class NotificationService {
-  final ApiClient _apiClient = ApiClient();
+  Future<List<NotificationItem>> getNotifications() async {
+    // Mock data - replace with actual API call
+    await Future.delayed(const Duration(seconds: 1));
 
-  // Singleton pattern
-  static final NotificationService _instance = NotificationService._internal();
-  factory NotificationService() => _instance;
-  NotificationService._internal();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
 
-  // Get user's notifications
-  Future<List<Map<String, dynamic>>> getNotifications({
-    int page = 1,
-    int limit = 20,
-    String? type,
-  }) async {
-    try {
-      final response = await _apiClient.get(
-        ApiConstants.notifications,
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-          if (type != null) 'type': type,
-        },
-        requiresAuth: true,
-      );
-
-      if (response is List) {
-        return List<Map<String, dynamic>>.from(response);
-      } else if (response is Map &&
-          response.containsKey('notifications') &&
-          response['notifications'] is List) {
-        return List<Map<String, dynamic>>.from(response['notifications']);
-      }
-
-      return [];
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
+    return [
+      // Today's notifications
+      NotificationItem(
+        id: '1',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '1 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: false,
+        createdAt: now.subtract(const Duration(hours: 1)),
+        type: NotificationType.orderDelivered,
+      ),
+      NotificationItem(
+        id: '2',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '2 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: false,
+        createdAt: now.subtract(const Duration(hours: 2)),
+        type: NotificationType.orderDelivered,
+      ),
+      NotificationItem(
+        id: '3',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '3 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: true,
+        createdAt: now.subtract(const Duration(hours: 3)),
+        type: NotificationType.orderDelivered,
+      ),
+      // Yesterday's notifications
+      NotificationItem(
+        id: '4',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '1 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: false,
+        createdAt: yesterday.add(const Duration(hours: 10)),
+        type: NotificationType.orderDelivered,
+      ),
+      NotificationItem(
+        id: '5',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '2 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: false,
+        createdAt: yesterday.add(const Duration(hours: 8)),
+        type: NotificationType.orderDelivered,
+      ),
+      NotificationItem(
+        id: '6',
+        title: 'تم توصيل الطلب',
+        description:
+            'لوريم إيبسوم (Lorem ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى)',
+        timeAgo: '3 س',
+        iconUrl: 'assets/images/notification_icon.png',
+        isRead: true,
+        createdAt: yesterday.add(const Duration(hours: 6)),
+        type: NotificationType.orderDelivered,
+      ),
+    ];
   }
 
-  // Mark notification as read
   Future<void> markAsRead(String notificationId) async {
-    try {
-      await _apiClient.post(
-        '${ApiConstants.notificationRead}$notificationId/read',
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
+    // Mock implementation - replace with actual API call
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
-  // Mark all notifications as read
   Future<void> markAllAsRead() async {
-    try {
-      await _apiClient.post(
-        '${ApiConstants.notifications}/mark-all-read',
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
+    // Mock implementation - replace with actual API call
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 
-  // Delete a notification
   Future<void> deleteNotification(String notificationId) async {
-    try {
-      await _apiClient.delete(
-        '${ApiConstants.notifications}/$notificationId',
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Clear all notifications
-  Future<void> clearAllNotifications() async {
-    try {
-      await _apiClient.delete(
-        '${ApiConstants.notifications}/clear-all',
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Get unread notification count
-  Future<int> getUnreadCount() async {
-    try {
-      final response = await _apiClient.get(
-        '${ApiConstants.notifications}/unread-count',
-        requiresAuth: true,
-      );
-
-      if (response is Map && response.containsKey('count')) {
-        return response['count'] ?? 0;
-      }
-
-      return 0;
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Get notification by ID
-  Future<Map<String, dynamic>> getNotificationById(
-      String notificationId) async {
-    try {
-      final response = await _apiClient.get(
-        '${ApiConstants.notifications}/$notificationId',
-        requiresAuth: true,
-      );
-
-      return response;
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Update notification preferences
-  Future<void> updateNotificationPreferences({
-    required bool orderUpdates,
-    required bool promotions,
-    required bool systemNotifications,
-    required bool pushNotifications,
-    required bool emailNotifications,
-  }) async {
-    try {
-      await _apiClient.put(
-        '${ApiConstants.notifications}/preferences',
-        data: {
-          'order_updates': orderUpdates,
-          'promotions': promotions,
-          'system_notifications': systemNotifications,
-          'push_notifications': pushNotifications,
-          'email_notifications': emailNotifications,
-        },
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Get notification preferences
-  Future<Map<String, dynamic>> getNotificationPreferences() async {
-    try {
-      final response = await _apiClient.get(
-        '${ApiConstants.notifications}/preferences',
-        requiresAuth: true,
-      );
-
-      return response;
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Send test notification (for development)
-  Future<void> sendTestNotification({
-    required String title,
-    required String body,
-    String? type,
-  }) async {
-    try {
-      await _apiClient.post(
-        '${ApiConstants.notifications}/test',
-        data: {
-          'title': title,
-          'body': body,
-          'type': type,
-        },
-        requiresAuth: true,
-      );
-    } catch (e) {
-      throw _handleNotificationError(e);
-    }
-  }
-
-  // Handle notification-specific errors
-  ApiError _handleNotificationError(dynamic error) {
-    if (error is DioException) {
-      // Handle specific notification errors
-      if (error.response?.statusCode == 400) {
-        return ApiError(
-          statusCode: 400,
-          message: 'Invalid notification data.',
-          data: error.response?.data,
-        );
-      } else if (error.response?.statusCode == 404) {
-        return ApiError(
-          statusCode: 404,
-          message: 'Notification not found.',
-          data: error.response?.data,
-        );
-      } else if (error.response?.statusCode == 403) {
-        return ApiError(
-          statusCode: 403,
-          message: 'You are not authorized to access this notification.',
-          data: error.response?.data,
-        );
-      }
-    }
-
-    // If it's already an ApiError, return it
-    if (error is ApiError) {
-      return error;
-    }
-
-    // Default error
-    return ApiError(message: error.toString());
+    // Mock implementation - replace with actual API call
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 }

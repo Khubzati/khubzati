@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:khubzati/core/routes/app_router.dart';
-import 'package:khubzati/features/notifications/application/blocs/notification_bloc.dart';
+import 'package:khubzati/features/notifications/data/services/notification_service.dart';
+import 'package:khubzati/features/notifications/presentation/blocs/notification_bloc.dart';
+import 'package:khubzati/features/notifications/presentation/blocs/notification_event.dart';
+import 'package:khubzati/features/notifications/presentation/blocs/notification_state.dart';
 
 class NotificationBadge extends StatelessWidget {
   final Widget child;
@@ -18,15 +21,13 @@ class NotificationBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NotificationBloc(
-        notificationService: context.read(),
-      )..add(const GetUnreadCount()),
+        notificationService: NotificationService(),
+      )..add(const LoadNotifications()),
       child: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
           int unreadCount = 0;
 
-          if (state is UnreadCountLoaded) {
-            unreadCount = state.unreadCount;
-          } else if (state is NotificationsLoaded) {
+          if (state is NotificationLoaded) {
             unreadCount = state.unreadCount;
           }
 

@@ -38,6 +38,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/baker.svg
   String get baker => 'assets/images/baker.svg';
 
+  /// File path: assets/images/cancelOrders.svg
+  String get cancelOrders => 'assets/images/cancelOrders.svg';
+
   /// File path: assets/images/closedToast.svg
   String get closedToast => 'assets/images/closedToast.svg';
 
@@ -48,6 +51,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/customAppBarBackground.svg
   String get customAppBarBackground =>
       'assets/images/customAppBarBackground.svg';
+
+  /// File path: assets/images/deleteAccount.svg
+  String get deleteAccount => 'assets/images/deleteAccount.svg';
 
   /// File path: assets/images/driver.svg
   String get driver => 'assets/images/driver.svg';
@@ -64,6 +70,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/loginBread.svg
   String get loginBreadSvg => 'assets/images/loginBread.svg';
+
+  /// File path: assets/images/noInternet.svg
+  String get noInternet => 'assets/images/noInternet.svg';
 
   /// File path: assets/images/otp.svg
   String get otp => 'assets/images/otp.svg';
@@ -97,14 +106,17 @@ class $AssetsImagesGen {
     arLogo,
     background,
     baker,
+    cancelOrders,
     closedToast,
     customAppBackground,
     customAppBarBackground,
+    deleteAccount,
     driver,
     editSuccessfully,
     icon,
     loginBreadJpg,
     loginBreadSvg,
+    noInternet,
     otp,
     prepainrBaker,
     resturant,

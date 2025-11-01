@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:khubzati/gen/assets.gen.dart';
@@ -28,6 +30,10 @@ class SharedAppBackground extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         image: DecorationImage(
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.3),
+            BlendMode.luminosity,
+          ),
           image: Assets.images.customAppBackground.provider(),
           fit: fit,
         ),

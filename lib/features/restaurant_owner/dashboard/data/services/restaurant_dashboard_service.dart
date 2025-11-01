@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_constants.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@injectable
 class RestaurantDashboardService {
   final ApiClient _apiClient = ApiClient();
 

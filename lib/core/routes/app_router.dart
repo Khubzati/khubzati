@@ -5,7 +5,6 @@ import 'package:khubzati/features/auth/presentation/screens/otp_verification_scr
 import 'package:khubzati/features/auth/presentation/screens/signup_screen.dart';
 import 'package:khubzati/features/auth/presentation/screens/verify_page.dart';
 import 'package:khubzati/features/customer/product_detail/presentation/screens/product_detail_screen.dart';
-import 'package:khubzati/features/home_page/presentation/page/home_page.dart';
 import 'package:khubzati/features/customer/cart/presentation/screens/cart_screen.dart';
 import 'package:khubzati/features/customer/checkout/presentation/screens/checkout_screen.dart';
 import 'package:khubzati/features/customer/home/presentation/screens/customer_home_screen.dart';
@@ -26,8 +25,21 @@ import 'package:khubzati/features/customer/order_details/presentation/screens/or
 import 'package:khubzati/features/inventory/presentation/pages/inventory_screen.dart';
 import 'package:khubzati/features/inventory/presentation/pages/product_detail_screen.dart';
 import 'package:khubzati/features/inventory/presentation/pages/edit_product_screen.dart';
-import 'package:khubzati/features/inventory/presentation/pages/add_new_item_screen.dart';
-import 'package:khubzati/features/customer/profile/presentation/screens/profile_settings_screen.dart';
+import 'package:khubzati/features/add_item/presentation/screens/add_item_screen.dart';
+import 'package:khubzati/features/customer/search/presentation/screens/search_screen.dart';
+import 'package:khubzati/features/customer/favorites/presentation/screens/favorites_screen.dart';
+import 'package:khubzati/features/home_page/presentation/page/home_page.dart';
+import 'package:khubzati/features/restaurant_owner/order_management/presentation/screens/restaurant_order_management_screen.dart';
+import 'package:khubzati/features/restaurant_owner/product_management/presentation/screens/restaurant_product_management_screen.dart';
+import 'package:khubzati/features/restaurant_owner/analytics/presentation/screens/restaurant_analytics_screen.dart';
+import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/restaurant_signup_screen.dart';
+import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/restaurant_otp_verification_screen.dart';
+import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/restaurant_signup_confirmation_screen.dart';
+import 'package:khubzati/features/restaurant_owner/dashboard/presentation/screens/restaurant_owner_home_screen.dart';
+import 'package:khubzati/features/network/presentation/screens/no_internet_screen.dart';
+import 'package:khubzati/features/menu/presentation/screens/profile_screen.dart';
+import 'package:khubzati/features/menu/presentation/screens/profile_menu_screen.dart';
+import 'package:khubzati/features/menu/presentation/screens/settings_screen.dart';
 import 'main_navigation_screen.dart';
 
 import '../di/injection.dart';
@@ -64,12 +76,12 @@ class AppRouter extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => [
-        // AutoRoute(page: SplashRoute.page, initial: true),
-        // AutoRoute(page: LoginRoute.page, initial: false),
-        // AutoRoute(page: SignupRoute.page, initial: false),
-        // AutoRoute(page: OtpVerificationRoute.page, initial: false),
-        // AutoRoute(page: VerifyRoute.page, initial: false),
-        AutoRoute(page: MainNavigationRoute.page, initial: true),
+        AutoRoute(page: SplashRoute.page, initial: true),
+        AutoRoute(page: LoginRoute.page, initial: false),
+        AutoRoute(page: SignupRoute.page, initial: false),
+        AutoRoute(page: OtpVerificationRoute.page, initial: false),
+        AutoRoute(page: VerifyRoute.page, initial: false),
+        AutoRoute(page: MainNavigationRoute.page, initial: false),
         AutoRoute(page: RoleSelectionRoute.page, initial: false),
         AutoRoute(page: WelcomeRoute.page, initial: false),
         AutoRoute(page: CustomerHomeRoute.page, initial: false),
@@ -87,11 +99,24 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: ReviewRoute.page, initial: false),
         AutoRoute(page: AddReviewRoute.page, initial: false),
         AutoRoute(page: NotificationRoute.page, initial: false),
+        AutoRoute(page: ProfileRoute.page, initial: false),
+        AutoRoute(page: ProfileMenuRoute.page, initial: false),
+        AutoRoute(page: SettingsRoute.page, initial: false),
         AutoRoute(page: OrderDetailsRoute.page, initial: false),
         AutoRoute(page: InventoryRoute.page, initial: false),
         AutoRoute(page: InventoryProductDetailRoute.page, initial: false),
         AutoRoute(page: EditProductRoute.page, initial: false),
-        AutoRoute(page: AddNewItemRoute.page, initial: false),
-        AutoRoute(page: ProfileSettingsRoute.page, initial: false),
+        AutoRoute(page: AddItemRoute.page, initial: false),
+        AutoRoute(page: SearchRoute.page, initial: false),
+        AutoRoute(page: FavoritesRoute.page, initial: false),
+        AutoRoute(page: HomeRoute.page, initial: false),
+        AutoRoute(page: RestaurantOrderManagementRoute.page, initial: false),
+        AutoRoute(page: RestaurantProductManagementRoute.page, initial: false),
+        AutoRoute(page: RestaurantAnalyticsRoute.page, initial: false),
+        AutoRoute(page: RestaurantSignupRoute.page, initial: false),
+        AutoRoute(page: RestaurantOtpVerificationRoute.page, initial: false),
+        AutoRoute(page: RestaurantSignupConfirmationRoute.page, initial: false),
+        AutoRoute(page: RestaurantOwnerHomeRoute.page, initial: false),
+        AutoRoute(page: NoInternetRoute.page, initial: false),
       ];
 }

@@ -61,17 +61,17 @@ class AddEditAddressRouteArgs {
 }
 
 /// generated route for
-/// [AddNewItemScreen]
-class AddNewItemRoute extends PageRouteInfo<void> {
-  const AddNewItemRoute({List<PageRouteInfo>? children})
-    : super(AddNewItemRoute.name, initialChildren: children);
+/// [AddItemScreen]
+class AddItemRoute extends PageRouteInfo<void> {
+  const AddItemRoute({List<PageRouteInfo>? children})
+    : super(AddItemRoute.name, initialChildren: children);
 
-  static const String name = 'AddNewItemRoute';
+  static const String name = 'AddItemRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AddNewItemScreen();
+      return const AddItemScreen();
     },
   );
 }
@@ -341,6 +341,22 @@ class EditProductRouteArgs {
 }
 
 /// generated route for
+/// [FavoritesScreen]
+class FavoritesRoute extends PageRouteInfo<void> {
+  const FavoritesRoute({List<PageRouteInfo>? children})
+    : super(FavoritesRoute.name, initialChildren: children);
+
+  static const String name = 'FavoritesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const FavoritesScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
@@ -514,6 +530,22 @@ class MainNavigationRouteArgs {
 }
 
 /// generated route for
+/// [NoInternetScreen]
+class NoInternetRoute extends PageRouteInfo<void> {
+  const NoInternetRoute({List<PageRouteInfo>? children})
+    : super(NoInternetRoute.name, initialChildren: children);
+
+  static const String name = 'NoInternetRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const NoInternetScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [NotificationScreen]
 class NotificationRoute extends PageRouteInfo<void> {
   const NotificationRoute({List<PageRouteInfo>? children})
@@ -587,10 +619,15 @@ class OrderDetailsRoute extends PageRouteInfo<OrderDetailsRouteArgs> {
   OrderDetailsRoute({
     Key? key,
     required String orderId,
+    bool isHistoryOrder = false,
     List<PageRouteInfo>? children,
   }) : super(
          OrderDetailsRoute.name,
-         args: OrderDetailsRouteArgs(key: key, orderId: orderId),
+         args: OrderDetailsRouteArgs(
+           key: key,
+           orderId: orderId,
+           isHistoryOrder: isHistoryOrder,
+         ),
          initialChildren: children,
        );
 
@@ -600,21 +637,31 @@ class OrderDetailsRoute extends PageRouteInfo<OrderDetailsRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<OrderDetailsRouteArgs>();
-      return OrderDetailsScreen(key: args.key, orderId: args.orderId);
+      return OrderDetailsScreen(
+        key: args.key,
+        orderId: args.orderId,
+        isHistoryOrder: args.isHistoryOrder,
+      );
     },
   );
 }
 
 class OrderDetailsRouteArgs {
-  const OrderDetailsRouteArgs({this.key, required this.orderId});
+  const OrderDetailsRouteArgs({
+    this.key,
+    required this.orderId,
+    this.isHistoryOrder = false,
+  });
 
   final Key? key;
 
   final String orderId;
 
+  final bool isHistoryOrder;
+
   @override
   String toString() {
-    return 'OrderDetailsRouteArgs{key: $key, orderId: $orderId}';
+    return 'OrderDetailsRouteArgs{key: $key, orderId: $orderId, isHistoryOrder: $isHistoryOrder}';
   }
 }
 
@@ -766,19 +813,120 @@ class ProductDetailRouteArgs {
 }
 
 /// generated route for
-/// [ProfileSettingsScreen]
-class ProfileSettingsRoute extends PageRouteInfo<void> {
-  const ProfileSettingsRoute({List<PageRouteInfo>? children})
-    : super(ProfileSettingsRoute.name, initialChildren: children);
+/// [ProfileMenuScreen]
+class ProfileMenuRoute extends PageRouteInfo<void> {
+  const ProfileMenuRoute({List<PageRouteInfo>? children})
+    : super(ProfileMenuRoute.name, initialChildren: children);
 
-  static const String name = 'ProfileSettingsRoute';
+  static const String name = 'ProfileMenuRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ProfileSettingsScreen();
+      return const ProfileMenuScreen();
     },
   );
+}
+
+/// generated route for
+/// [ProfileScreen]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+    : super(ProfileRoute.name, initialChildren: children);
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantAnalyticsScreen]
+class RestaurantAnalyticsRoute extends PageRouteInfo<void> {
+  const RestaurantAnalyticsRoute({List<PageRouteInfo>? children})
+    : super(RestaurantAnalyticsRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantAnalyticsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantAnalyticsScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantOrderManagementScreen]
+class RestaurantOrderManagementRoute extends PageRouteInfo<void> {
+  const RestaurantOrderManagementRoute({List<PageRouteInfo>? children})
+    : super(RestaurantOrderManagementRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantOrderManagementRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantOrderManagementScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantOtpVerificationScreen]
+class RestaurantOtpVerificationRoute
+    extends PageRouteInfo<RestaurantOtpVerificationRouteArgs> {
+  RestaurantOtpVerificationRoute({
+    Key? key,
+    required String phoneNumber,
+    required String verificationId,
+    List<PageRouteInfo>? children,
+  }) : super(
+         RestaurantOtpVerificationRoute.name,
+         args: RestaurantOtpVerificationRouteArgs(
+           key: key,
+           phoneNumber: phoneNumber,
+           verificationId: verificationId,
+         ),
+         initialChildren: children,
+       );
+
+  static const String name = 'RestaurantOtpVerificationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RestaurantOtpVerificationRouteArgs>();
+      return RestaurantOtpVerificationScreen(
+        key: args.key,
+        phoneNumber: args.phoneNumber,
+        verificationId: args.verificationId,
+      );
+    },
+  );
+}
+
+class RestaurantOtpVerificationRouteArgs {
+  const RestaurantOtpVerificationRouteArgs({
+    this.key,
+    required this.phoneNumber,
+    required this.verificationId,
+  });
+
+  final Key? key;
+
+  final String phoneNumber;
+
+  final String verificationId;
+
+  @override
+  String toString() {
+    return 'RestaurantOtpVerificationRouteArgs{key: $key, phoneNumber: $phoneNumber, verificationId: $verificationId}';
+  }
 }
 
 /// generated route for
@@ -793,6 +941,70 @@ class RestaurantOwnerDashboardRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const RestaurantOwnerDashboardScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantOwnerHomeScreen]
+class RestaurantOwnerHomeRoute extends PageRouteInfo<void> {
+  const RestaurantOwnerHomeRoute({List<PageRouteInfo>? children})
+    : super(RestaurantOwnerHomeRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantOwnerHomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantOwnerHomeScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantProductManagementScreen]
+class RestaurantProductManagementRoute extends PageRouteInfo<void> {
+  const RestaurantProductManagementRoute({List<PageRouteInfo>? children})
+    : super(RestaurantProductManagementRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantProductManagementRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantProductManagementScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantSignupConfirmationScreen]
+class RestaurantSignupConfirmationRoute extends PageRouteInfo<void> {
+  const RestaurantSignupConfirmationRoute({List<PageRouteInfo>? children})
+    : super(RestaurantSignupConfirmationRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantSignupConfirmationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantSignupConfirmationScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [RestaurantSignupScreen]
+class RestaurantSignupRoute extends PageRouteInfo<void> {
+  const RestaurantSignupRoute({List<PageRouteInfo>? children})
+    : super(RestaurantSignupRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantSignupRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantSignupScreen();
     },
   );
 }
@@ -867,6 +1079,38 @@ class RoleSelectionRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const RoleSelectionScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SearchScreen]
+class SearchRoute extends PageRouteInfo<void> {
+  const SearchRoute({List<PageRouteInfo>? children})
+    : super(SearchRoute.name, initialChildren: children);
+
+  static const String name = 'SearchRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SearchScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [SettingsScreen]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+    : super(SettingsRoute.name, initialChildren: children);
+
+  static const String name = 'SettingsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const SettingsScreen();
     },
   );
 }
