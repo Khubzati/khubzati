@@ -45,5 +45,19 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(REVERSED_CLIENT_ID)</string>
+				<string>app-1-19603541521-ios-3f45003d5d37777126abb0</string>
+				<string>app-1-730976050706-ios-612cc480566b01914e02cb</string>
+				<string>app-1-501090037216-ios-b7b639abf9f8a600fe4f85</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

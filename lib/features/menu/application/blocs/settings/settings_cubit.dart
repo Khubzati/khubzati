@@ -15,10 +15,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     required this.appPreferences,
     required this.localizationService,
-  }) : super(SettingsInitial());
+  }) : super(const SettingsInitial());
 
   Future<void> loadSettings() async {
-    emit(SettingsLoading());
+    emit(const SettingsLoading());
     try {
       final prefs = await SharedPreferences.getInstance();
       final isNotificationsEnabled = prefs.getBool(_notificationsKey) ?? true;

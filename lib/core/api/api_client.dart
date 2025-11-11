@@ -183,8 +183,13 @@ class ApiClient {
       final formData = FormData();
 
       // Add files
-      for (var i = 0; i < files.length; i++) {
-        formData.files.add(MapEntry('file$i', files[i]));
+      // For single file upload, use 'file', for multiple use 'file0', 'file1', etc.
+      if (files.length == 1) {
+        formData.files.add(MapEntry('file', files[0]));
+      } else {
+        for (var i = 0; i < files.length; i++) {
+          formData.files.add(MapEntry('file$i', files[i]));
+        }
       }
 
       // Add other data

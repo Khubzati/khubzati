@@ -38,7 +38,7 @@ class BackgroundWithLogo extends StatelessWidget {
         Positioned.fill(
           child: SafeArea(
             child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 16.w),
+              // padding: EdgeInsets.only(bottom: 16.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -47,8 +47,8 @@ class BackgroundWithLogo extends StatelessWidget {
                     if (showLogo) SvgPicture.asset(Assets.images.arLogo),
                     if (showLogo && showTitle) 10.verticalSpace,
                     if (showTitle)
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.h),
+                      Center(
+                        // padding: EdgeInsets.only(left: 20.h),
                         child: Text(
                           context.tr(LocaleKeys.app_userTypeSelection_title),
                           style: AppTextStyles.font47TextW700,

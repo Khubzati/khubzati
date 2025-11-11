@@ -289,7 +289,11 @@
             "phone_number_invalid": "يرجى إدخال رقم هاتف صحيح",
             "edit_info": "تعديل معلوماتي",
             "save_success": "تم تحديث الملف الشخصي بنجاح",
-            "profile_updated": "تم تحديث الملف الشخصي بنجاح"
+            "profile_updated": "تم تحديث الملف الشخصي بنجاح",
+            "unsaved_changes_title": "تغييرات غير محفوظة",
+            "unsaved_changes_message": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد تجاهلها؟",
+            "discard": "تجاهل",
+            "failed_to_pick_image": "فشل في اختيار الصورة"
         },
         "vendor_listing": {
             "title": "المتاجر",

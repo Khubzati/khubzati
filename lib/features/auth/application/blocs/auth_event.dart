@@ -13,12 +13,11 @@ class AuthCheckRequested extends AuthEvent {}
 // Event for Login
 class LoginRequested extends AuthEvent {
   final String emailOrPhone;
-  final String password;
 
-  const LoginRequested({required this.emailOrPhone, required this.password});
+  const LoginRequested({required this.emailOrPhone});
 
   @override
-  List<Object?> get props => [emailOrPhone, password];
+  List<Object?> get props => [emailOrPhone];
 }
 
 // Event for Signup
@@ -44,15 +43,17 @@ class SignupRequested extends AuthEvent {
 // Event for OTP Verification
 class OtpVerificationRequested extends AuthEvent {
   final String otp;
-  // May need additional context like phone number or verification ID from backend
-  final String
-      verificationId; // Example, adjust based on actual backend response
+  final String verificationId;
+  final String purpose; // registration, login, password_reset, etc.
 
-  const OtpVerificationRequested(
-      {required this.otp, required this.verificationId});
+  const OtpVerificationRequested({
+    required this.otp,
+    required this.verificationId,
+    required this.purpose,
+  });
 
   @override
-  List<Object?> get props => [otp, verificationId];
+  List<Object?> get props => [otp, verificationId, purpose];
 }
 
 // Event to request OTP for Forgot Password
@@ -105,4 +106,54 @@ class FileUploadRequested extends AuthEvent {
 
   @override
   List<Object?> get props => [filePath, fileName, uploadType];
+}
+
+// Event for Bakery Registration (after user registration)
+class BakeryRegistrationRequested extends AuthEvent {
+  final String name;
+  final String? description;
+  final String addressLine1;
+  final String? addressLine2;
+  final String city;
+  final String? postalCode;
+  final String? country;
+  final String phoneNumber;
+  final String? email;
+  final String? logoUrl;
+  final String? coverImageUrl;
+  final String? commercialRegistryUrl;
+  final Map<String, dynamic>? operatingHours;
+
+  const BakeryRegistrationRequested({
+    required this.name,
+    this.description,
+    required this.addressLine1,
+    this.addressLine2,
+    required this.city,
+    this.postalCode,
+    this.country,
+    required this.phoneNumber,
+    this.email,
+    this.logoUrl,
+    this.coverImageUrl,
+    this.commercialRegistryUrl,
+    this.operatingHours,
+  });
+
+  @override
+  List<Object?> get props => [
+        name,
+        description,
+        addressLine1,
+        addressLine2,
+        city,
+        postalCode,
+        country,
+        phoneNumber,
+        email,
+        logoUrl,
+        coverImageUrl,
+        commercialRegistryUrl,
+        operatingHours,
+      ];
 }

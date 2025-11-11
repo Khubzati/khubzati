@@ -61,10 +61,8 @@ class _StepBasedSignupState extends State<StepBasedSignup> {
             _breadInfoData = data;
           },
           onNext: () {
-            setState(() {
-              _currentStep++;
-            });
-            widget.onStepChanged?.call(_currentStep);
+            // Skip step 2 (account step) - complete signup directly after bread info step
+            _completeSignup();
           },
           phoneNumber: _personalInfoData['phone'] ??
               '', // Pass phone number from personal info
@@ -90,7 +88,11 @@ class _StepBasedSignupState extends State<StepBasedSignup> {
           style: AppTextStyles.font15TextW400,
         ),
         32.verticalSpace,
-        const SignupForm(),
+        SignupForm(
+          onDataChanged: (data) {
+            _accountData.addAll(data);
+          },
+        ),
         40.verticalSpace,
         // Complete Signup Button
         SizedBox(
@@ -123,6 +125,36 @@ class _StepBasedSignupState extends State<StepBasedSignup> {
       ..._breadInfoData,
       ..._accountData,
     };
+
+    // For bakery registration, set default values if account step was skipped
+    if (completeData['username'] == null ||
+        completeData['username'].toString().isEmpty) {
+      // Generate username from bakery name or phone
+      final bakeryName = _personalInfoData['bakeryName'] ?? '';
+      final phone = _personalInfoData['phone'] ?? '';
+      completeData['username'] = bakeryName.isNotEmpty
+          ? bakeryName.replaceAll(' ', '_').toLowerCase()
+          : phone.replaceAll(RegExp(r'[^0-9]'), '');
+    }
+    if (completeData['email'] == null ||
+        completeData['email'].toString().isEmpty) {
+      // Use phone number as email placeholder or generate from bakery name
+      final phone = _personalInfoData['phone'] ?? '';
+      completeData['email'] = phone.isNotEmpty
+          ? '${phone.replaceAll(RegExp(r'[^0-9]'), '')}@bakery.temp'
+          : '${completeData['username']}@bakery.temp';
+    }
+    if (completeData['password'] == null ||
+        completeData['password'].toString().isEmpty) {
+      // Generate a default password from phone number
+      final phone = _personalInfoData['phone'] ?? '';
+      completeData['password'] = phone.replaceAll(RegExp(r'[^0-9]'), '');
+      if (completeData['password'].toString().length < 6) {
+        completeData['password'] = '${completeData['password']}123456';
+      }
+    }
+    // Set role to bakery_owner for bakery registration
+    completeData['role'] = 'bakery_owner';
 
     widget.onSignupComplete(completeData);
   }

@@ -30,16 +30,20 @@ class LoginHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Make height responsive to screen size
+    final containerHeight = MediaQuery.of(context).size.height * 0.33;
+    final backgroundHeight = containerHeight - 40.h;
+
     return FadeTransition(
       opacity: fadeAnimation,
       child: Container(
-        height: 280.h,
+        height: containerHeight,
         margin: EdgeInsets.symmetric(horizontal: 24.w),
         child: Stack(
           children: [
             // Background gradient container
             Container(
-              height: 240.h,
+              height: backgroundHeight,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -63,7 +67,7 @@ class LoginHeaderWidget extends StatelessWidget {
             ),
             // Glassmorphism overlay
             Container(
-              height: 240.h,
+              height: backgroundHeight,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(32.r),
                 gradient: LinearGradient(
@@ -84,80 +88,100 @@ class LoginHeaderWidget extends StatelessWidget {
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Logo with enhanced styling
-                  ScaleTransition(
-                    scale: scaleAnimation,
-                    child: Container(
-                      width: 100.w,
-                      height: 100.w,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.white.withOpacity(0.3),
-                            Colors.white.withOpacity(0.1),
+                  Flexible(
+                    flex: 3,
+                    child: ScaleTransition(
+                      scale: scaleAnimation,
+                      child: Container(
+                        width: 80.w,
+                        height: 80.w,
+                        constraints: BoxConstraints(
+                          maxWidth: 100.w,
+                          maxHeight: 100.w,
+                        ),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.white.withOpacity(0.3),
+                              Colors.white.withOpacity(0.1),
+                            ],
+                          ),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.4),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withOpacity(0.3),
+                              blurRadius: 20,
+                              offset: const Offset(0, 10),
+                            ),
                           ],
                         ),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.4),
-                          width: 2,
+                        child: ClipOval(
+                          child: Assets.images.loginBreadJpg.image(
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.3),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  // App name with enhanced typography
+                  Flexible(
+                    flex: 2,
+                    child: Text(
+                      LocaleKeys.app_userTypeSelection_title.tr(),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.3),
+                            offset: const Offset(0, 4),
+                            blurRadius: 8,
                           ),
                         ],
                       ),
-                      child: ClipOval(
-                        child: Assets.images.loginBreadJpg.image(
-                          fit: BoxFit.cover,
-                        ),
-                      ),
                     ),
                   ),
-                  20.verticalSpace,
-                  // App name with enhanced typography
-                  Text(
-                    LocaleKeys.app_userTypeSelection_title.tr(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 32.sp,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.2,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withOpacity(0.3),
-                          offset: const Offset(0, 4),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                  ),
-                  16.verticalSpace,
+                  SizedBox(height: 10.h),
                   // Subtitle with modern styling
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.3),
-                        width: 1,
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.3),
+                          width: 1,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      LocaleKeys.app_userTypeSelection_WelcomeText.tr(),
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.95),
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
+                      child: Text(
+                        LocaleKeys.app_userTypeSelection_WelcomeText.tr(),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.95),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                     ),
                   ),

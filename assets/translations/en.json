@@ -21,7 +21,11 @@
             "phone_number_invalid": "Please enter a valid phone number",
             "edit_info": "Edit My Information",
             "save_success": "Profile updated successfully",
-            "profile_updated": "Profile updated successfully"
+            "profile_updated": "Profile updated successfully",
+            "unsaved_changes_title": "Unsaved Changes",
+            "unsaved_changes_message": "You have unsaved changes. Are you sure you want to discard them?",
+            "discard": "Discard",
+            "failed_to_pick_image": "Failed to pick image"
         },
         "vendor_listing": {
             "title": "Vendors",

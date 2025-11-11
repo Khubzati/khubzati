@@ -40,13 +40,20 @@ class AuthError extends AuthState {
 
 // State when OTP has been sent (e.g., for signup or forgot password)
 class OtpSent extends AuthState {
-  final String verificationId; // Or some identifier for the OTP process
-  final String? message; // Optional message e.g. "OTP sent to your phone"
+  final String verificationId; // Identifier used to verify OTP
+  final String purpose; // login, registration, password_reset, etc.
+  final String? contact; // Phone/email shown to user
+  final String? message; // Optional message e.g. "OTP sent"
 
-  const OtpSent({required this.verificationId, this.message});
+  const OtpSent({
+    required this.verificationId,
+    required this.purpose,
+    this.contact,
+    this.message,
+  });
 
   @override
-  List<Object?> get props => [verificationId, message];
+  List<Object?> get props => [verificationId, purpose, contact, message];
 }
 
 // State when OTP verification is successful (intermediate state before Authenticated or PasswordResetReady)
@@ -106,4 +113,14 @@ class FileUploadError extends AuthState {
 
   @override
   List<Object?> get props => [message, uploadType];
+}
+
+// State when bakery registration is successful
+class BakeryRegistrationSuccess extends AuthState {
+  final String? message;
+
+  const BakeryRegistrationSuccess({this.message});
+
+  @override
+  List<Object?> get props => [message];
 }

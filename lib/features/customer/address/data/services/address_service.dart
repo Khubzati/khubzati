@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_constants.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@lazySingleton
 class AddressService {
   final ApiClient _apiClient = ApiClient();
 
-  // Singleton pattern
-  static final AddressService _instance = AddressService._internal();
-  factory AddressService() => _instance;
-  AddressService._internal();
+  AddressService();
 
   // Get user's addresses
   Future<List<Map<String, dynamic>>> getAddresses() async {

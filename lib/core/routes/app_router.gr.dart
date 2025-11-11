@@ -672,6 +672,7 @@ class OtpVerificationRoute extends PageRouteInfo<OtpVerificationRouteArgs> {
     Key? key,
     required String phoneNumber,
     required String verificationId,
+    required String purpose,
     List<PageRouteInfo>? children,
   }) : super(
          OtpVerificationRoute.name,
@@ -679,6 +680,7 @@ class OtpVerificationRoute extends PageRouteInfo<OtpVerificationRouteArgs> {
            key: key,
            phoneNumber: phoneNumber,
            verificationId: verificationId,
+           purpose: purpose,
          ),
          initialChildren: children,
        );
@@ -693,6 +695,7 @@ class OtpVerificationRoute extends PageRouteInfo<OtpVerificationRouteArgs> {
         key: args.key,
         phoneNumber: args.phoneNumber,
         verificationId: args.verificationId,
+        purpose: args.purpose,
       );
     },
   );
@@ -703,6 +706,7 @@ class OtpVerificationRouteArgs {
     this.key,
     required this.phoneNumber,
     required this.verificationId,
+    required this.purpose,
   });
 
   final Key? key;
@@ -711,9 +715,11 @@ class OtpVerificationRouteArgs {
 
   final String verificationId;
 
+  final String purpose;
+
   @override
   String toString() {
-    return 'OtpVerificationRouteArgs{key: $key, phoneNumber: $phoneNumber, verificationId: $verificationId}';
+    return 'OtpVerificationRouteArgs{key: $key, phoneNumber: $phoneNumber, verificationId: $verificationId, purpose: $purpose}';
   }
 }
 

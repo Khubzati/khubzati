@@ -1,15 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@lazySingleton
 class DriverDashboardService {
   final ApiClient _apiClient = ApiClient();
 
-  // Singleton pattern
-  static final DriverDashboardService _instance =
-      DriverDashboardService._internal();
-  factory DriverDashboardService() => _instance;
-  DriverDashboardService._internal();
+  DriverDashboardService();
 
   // Get driver dashboard data
   Future<Map<String, dynamic>> getDriverDashboard() async {

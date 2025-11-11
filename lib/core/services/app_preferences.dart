@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
@@ -131,5 +132,53 @@ class AppPreferences {
     await preferences.remove(PreferencesKey.role.name);
     await preferences.remove(PreferencesKey.email.name);
     await preferences.remove(PreferencesKey.password.name);
+  }
+
+  // Pending bakery registration data (stored temporarily during signup)
+  Future<void> setPendingBakeryData(Map<String, dynamic> data) async {
+    final jsonString = jsonEncode(data);
+    await preferences.setString('pending_bakery_data', jsonString);
+  }
+
+  Future<Map<String, dynamic>?> getPendingBakeryData() async {
+    final dataString = preferences
+        .getString('pending_bakery_data', defaultValue: '')
+        .getValue();
+    if (dataString.isEmpty) return null;
+
+    try {
+      return jsonDecode(dataString) as Map<String, dynamic>;
+    } catch (e) {
+      print('Error parsing pending bakery data: $e');
+      return null;
+    }
+  }
+
+  Future<void> clearPendingBakeryData() async {
+    await preferences.remove('pending_bakery_data');
+  }
+
+  // Pending signup data (stored temporarily to be used after OTP verification)
+  Future<void> setPendingSignupData(Map<String, dynamic> data) async {
+    final jsonString = jsonEncode(data);
+    await preferences.setString('pending_signup_data', jsonString);
+  }
+
+  Future<Map<String, dynamic>?> getPendingSignupData() async {
+    final dataString = preferences
+        .getString('pending_signup_data', defaultValue: '')
+        .getValue();
+    if (dataString.isEmpty) return null;
+
+    try {
+      return jsonDecode(dataString) as Map<String, dynamic>;
+    } catch (e) {
+      print('Error parsing pending signup data: $e');
+      return null;
+    }
+  }
+
+  Future<void> clearPendingSignupData() async {
+    await preferences.remove('pending_signup_data');
   }
 }

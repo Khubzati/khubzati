@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,13 +19,13 @@ TextTheme get appTextTheme {
 }
 
 class AppTextStyles {
-  static const TextStyle phoneNumber = TextStyle(
-    fontSize: 16,
+  static TextStyle phoneNumber = TextStyle(
+    fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.textDarkBrown,
   );
   static TextStyle font12PrimaryBurntOrange = TextStyle(
-    fontSize: 12,
+    fontSize: 12.sp,
     color: AppColors.primaryBurntOrange.withOpacity(0.46),
     fontWeight: FontWeight.normal,
   );

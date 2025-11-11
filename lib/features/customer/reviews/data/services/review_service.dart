@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_constants.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@lazySingleton
 class ReviewService {
   final ApiClient _apiClient = ApiClient();
 
-  // Singleton pattern
-  static final ReviewService _instance = ReviewService._internal();
-  factory ReviewService() => _instance;
-  ReviewService._internal();
+  ReviewService();
 
   // Get reviews for a specific entity (product, restaurant, bakery)
   Future<List<Map<String, dynamic>>> getReviews({

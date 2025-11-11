@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import '../network/dio_client.dart';
@@ -21,6 +22,10 @@ abstract class AppServiceModel {
   @preResolve
   Future<StreamingSharedPreferences> preferences() =>
       StreamingSharedPreferences.instance;
+
+  @preResolve
+  Future<SharedPreferences> sharedPreferences() =>
+      SharedPreferences.getInstance();
 
   @lazySingleton
   FirebaseAuth get firebaseAuth => FirebaseAuth.instance;

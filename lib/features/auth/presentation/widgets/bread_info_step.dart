@@ -1,8 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:khubzati/core/routes/app_router.dart';
 
 import '../../../../core/theme/styles/app_colors.dart';
 import '../../../../core/theme/styles/app_text_style.dart';
@@ -133,24 +131,6 @@ class _BreadInfoStepState extends State<BreadInfoStep> {
       }
     }
     return _breadTypes.isNotEmpty;
-  }
-
-  void _navigateToOtp() {
-    try {
-      // Generate a mock verification ID (in real app, this would come from backend)
-      const mockVerificationId = 'mock_verification_id_123';
-
-      context.router.push(
-        OtpVerificationRoute(
-          phoneNumber: widget.phoneNumber,
-          verificationId: mockVerificationId,
-        ),
-      );
-    } catch (e) {
-      // Handle navigation error gracefully
-      debugPrint('Navigation error: $e');
-      // You could show a snackbar or dialog here
-    }
   }
 
   @override
@@ -300,7 +280,7 @@ class _BreadInfoStepState extends State<BreadInfoStep> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _isFormValid() ? _navigateToOtp : null,
+              onPressed: _isFormValid() ? widget.onNext : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryBurntOrange,
                 foregroundColor: Colors.white,

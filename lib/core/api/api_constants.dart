@@ -1,7 +1,18 @@
+import 'package:flutter/foundation.dart';
+
 class ApiConstants {
   // Base URL
-  static const String baseUrl =
-      'https://api.khubzati.com/v1'; // Replace with actual API base URL
+  // For development: use localhost (backend serves routes at both /api/* and /v1/*)
+  // For production: use actual API URL
+  static const String baseUrl = kDebugMode
+      ? 'http://localhost:3000/v1' // Local development server (backend also serves /v1/* routes)
+      : 'https://api.khubzati.com/v1'; // Production API URL
+
+  // Alternative: Use environment variable if needed
+  // static const String baseUrl = const String.fromEnvironment(
+  //   'API_BASE_URL',
+  //   defaultValue: 'http://localhost:3000',
+  // );
 
   // Timeouts (in milliseconds)
   static const int connectionTimeout = 30000; // 30 seconds
@@ -11,6 +22,7 @@ class ApiConstants {
 
   // Auth endpoints
   static const String login = '/auth/login';
+  static const String loginWithFirebase = '/auth/login-with-firebase'; // Firebase token login
   static const String register = '/auth/register';
   static const String verifyOtp = '/auth/verify-otp';
   static const String resendOtp = '/auth/resend-otp';
@@ -20,8 +32,8 @@ class ApiConstants {
   static const String logout = '/auth/logout';
 
   // User endpoints
-  static const String userProfile = '/user/profile';
-  static const String updateProfile = '/user/profile';
+  static const String userProfile = '/users/me';
+  static const String updateProfile = '/users/me';
   static const String changePassword = '/user/change-password';
   static const String userAddresses = '/user/addresses';
 
@@ -38,6 +50,8 @@ class ApiConstants {
   static const String orderDetail = '/customer/orders/'; // Append order ID
 
   // Bakery owner endpoints
+  static const String bakeryRegister =
+      '/bakeries'; // Register new bakery (POST to create)
   static const String bakeryDashboard = '/bakery/dashboard';
   static const String bakeryProducts = '/bakery/products';
   static const String bakeryProductDetail =
@@ -99,4 +113,8 @@ class ApiConstants {
   static const String notifications = '/notifications';
   static const String notificationRead =
       '/notifications/'; // Append notification ID + /read
+
+  // File upload endpoints
+  static const String uploadDocument = '/upload/document';
+  static const String uploadDocuments = '/upload/documents';
 }

@@ -1,15 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:khubzati/core/api/api_client.dart';
 import 'package:khubzati/core/api/api_constants.dart';
 import 'package:khubzati/core/api/api_error.dart';
 
+@lazySingleton
 class PaymentService {
   final ApiClient _apiClient = ApiClient();
 
-  // Singleton pattern
-  static final PaymentService _instance = PaymentService._internal();
-  factory PaymentService() => _instance;
-  PaymentService._internal();
+  PaymentService();
 
   // Process payment for an order
   Future<Map<String, dynamic>> processPayment({

@@ -9,7 +9,9 @@ import '../../../../core/widgets/shared_form_text_field_bloc.dart';
 import '../../../../gen/translations/locale_keys.g.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final Function(Map<String, dynamic>)? onDataChanged;
+
+  const SignupForm({super.key, this.onDataChanged});
 
   @override
   State<SignupForm> createState() => _SignupFormState();
@@ -63,6 +65,7 @@ class _SignupFormState extends State<SignupForm> {
             },
             onChanged: (value) {
               _usernameController.text = value;
+              _updateAccountData();
             },
           ),
 
@@ -89,6 +92,7 @@ class _SignupFormState extends State<SignupForm> {
             },
             onChanged: (value) {
               _emailController.text = value;
+              _updateAccountData();
             },
           ),
           16.verticalSpace,
@@ -98,7 +102,7 @@ class _SignupFormState extends State<SignupForm> {
           16.verticalSpace,
 
           // Role Selection
-          _buildRoleSelection(),
+          // _buildRoleSelection(),
           16.verticalSpace,
 
           // Password Field
@@ -134,6 +138,7 @@ class _SignupFormState extends State<SignupForm> {
             },
             onChanged: (value) {
               _passwordController.text = value;
+              _updateAccountData();
             },
           ),
           16.verticalSpace,
@@ -173,6 +178,7 @@ class _SignupFormState extends State<SignupForm> {
             },
             onChanged: (value) {
               _confirmPasswordController.text = value;
+              _updateAccountData();
             },
           ),
           16.verticalSpace,
@@ -182,6 +188,17 @@ class _SignupFormState extends State<SignupForm> {
         ],
       ),
     );
+  }
+
+  void _updateAccountData() {
+    if (widget.onDataChanged != null) {
+      widget.onDataChanged!({
+        'username': _usernameController.text,
+        'email': _emailController.text,
+        'password': _passwordController.text,
+        'role': _selectedRole,
+      });
+    }
   }
 
   Widget _buildPhoneField() {
@@ -293,6 +310,7 @@ class _SignupFormState extends State<SignupForm> {
                 setState(() {
                   _selectedRole = value ?? 'customer';
                 });
+                _updateAccountData();
               },
             ),
           ),
@@ -311,6 +329,7 @@ class _SignupFormState extends State<SignupForm> {
             setState(() {
               _agreeToTerms = value ?? false;
             });
+            _updateAccountData();
           },
           activeColor: AppColors.primaryBurntOrange,
           shape: RoundedRectangleBorder(

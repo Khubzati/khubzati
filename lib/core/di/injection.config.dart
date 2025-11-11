@@ -94,7 +94,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => appServiceModel.preferences(),
       preResolve: true,
     );
-    gh.factory<_i240.ProfileService>(() => _i240.ProfileService());
+    await gh.factoryAsync<_i460.SharedPreferences>(
+      () => appServiceModel.sharedPreferences(),
+      preResolve: true,
+    );
     gh.factory<_i762.RestaurantAuthService>(
         () => _i762.RestaurantAuthService());
     gh.factory<_i862.RestaurantDashboardService>(
@@ -111,6 +114,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i273.LocalizationService());
     gh.lazySingleton<_i835.DataCubit>(() => _i835.DataCubit());
     gh.lazySingleton<_i47.AuthService>(() => _i47.AuthService());
+    gh.lazySingleton<_i809.DriverDashboardService>(
+        () => _i809.DriverDashboardService());
+    gh.lazySingleton<_i96.PaymentService>(() => _i96.PaymentService());
+    gh.lazySingleton<_i602.AddressService>(() => _i602.AddressService());
+    gh.lazySingleton<_i666.ReviewService>(() => _i666.ReviewService());
     gh.lazySingleton<_i189.AuthService>(
         () => _i189.AuthService(gh<_i59.FirebaseAuth>()));
     gh.factory<_i771.SearchRemoteDataSource>(
@@ -131,6 +139,8 @@ extension GetItInjectableX on _i174.GetIt {
         _i458.FavoritesRepositoryImpl(gh<_i123.FavoritesLocalDataSource>()));
     gh.factory<_i173.AddressBloc>(
         () => _i173.AddressBloc(addressService: gh<_i602.AddressService>()));
+    gh.factory<_i240.ProfileService>(
+        () => _i240.ProfileService(gh<_i458.AppPreferences>()));
     gh.factory<_i857.ProfileBloc>(
         () => _i857.ProfileBloc(profileService: gh<_i240.ProfileService>()));
     gh.factory<_i628.ProfileMenuCubit>(() =>

@@ -10,37 +10,110 @@ class AuthService {
   final ApiClient _apiClient = ApiClient();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
 
-  // Login with email/phone and password
+  // Login with Firebase ID token (Primary method when using Firebase Auth)
+  Future<Map<String, dynamic>> loginWithFirebase({
+    required String idToken,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        ApiConstants.loginWithFirebase,
+        data: {
+          'idToken': idToken,
+        },
+        requiresAuth: false,
+      );
+
+      final responseData = response['data'] ?? response;
+      if (responseData['token'] != null || response['token'] != null) {
+        await _saveAuthData(response);
+      }
+
+      return response;
+    } catch (e) {
+      ApiError error;
+
+      if (e is DioException) {
+        error = _handleAuthError(e);
+      } else if (e is ApiError) {
+        error = e;
+      } else {
+        error = _handleAuthError(e);
+      }
+
+      throw error;
+    }
+  }
+
+  // Login with email/phone and OTP (two-step flow - fallback method)
   Future<Map<String, dynamic>> login({
     required String emailOrPhone,
-    required String password,
-    required String role, // 'customer', 'bakery_owner', 'restaurant_owner'
+    String? otp,
   }) async {
-    // TODO: Mock login for development - remove when backend is ready
-    print('DEBUG: Mock login for $emailOrPhone with role $role');
+    try {
+      final data = {
+        'emailOrPhone': emailOrPhone,
+        if (otp != null) 'otp': otp,
+      };
 
-    // Simulate network delay
-    await Future.delayed(const Duration(seconds: 1));
+      final response = await _apiClient.post(
+        ApiConstants.login,
+        data: data,
+        requiresAuth: false,
+      );
 
-    // Return mock response - only phone number required
-    final mockResponse = {
-      'success': true,
-      'message': 'Login successful',
-      'token': 'mock_jwt_token_${DateTime.now().millisecondsSinceEpoch}',
-      'user': {
-        'id': 'user_${DateTime.now().millisecondsSinceEpoch}',
-        'name': 'Mock User',
-        'phone': emailOrPhone,
-        'role': role, // Use the role passed from the login request
-        'is_verified': true,
-      },
-      'expires_in': 3600,
-    };
+      final responseData = response['data'] ?? response;
+      if (responseData['token'] != null || response['token'] != null) {
+        await _saveAuthData(response);
+      }
 
-    // Save tokens
-    await _saveAuthData(mockResponse);
+      return response;
+    } catch (e) {
+      // Handle specific errors for bakery/restaurant owner approval
+      ApiError error;
 
-    return mockResponse;
+      if (e is DioException) {
+        error = _handleAuthError(e);
+      } else if (e is ApiError) {
+        error = e;
+      } else {
+        error = _handleAuthError(e);
+      }
+
+      // Check if it's a 403 error with pending approval message
+      if (error.statusCode == 403) {
+        // Extract the specific error message from backend response
+        // Backend returns: { status: 'fail', message: '...', pendingApproval: true, noVendor: false }
+        dynamic errorData = error.data;
+        String message = error.message;
+        bool pendingApproval = false;
+        bool noVendor = false;
+
+        if (errorData != null) {
+          if (errorData is Map) {
+            // Direct map access
+            message = errorData['message']?.toString() ?? message;
+            pendingApproval = errorData['pendingApproval'] == true;
+            noVendor = errorData['noVendor'] == true;
+          } else if (errorData is String) {
+            // Sometimes error data might be a string
+            message = errorData;
+          }
+        }
+
+        // Throw a more specific error with backend message
+        throw ApiError(
+          statusCode: 403,
+          message: message,
+          data: {
+            'pendingApproval': pendingApproval,
+            'noVendor': noVendor,
+            'message': message,
+          },
+        );
+      }
+
+      throw error;
+    }
   }
 
   // Register new user
@@ -55,9 +128,10 @@ class AuthService {
       final response = await _apiClient.post(
         ApiConstants.register,
         data: {
-          'name': name,
+          'username': name, // Backend expects username
+          'fullName': name, // Also send fullName
           'email': email,
-          'phone': phone,
+          'phoneNumber': phone, // Backend expects phoneNumber
           'password': password,
           'role': role,
         },
@@ -218,6 +292,72 @@ class AuthService {
     return await _secureStorage.read(key: 'user_id');
   }
 
+  // Upload file
+  Future<Map<String, dynamic>> uploadFile({
+    required String filePath,
+    required String fileName,
+  }) async {
+    try {
+      final file = await MultipartFile.fromFile(
+        filePath,
+        filename: fileName,
+      );
+
+      final response = await _apiClient.uploadFiles(
+        ApiConstants.uploadDocument,
+        files: [file],
+        requiresAuth: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw _handleAuthError(e);
+    }
+  }
+
+  // Register bakery (after user registration)
+  Future<Map<String, dynamic>> registerBakery({
+    required String name,
+    String? description,
+    required String addressLine1,
+    String? addressLine2,
+    required String city,
+    String? postalCode,
+    String? country,
+    required String phoneNumber,
+    String? email,
+    String? logoUrl,
+    String? coverImageUrl,
+    String? commercialRegistryUrl,
+    Map<String, dynamic>? operatingHours,
+  }) async {
+    try {
+      final response = await _apiClient.post(
+        ApiConstants.bakeryRegister,
+        data: {
+          'name': name,
+          if (description != null) 'description': description,
+          'addressLine1': addressLine1,
+          if (addressLine2 != null) 'addressLine2': addressLine2,
+          'city': city,
+          if (postalCode != null) 'postalCode': postalCode,
+          if (country != null) 'country': country,
+          'phoneNumber': phoneNumber,
+          if (email != null) 'email': email,
+          if (logoUrl != null) 'logoUrl': logoUrl,
+          if (coverImageUrl != null) 'coverImageUrl': coverImageUrl,
+          if (commercialRegistryUrl != null) 'commercialRegistryUrl': commercialRegistryUrl,
+          if (operatingHours != null) 'operatingHours': operatingHours,
+        },
+        requiresAuth: true,
+      );
+
+      return response;
+    } catch (e) {
+      throw _handleAuthError(e);
+    }
+  }
+
   // Save authentication data
   Future<void> _saveAuthData(Map<String, dynamic> data) async {
     if (data.containsKey('token')) {
@@ -258,8 +398,7 @@ class AuthService {
       if (error.response?.statusCode == 401) {
         return ApiError(
           statusCode: 401,
-          message:
-              'Invalid credentials. Please check your email/phone and password.',
+          message: 'Invalid credentials. Please check the code and try again.',
           data: error.response?.data,
         );
       } else if (error.response?.statusCode == 422) {

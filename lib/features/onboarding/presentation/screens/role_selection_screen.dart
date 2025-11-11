@@ -144,7 +144,7 @@ class _RoleSelectionViewState extends State<_RoleSelectionView> {
                           enlargeCenterPage: true,
                           enlargeFactor: 0.1,
                           autoPlay: false,
-                          height: 280.h,
+                          height: MediaQuery.of(context).size.height * 0.35,
                         ),
                         itemCount: roleData.length,
                         itemBuilder: (context, index, realIndex) {
@@ -219,52 +219,69 @@ class _RoleSelectionViewState extends State<_RoleSelectionView> {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: EdgeInsets.all(8.w),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: SvgPicture.asset(
-                image,
-                height: 100.h,
-                fit: BoxFit.contain,
-              ),
-            ),
-            15.verticalSpace,
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textDarkBrown,
+            Flexible(
+              flex: 3,
+              child: Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: SvgPicture.asset(
+                  image,
+                  height: 80.h,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-            8.verticalSpace,
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w500,
-                color: AppColors.textDarkBrown.withOpacity(0.7),
-              ),
-            ),
-            5.verticalSpace,
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
-              decoration: BoxDecoration(
-                color: AppColors.tertiaryOliveGreen.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
+            SizedBox(height: 10.h),
+            Flexible(
+              flex: 2,
               child: Text(
-                'Tap to continue',
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textDarkBrown,
+                ),
+              ),
+            ),
+            SizedBox(height: 5.h),
+            Flexible(
+              flex: 1,
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.tertiaryOliveGreen,
+                  color: AppColors.textDarkBrown.withOpacity(0.7),
+                ),
+              ),
+            ),
+            SizedBox(height: 5.h),
+            Flexible(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.w),
+                decoration: BoxDecoration(
+                  color: AppColors.tertiaryOliveGreen.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+                child: Text(
+                  'Tap to continue',
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.tertiaryOliveGreen,
+                  ),
                 ),
               ),
             ),

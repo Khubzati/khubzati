@@ -11,15 +11,17 @@ class AuthService {
 
   AuthService(this.firebaseAuth);
 
-  /// Login with email/phone and password
+  /// Login with email/phone using OTP (two-step flow)
   Future<Map<String, dynamic>> login(
-      String emailOrPhone, String password) async {
+    String emailOrPhone, {
+    String? otp,
+  }) async {
     try {
       final response = await _apiClient.post(
         ApiConstants.login,
         data: {
-          'email_or_phone': emailOrPhone,
-          'password': password,
+          'emailOrPhone': emailOrPhone,
+          if (otp != null) 'otp': otp,
         },
       );
 
