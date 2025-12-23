@@ -867,6 +867,43 @@ class RestaurantAnalyticsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RestaurantDetailScreen]
+class RestaurantDetailRoute extends PageRouteInfo<RestaurantDetailRouteArgs> {
+  RestaurantDetailRoute({
+    Key? key,
+    required String id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         RestaurantDetailRoute.name,
+         args: RestaurantDetailRouteArgs(key: key, id: id),
+         initialChildren: children,
+       );
+
+  static const String name = 'RestaurantDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RestaurantDetailRouteArgs>();
+      return RestaurantDetailScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class RestaurantDetailRouteArgs {
+  const RestaurantDetailRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'RestaurantDetailRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
 /// [RestaurantOrderManagementScreen]
 class RestaurantOrderManagementRoute extends PageRouteInfo<void> {
   const RestaurantOrderManagementRoute({List<PageRouteInfo>? children})
@@ -952,6 +989,22 @@ class RestaurantOwnerDashboardRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [RestaurantOwnerFavoritesScreen]
+class RestaurantOwnerFavoritesRoute extends PageRouteInfo<void> {
+  const RestaurantOwnerFavoritesRoute({List<PageRouteInfo>? children})
+    : super(RestaurantOwnerFavoritesRoute.name, initialChildren: children);
+
+  static const String name = 'RestaurantOwnerFavoritesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RestaurantOwnerFavoritesScreen();
+    },
+  );
+}
+
+/// generated route for
 /// [RestaurantOwnerHomeScreen]
 class RestaurantOwnerHomeRoute extends PageRouteInfo<void> {
   const RestaurantOwnerHomeRoute({List<PageRouteInfo>? children})
@@ -981,6 +1034,43 @@ class RestaurantProductManagementRoute extends PageRouteInfo<void> {
       return const RestaurantProductManagementScreen();
     },
   );
+}
+
+/// generated route for
+/// [RestaurantReviewsScreen]
+class RestaurantReviewsRoute extends PageRouteInfo<RestaurantReviewsRouteArgs> {
+  RestaurantReviewsRoute({
+    Key? key,
+    required String id,
+    List<PageRouteInfo>? children,
+  }) : super(
+         RestaurantReviewsRoute.name,
+         args: RestaurantReviewsRouteArgs(key: key, id: id),
+         initialChildren: children,
+       );
+
+  static const String name = 'RestaurantReviewsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<RestaurantReviewsRouteArgs>();
+      return RestaurantReviewsScreen(key: args.key, id: args.id);
+    },
+  );
+}
+
+class RestaurantReviewsRouteArgs {
+  const RestaurantReviewsRouteArgs({this.key, required this.id});
+
+  final Key? key;
+
+  final String id;
+
+  @override
+  String toString() {
+    return 'RestaurantReviewsRouteArgs{key: $key, id: $id}';
+  }
 }
 
 /// generated route for

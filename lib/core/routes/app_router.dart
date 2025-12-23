@@ -36,6 +36,9 @@ import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/res
 import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/restaurant_otp_verification_screen.dart';
 import 'package:khubzati/features/restaurant_owner/auth/presentation/screens/restaurant_signup_confirmation_screen.dart';
 import 'package:khubzati/features/restaurant_owner/dashboard/presentation/screens/restaurant_owner_home_screen.dart';
+import 'package:khubzati/features/restaurant_owner/dashboard/presentation/screens/restaurant_detail_screen.dart';
+import 'package:khubzati/features/restaurant_owner/dashboard/presentation/screens/restaurant_reviews_screen.dart';
+import 'package:khubzati/features/restaurant_owner/favorites/presentation/screens/favorites_screen.dart';
 import 'package:khubzati/features/network/presentation/screens/no_internet_screen.dart';
 import 'package:khubzati/features/menu/presentation/screens/profile_screen.dart';
 import 'package:khubzati/features/menu/presentation/screens/profile_menu_screen.dart';
@@ -117,6 +120,9 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RestaurantOtpVerificationRoute.page, initial: false),
         AutoRoute(page: RestaurantSignupConfirmationRoute.page, initial: false),
         AutoRoute(page: RestaurantOwnerHomeRoute.page, initial: false),
+        AutoRoute(page: RestaurantDetailRoute.page, initial: false),
+        AutoRoute(page: RestaurantReviewsRoute.page, initial: false),
+        AutoRoute(page: RestaurantOwnerFavoritesRoute.page, initial: false),
         AutoRoute(page: NoInternetRoute.page, initial: false),
       ];
 }
